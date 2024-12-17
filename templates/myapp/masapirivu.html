@@ -1,0 +1,154 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masapirivu</title>
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+</head>
+<body>
+
+    {% include 'myapp/navbar.html' %}
+
+    <h1 class=" flex items-center justify-center text-xl">Maasa Pirivu</h1>
+    <div class="mt-4 flex items-center justify-center">
+
+        <form id="masapirivuForm" method="post" class="space-y-4 l:w-80 lg:w-96">
+          {% csrf_token %}
+            <div class="flex items-center space-x-4">
+              <label for="name" class="w-1/4">Name <span class="text-red-500">*</span></label>
+              <input type="text" id="name" name="name" placeholder="Enter the name" class="w-3/4 rounded-md" required>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="id_no" class="w-1/4">Id Number <span class="text-red-500">*</span></label>
+                <div class="w-3/4">
+                  <input type="text" id="id_no" name="id_no" placeholder="Enter the ID number" class="w-full p-2 border rounded-md" required>
+                </div>
+              </div>
+          
+            <div class="flex items-center space-x-4">
+              <label for="reciept_no" class="w-1/4">Reciept Number <span class="text-red-500">*</span></label>
+              <input type="text" id="reciept_no" name="reciept_no" placeholder="Enter the reciept number" class="w-3/4 p-2 border rounded-md" required>
+            </div>
+
+            <div class="flex items-center space-x-4">
+              <label for="date" class="w-1/4">Date <span class="text-red-500">*</span></label>
+              <input type="date" id="date" name="date" placeholder="Select the Date" class="w-3/4 p-2 border rounded-md" required>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="palli" class="w-1/4">Palli Fund <span class="text-red-500">*</span></label>
+                <input type="number" id="palli" name="palli" placeholder="Enter the Palli Fund" class="w-3/4 rounded-md" required>
+            </div>
+          
+            <div class="flex items-center space-x-4">
+                <label for="madrassa" class="w-1/4">Madrassa Fund <span class="text-red-500">*</span></label>
+                <input type="number" id="madrassa" name="madrassa" placeholder="Enter the Madrassa Fund" class="w-3/4 rounded-md" required>
+            </div>
+
+            <div class="flex items-center space-x-4">
+               <label for="mess" class="w-1/4">Mess Fund <span class="text-red-500">*</span></label>
+               <input type="number" id="mess" name="mess" placeholder="Enter the Mess Fund" class="w-3/4 rounded-md" required>
+            </div>
+              
+            <div class="flex items-center space-x-4">
+              <label for="description" class="w-1/4">Description</label>
+              <input type="text" id="description" name="description" placeholder="Enter the Description" class="w-3/4 rounded-md" required>
+            </div>
+          
+            <div class="flex items-center space-x-4">
+              <label for="total" class="w-1/4">Total Amount</label>
+              <input type="text" id="total" name="total_amount" placeholder="Total amount" class="w-3/4 rounded-md bg-gray-100">
+            </div>
+
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text">Credit</span>
+                <input type="radio" name="radio10" class="radio checked:bg-blue-500" value="credit" checked="checked" />
+              </label>
+            </div>
+
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text">Debit</span>
+                  <input type="radio" name="radio10" class="radio checked:bg-red-500" value="debit"/>
+                </label>
+              </div>
+              
+              <button type="submit" id="submitButton" class="px-4 py-2 bg-green-500 text-white rounded-md">Submit</button>
+
+          </form>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="confirmationPopup" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-gray-300 rounded-lg p-6 shadow-lg w-96">
+            <h2 class="text-lg text-black font-semibold mb-4">Confirm Submission</h2>
+            <p class="mb-6 text-black">Are you sure you want to submit this form?</p>
+            <div class="flex justify-end space-x-4">
+                <button id="popupCancelButton" class="btn btn-error">Cancel</button>
+                <button id="popupConfirmButton"  class="btn btn-accent">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Masapirivu Function to calculate and update the total amount -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          // Function to calculate and update the total
+          function calculateTotal() {
+              // Get references to the input fields
+              const palli = parseFloat(document.getElementById("palli")?.value) || 0;
+              const madrassa = parseFloat(document.getElementById("madrassa")?.value) || 0;
+              const mess = parseFloat(document.getElementById("mess")?.value) || 0;
+
+              // Calculate the total and round to the nearest integer
+              const total = Math.round(palli + madrassa + mess);
+
+              // Update the "Total Amount" field
+              const totalField = document.getElementById("total");
+              if (totalField) {
+                  totalField.value = total.toString(); // Display as integer
+              }
+          }
+
+          // Attach event listeners to each input field
+          ["palli", "madrassa", "mess"].forEach((fieldId) => {
+              const field = document.getElementById(fieldId);
+              if (field) {
+                  field.addEventListener("input", calculateTotal);
+              }
+          });
+      });
+    </script>
+
+    <!-- popup confirmation after clicking the submit button -->
+    <script>
+        const form = document.getElementById('masapirivuForm');
+        const popup = document.getElementById('confirmationPopup');
+        const cancelPopupButton = document.getElementById('popupCancelButton');
+        const confirmPopupButton = document.getElementById('popupConfirmButton');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent immediate form submission
+            popup.classList.remove('hidden'); // Show the popup
+        });
+
+        cancelPopupButton.addEventListener('click', function () {
+            popup.classList.add('hidden'); // Hide the popup on cancel
+        });
+
+        confirmPopupButton.addEventListener('click', function () {
+            popup.classList.add('hidden'); // Hide the popup
+            form.submit(); // Submit the form after confirmation
+        });
+    </script>
+
+<script src="{% static 'js/addmore.js' %}"></script>
+
+</body>
+</html>

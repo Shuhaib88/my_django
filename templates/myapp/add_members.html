@@ -1,0 +1,78 @@
+{% load static tailwind_tags  %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Mahallu Memebers</title>
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+</head>
+<body>
+
+    {% include 'myapp/navbar.html' %}
+
+    <h1 class=" flex items-center justify-center text-xl text-mywhite">Add Mahallu Members</h1>
+
+    <div class="mt-4 flex items-center justify-center ">
+
+        <form method="POST" class="space-y-4 l:w-80 lg:w-96">
+          {% csrf_token %}
+
+          <div class="flex items-center space-x-4">
+            <label for="id_no" class="w-1/4">Mahallu Membership Id<span class="text-red-500">*</span></label>
+            <div class="w-3/4">
+              <input type="text" id="id_no" name="id_no" placeholder="Enter the ID number" class="w-full p-2 border rounded-md" required>
+            </div>
+          </div>
+
+            <div class="flex items-center space-x-4">
+              <label for="name" class="w-1/4">Name <span class="text-red-500">*</span></label>
+              <input type="text" id="name" name="name" placeholder="Enter the name" class="w-3/4 rounded-md" required>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="father_name" class="w-1/4">Father's/Husband Name<span class="text-red-500">*</span></label>
+                <input type="text" id="father_name" name="father_name" placeholder="Enter the reciept number" class="w-3/4 p-2 border rounded-md" required>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="house_name" class="w-1/4">House Name<span class="text-red-500">*</span></label>
+                <input type="text" id="house_name" name="house_name" placeholder="Enter the reciept number" class="w-3/4 p-2 border rounded-md" required>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="family_member" class="w-1/4">Family Member<span class="text-red-500">*</span></label>
+                <div class="w-3/4 space-y-4">
+                    <input id="family_member" name="family_member" placeholder="Family Member Name" class="w-full p-2 border rounded-md">
+                  <input list="relation_list" id="relation" name="relation" placeholder="Relation" class="w-full p-2 border rounded-md">
+                  <datalist id="relation_list">
+                    <option value="Mother">
+                    <option value="Father">
+                    <option value="Grand Father">
+                    <option value="Grand Mother">
+                    <option value="Wife">
+                    <option value="Son">
+                    <option value="Daughter">
+                    <option value="Brother">
+                    <option value="Sister">
+                    <option value="Cousin">
+                  </datalist>
+                </div>
+              </div>
+
+              <div id="dynamicFields" class="space-y-4 mr-14"></div>
+
+              <button type="button" id="addOptionButton" class="btn btn-info hover:bg-created-blue">
+                Add Family Members
+              </button>
+
+              <button type="submit" class="btn btn-accent">Submit</button>
+
+          </form>
+          
+    </div>    
+    <script src="{% static 'js/add_members.js' %}"></script>
+</body>
+</html>

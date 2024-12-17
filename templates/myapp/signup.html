@@ -1,0 +1,69 @@
+{% load static tailwind_tags  %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+</head>
+<body class=" min-h-screen flex items-center justify-center">
+
+    <div class="container">
+        <h1 class="text-2xl font-bold mb-4 text-center">Sign up page</h1>
+
+         <!-- Message Display Section -->
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <p class="text-red-500">{{ message }}</p> <!-- Error messages in red -->
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <!-- Signup Form -->
+        <form method="POST" class="bg-white p-6 rounded shadow-md max-w-sm mx-auto">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium">User Name</label>
+                <input type="text" id="name" name="username" class="mt-1 block w-full border border-gray-300 rounded px-2 py-1" required>
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium">Password</label>
+                <input type="password" id="field_of_job" name="password" class="mt-1 block w-full border border-gray-300 rounded px-2 py-1" required>
+            </div>
+
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create User</button>
+            <a href="{% url 'login' %}">Return to login</a>
+        </form>
+    </div>
+
+   
+    <script>
+        const button = document.querySelector("#secondarybtn");
+        button.addEventListener("click", () => {
+          const currentTheme = document.documentElement.getAttribute("data-theme");
+          const newTheme = currentTheme === "dark" ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", newTheme);
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const experienceInput = document.getElementById('experience');
+            const additionalField = document.getElementById('additional-field');
+    
+            experienceInput.addEventListener('input', function () {
+                if (experienceInput.value > 5) {
+                    additionalField.classList.remove('hidden');
+                } else {
+                    additionalField.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

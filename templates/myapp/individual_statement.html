@@ -1,0 +1,169 @@
+
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Individual Statement</title>
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+</head>
+<body>
+    {% include 'myapp/navbar.html' %}
+
+    <h1 class="flex items-center justify-center text-xl">Mahallu Members Statements</h1>
+
+    <div class="mt-4 l:ml-2 sm:w-full lg:ml-60 l:w-96 lg:w-8/12">
+    
+            <!-- <input type="date" id="dateFilter" class="p-2 border mb-4 l:w-28 lg:w-36" placeholder="Filter by date">
+            <input type="text" id="textFilter" class="p-2 border mb-4 l:w-28 lg:w-36" placeholder="Filter by text"> -->
+            <!-- <button class="btn btn-warning l:ml-12 xl:ml-72">Edit</button>
+            <button class="btn btn-error l:ml-36 xl:ml-10">Delete</button> -->
+
+            <!-- <div class="flex space-x-4 l:w-28 lg:w-36">
+                <input type="date" id="dateFilter" class="p-2 border flex-grow" placeholder="Filter by date">
+                <input type="text" id="textFilter" class="p-2 border flex-grow" placeholder="Filter by text">
+            </div>
+
+            <div class="flex l:w-28 l:ml-0 lg:w-36 lg:ml-96">
+                <button class="btn btn-warning l:ml-12 xl:ml-72">Edit</button>
+                <button class="btn btn-error l:ml-36 xl:ml-10">Delete</button>
+            </div> -->
+
+            <div class="flex flex-wrap space-x-4 items-center">
+                <div class="flex space-x-4 l:ml-8 lg:ml-0 ">
+                  <input type="date" id="dateFilter" class="p-2 border flex-grow l:w-36 lg:w-40" placeholder="Filter by date">
+                  <input type="text" id="textFilter" class="p-2 border flex-grow l:w-36 lg:w-40" placeholder="Filter by text">
+                </div>
+              
+                <div class="flex space-x-4 l:w-full lg:w-36">
+                    <button class="btn btn-warning l:ml-12 xl:ml-72">Edit</button>
+                    <button class="btn btn-error l:ml-36 xl:ml-10">Delete</button>
+                  </div>
+              </div>
+              
+        <div class="overflow-x-auto">
+            <table class="table border border-r w-full text-left">
+                <!-- {% if id_no == id_no %}
+                {% endif %} -->
+                {% for addmahallumembers in addmahallumembers_data %}
+                <thead>
+                    <tr class="border-primary">
+                        <th class="border-r p-2 text-primary" colspan="4">
+                            <ul class="ml-5">
+                                <li>Mahallu ID No: {{id_no}}</li>
+                                <li>Name: {{addmahallumembers.name}}</li>
+                                <li>Father's/Husband Name: {{addmahallumembers.father_name}}</li>
+                                <li>House Name: {{addmahallumembers.house_name}}</li>
+                            </ul>
+                        </th>
+                        <th class="border-r p-2" colspan="3">
+                            <ul class="ml-5">
+                                <li class="text-primary">Family Members : </li>
+                                <li class="text-primary">{{addmahallumembers.family_member}} - {{addmahallumembers.relation}}</li>
+                                {% for addfamilymembers in addfamilymembers_data %}
+                                {% if addfamilymembers.id_no == id_no %}
+                                <li class="text-primary">{{addfamilymembers.family_member}} - {{addfamilymembers.relation}}</li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </th>
+                    </tr>
+                </thead>
+                {% endfor %}
+                <!-- head -->
+                <thead class="bg-slate-300 text-black">
+                    <tr class="border-primary">
+                        <th class="border-r p-2">Name</th>
+                        <th class="border-r p-2">Date</th>
+                        <th class="border-r p-2">Reciept No</th>
+                        <th class="border-r p-2">Fund Type</th>
+                        <th class="border-r p-2">Description</th>
+                        <th class="border-r p-2">Total Amount</th>
+                        <th class="border-r p-2">Debited/Credited</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTable">
+                    {% for fund in pallifund_data %}
+                    <tr class="border-white hover:bg-black hover:text-action-color">
+                        <td class="border-r p-2">{{ fund.name }}</td>
+                        <td class="border-r p-2">{{ fund.date }}</td>
+                        <td class="border-r p-2">{{ fund.reciept_no }}</td>
+                        <td class="border-r p-2">
+                            {{ fund.fund_type }} : {{ fund.amount }}<br>
+                            {% for additional in additionalfund_data %}
+                            {% if additional.reciept_no == fund.reciept_no %}
+                            <div>
+                                {{ additional.fund_type }}: {{ additional.amount }}<br>
+                                Description: {{ additional.description }}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td class="border-r p-2">{{ fund.description }}</td>
+                        <td class="border-r p-2">{{ fund.total_amount }}</td>
+                        <td class="border-r p-2">{{ fund.debit_credit }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    {% for fund in masapirivu_data %}
+                    <tr class="border-white hover:bg-black hover:text-action-color">
+                        <td class="border-r p-2">{{ fund.name }}</td>
+                        <td class="border-r p-2">{{ fund.date }}</td>
+                        <td class="border-r p-2">{{ fund.reciept_no }}</td>
+                        <td class="border-r p-2">
+                            <div>
+                                Palli : {{ fund.palli }}<br>
+                                Madrassa : {{ fund.madrassa }}<br>
+                                Mess : {{ fund.mess }}
+                                {{ fund.fund_type }} : {{ fund.amount }}<br>
+                                {% for additional in additionalfund_data %}
+                                {% if additional.reciept_no == fund.reciept_no %}
+                                <div>
+                                    {{ additional.fund_type }}: {{ additional.amount }}<br>
+                                    Description: {{ additional.description }}
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td class="border-r p-2">{{ fund.description }}</td>
+                        <td class="border-r p-2">{{ fund.total_amount }}</td>
+                        <td class="border-r p-2">{{ fund.debit_credit }}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('dateFilter').addEventListener('input', filterTable);
+        document.getElementById('textFilter').addEventListener('input', filterTable);
+
+        function filterTable() {
+            const dateFilter = document.getElementById('dateFilter').value;
+            const textFilter = document.getElementById('textFilter').value.toLowerCase();
+            const rows = document.querySelectorAll('#dataTable tr');
+
+            rows.forEach(row => {
+                const dateCell = row.querySelector('td:nth-child(3)').innerText;
+                const textCells = Array.from(row.querySelectorAll('td')).map(cell => cell.innerText.toLowerCase());
+
+                const dateMatch = dateFilter ? dateCell.includes(dateFilter) : true;
+                const textMatch = textFilter ? textCells.some(cell => cell.includes(textFilter)) : true;
+
+                if (dateMatch && textMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

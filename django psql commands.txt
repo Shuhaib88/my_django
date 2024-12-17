@@ -1,0 +1,185 @@
+
+
+
+INSERT INTO myapp_addmahallumembers (name, id_no, father_name, house_name, family_member, relation) VALUES ('abdu', '123411', 'razak', 'kuzhi veetil', 'sameera', 'wife' );
+
+INSERT INTO myapp_addmahallumembers (name, id_no, father_name, house_name, family_member, relation) VALUES ('Abdu', '12345', 'Razak', 'Kuzhi Veetil', 'Sameera', 'Wife'), ('Ahmed', '12346', 'Ismail', 'Tharavad House', 'Hafsa', 'Daughter'), ('Fatima', '12347', 'Mohammed', 'Meadow Cottage', 'Bilal', 'Son'), ('Omar', '12348', 'Yusuf', 'Green Villa', 'Zainab', 'Mother'), ('Ayesha', '12349', 'Ali', 'Lake House', 'Suhail', 'Brother'), ('Khalid', '12350', 'Hamza', 'Hill View', 'Amina', 'Sister');
+
+INSERT INTO myapp_pallifund (name, id_no, reciept_no, fund_type, description. amount, debit_credit, total_amount, date) VALUES ( );
+
+INSERT INTO myapp_pallifund (name, id_no, reciept_no, fund_type, description, amount, debit_credit, total_amount, date) VALUES ('Ahmed', 'ID001', 'R001', 'Donation', 'Charity contribution', 1000, 'Credit', 5000, '2023-12-01'), ('Fatima', 'ID002', 'R002', 'Marriage Fund', 'Marriage event support', 2000, 'Credit', 7000, '2023-12-02'), ('Ali', 'ID003', 'R003', 'Palli Fund', 'General fund support', 1500, 'Debit', 5500, '2023-12-03'), ('Sara', 'ID004', 'R004', 'Madrassa', 'School maintenance', 3000, 'Credit', 8500, '2023-12-04'), ('Omar', 'ID005', 'R005', 'Marriage Hall', 'Hall renovation', 2500, 'Debit', 6000, '2023-12-05'), ('Ayesha', 'ID006', 'R006', 'Others', 'Miscellaneous expenses', 500, 'Credit', 6500, '2023-12-06');
+
+INSERT INTO myapp_pallifund (name, id_no, reciept_no, fund_type, description, amount, debit_credit, total_amount, date) VALUES ('John Doe', '12345', 'RCPT1001', 'Palli Fund', 'Monthly donation for maintenance', 500, 'Credit', 500, '2024-12-01'),('Jane Smith', '54321', 'RCPT1002', 'Marriage Fund', 'Contribution to marriage expenses', 1000, 'Debit', 1000, '2024-12-02'),('Ali Khan', '67890', 'RCPT1003', 'Donation', 'Charity for community development', 200, 'Credit', 200, '2024-12-03'),('Ahmed', '98765', 'RCPT1004', 'Madrassa', 'Support for educational needs', 300, 'Credit', 300, '2024-12-04'),('Lee', '11223', 'RCPT1005', 'Marriage Hall', 'Advance payment for hall booking', 1500, 'Debit', 1500, '2024-12-05'),('Clark', '44556', 'RCPT1006', 'Palli Fund', 'Monthly maintenance', 600, 'Credit', 600, '2024-12-06'),('Mohammed Yusuf', '77889', 'RCPT1007', 'Donation', 'Special fund for healthcare', 700, 'Debit', 700, '2024-12-07'),('Sophia Brown', '99001', 'RCPT1008', 'Others', 'Miscellaneous expenses', 400, 'Debit', 400, '2024-12-08');
+
+INSERT INTO myapp_pallifund (name, id_no, reciept_no, fund_type, description, amount, debit_credit, total_amount, date) 
+VALUES 
+('Ibraheem', '1234245', 'RCPT1001', 'Palli Fund', 'Monthly donation for maintenance', 500, 'Credit', 500, '2024-12-01'),
+('Shoukath', '5445321', 'RCPT1002', 'Marriage Fund', 'Contribution to marriage expenses', 1000, 'Debit', 1000, '2024-12-02'),
+('Sulaiman', '6777890', 'RCPT1003', 'Donation', 'Charity for community development', 200, 'Credit', 200, '2024-12-03'),
+('Routhar', '98798765', 'RCPT1004', 'Madrassa', 'Support for educational needs', 300, 'Credit', 300, '2024-12-04'),
+('Haseeb', '7711223', 'RCPT1005', 'Marriage Hall', 'Advance payment for hall booking', 1500, 'Debit', 1500, '2024-12-05'),
+('Habeeb', '1944556', 'RCPT1006', 'Palli Fund', 'Monthly maintenance', 600, 'Credit', 600, '2024-12-06'),
+('Mohammed Yusuf', '6977889', 'RCPT1007', 'Donation', 'Special fund for healthcare', 700, 'Debit', 700, '2024-12-07'),
+('Shuhaib', '0099001', 'RCPT1008', 'Others', 'Miscellaneous expenses', 400, 'Debit', 400, '2024-12-08');
+
+
+INSERT INTO myapp_masapirivu (name, id_no, reciept_no, palli, madrassa, mess, description, total_amount, debit_credit, date) 
+VALUES 
+('ibraheem', '1234245', 'MASA3321', 200, 150, 100, 'Monthly contributions', 450, 'Credit', '2024-12-09'),
+('John Doe', '12345', 'MASA1001', 200, 150, 100, 'Monthly contributions', 450, 'Credit', '2024-12-01'),
+('Jane Smith', '54321', 'MASA1002', 300, 200, 150, 'Support for activities', 650, 'Debit', '2024-12-02'),
+('Ali Khan', '67890', 'MASA1003', 250, 180, 120, 'Regular donation', 550, 'Credit', '2024-12-03'),
+('Sara Ahmed', '98765', 'MASA1004', 400, 220, 180, 'Special contribution', 800, 'Debit', '2024-12-04'),
+('David Lee', '11223', 'MASA1005', 100, 100, 80, 'Quarterly support', 280, 'Credit', '2024-12-05'),
+('Emily Clark', '44556', 'MASA1006', 500, 300, 200, 'One-time donation', 1000, 'Debit', '2024-12-06'),
+('Mohammed Yusuf', '77889', 'MASA1007', 150, 120, 90, 'Community support', 360, 'Credit', '2024-12-07'),
+('Sophia Brown', '99001', 'MASA1008', 200, 100, 50, 'Miscellaneous donation', 350, 'Debit', '2024-12-08');
+
+
+INSERT INTO myapp_additionalfund (reciept_no, fund_type, description, amount)
+VALUES 
+('MASA1002', 'Charity', 'Donation for local charity event', 500),
+('MASA1002', 'Construction', 'Contribution towards new building construction', 1000),
+('MASA1002', 'Education', 'Support for madrassa education', 750),
+('MASA1005', 'Health', 'Funds for community health initiative', 300),
+('MASA1007', 'Maintenance', 'Repair and maintenance of community center', 450),
+('MASA1007', 'Emergency', 'Emergency relief fund', 1200),
+('MASA1001', 'Utilities', 'Payment for electricity and water bills', 600),
+('MASA1008', 'Events', 'Sponsorship for annual community event', 900);
+
+INSERT INTO myapp_additionalfund (reciept_no, fund_type, description, amount)
+VALUES 
+('RCPT1001', 'Charity', 'Donation for local charity event', 500),
+('RCPT1001', 'Construction', 'Contribution towards new building construction', 1000),
+('RCPT1003', 'Education', 'Support for madrassa education', 750),
+('RCPT1006', 'Health', 'Funds for community health initiative', 300),
+('RCPT1006', 'Maintenance', 'Repair and maintenance of community center', 450),
+('RCPT1006', 'Emergency', 'Emergency relief fund', 1200),
+('RCPT1008', 'Utilities', 'Payment for electricity and water bills', 600),
+('RCPT1002', 'Events', 'Sponsorship for annual community event', 900);
+
+INSERT INTO myapp_additionalfund (reciept_no, fund_type, description, amount)
+VALUES 
+('MASA1002', 'Charity', 'Donation for local charity event', 500),
+('MASA1002', 'Construction', 'Contribution towards new building construction', 1000),
+('MASA1002', 'Education', 'Support for madrassa education', 750),
+('MASA1005', 'Health', 'Funds for community health initiative', 300),
+('MASA1007', 'Maintenance', 'Repair and maintenance of community center', 450),
+('MASA1007', 'Emergency', 'Emergency relief fund', 1200),
+('MASA1001', 'Utilities', 'Payment for electricity and water bills', 600),
+('MASA1008', 'Events', 'Sponsorship for annual community event', 900),
+('RCPT1001', 'Charity', 'Donation for local charity event', 500),
+('RCPT1001', 'Construction', 'Contribution towards new building construction', 1000),
+('RCPT1003', 'Education', 'Support for madrassa education', 750),
+('RCPT1006', 'Health', 'Funds for community health initiative', 300),
+('RCPT1006', 'Maintenance', 'Repair and maintenance of community center', 450),
+('RCPT1006', 'Emergency', 'Emergency relief fund', 1200),
+('RCPT1008', 'Utilities', 'Payment for electricity and water bills', 600),
+('RCPT1002', 'Events', 'Sponsorship for annual community event', 900);
+
+
+INSERT INTO myapp_addmahallumembers (id_no, name, father_name, house_name, family_member, relation)
+VALUES 
+(1234245, 'Ibraheem', 'althaf', 'Tharavad House', 'sameera', 'wife'),
+(5445321, 'Shoukath', 'Rahim', 'Green Villa', 'Mujeeb', 'Son'),
+(6777890, 'Sulaiman', 'Abdul', 'Sunrise Home', 'Fathima', 'Daughter'),
+(98798765, 'Routhar', 'Kareem', 'Rose Cottage', 'Jameela', 'Mother'),
+(7711223, 'Haseeb', 'Ibrahim', 'Lakeview', 'Salim', 'Father'),
+(1944556, 'Habeeb', 'Sajid', 'Palm Residency', 'Aisha', 'Sister'),
+(1237845, 'Mohammed', 'Shahid', 'Mountain House', 'Bilal', 'Brother'),
+(0099001, 'Shuhaib', 'Mahmood', 'Blue Nest', 'Hana', 'Aunt'),
+(6977889, 'Mohammed Yusuf', 'Farooq', 'Sunset Villa', 'Yasmin', 'Uncle'),
+(1987254, 'ashik', 'Bashir', 'Golden Estate', 'Ahmed', 'Cousin');
+
+INSERT INTO myapp_addfamilymembers (id_no,family_member, relation)
+VALUES 
+(1234245,'sameera', 'wife'),
+(1234245,'shajiya', 'mother'),
+(5445321,'haseena', 'mother'),
+(5445321,'shafeek', 'son'),
+(5445321,'asna', 'wife');
+------------------------------------------------------------------------------------------------------------------------------------------------
+tables
+------------------------------------------------------------------------------------------------------------------------------------------------
+myapp_addmahallumembers
+
+myapp_addfamilymembers
+
+myapp_masapirivu
+
+myapp_pallifund
+
+myapp_additionalfund
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+\pset pager off
+
+select * from myapp_pallifund;
+
+select * from myapp_masapirivu;
+
+select * from myapp_additionalfund;
+
+select * from myapp_addmahallumembers;
+
+select * from myapp_addfamilymembers;
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+ALTER TABLE myapp_additionalfund ADD id_no VARCHAR(30);
+
+ALTER TABLE myapp_additionalfund DROP COLUMN id_no;
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+manually re-arrage the order of the 
+------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE myapp_additionalfund_new (
+    id SERIAL PRIMARY KEY,
+    id_no VARCHAR(30),
+    reciept_no VARCHAR(30),
+    fund_type VARCHAR(100),
+    description VARCHAR(100),
+    amount VARCHAR(7)
+);
+
+INSERT INTO myapp_additionalfund_new (id, id_no, reciept_no, fund_type, description, amount)
+SELECT id, id_no, reciept_no, fund_type, description, amount
+FROM myapp_additionalfund;
+
+DROP TABLE myapp_additionalfund;
+
+ALTER TABLE myapp_additionalfund_new
+RENAME TO myapp_additionalfund;
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+INSERT INTO myapp_masapirivu (name, id_no, reciept_no, palli, madrassa, mess, description, total_amount, debit_credit, date) 
+VALUES 
+('ibraheem', '1234245', 'MASA3321', 200, 150, 100, 'Monthly contributions', 450, 'Credit', '2024-12-09');
+
+select * from myapp_additionalfund;
+
+INSERT INTO myapp_additionalfund (reciept_no, fund_type, description, amount)
+VALUES 
+('MASA3321', 'Charity', 'Donation for local charity event', 500);
+
+RCPT1001
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

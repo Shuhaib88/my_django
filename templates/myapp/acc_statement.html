@@ -1,0 +1,179 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Statement</title>
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+</head>
+<body>
+    {% include 'myapp/navbar.html' %}
+    <h1 class="flex items-center justify-center text-xl">Palli Account Statement</h1>
+
+    <div class="mt-4 l:ml-2 sm:w-full lg:ml-60 l:w-96 lg:w-8/12">
+        <input type="date" id="dateFilter" class="p-2 border mb-4" placeholder="Filter by date">
+        <input type="text" id="textFilter" class="p-2 border mb-4" placeholder="Filter by text">
+
+        <table class="table border-separate border-spacing-0">
+            <thead class="bg-slate-400 text-black">
+                <tr>
+                    <th class="border-2 border-white px-6 py-2">Debit/Credit</th>
+                    <th class="border-2 border-white px-6 py-2">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-white hover:bg-black hover:text-action-color">
+                    <td class="border-2 border-white px-6 py-2">Total Amount Credited</td>
+                    <td id="totalCredited" class="border-2 border-white px-6 py-2"></td>
+                </tr>
+                <tr class="border-white hover:bg-black hover:text-action-color">
+                    <td class="border-2 border-white px-6 py-2">Total Amount Debited</td>
+                    <td id="totalDebited" class="border-2 border-white px-6 py-2"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="overflow-x-auto">
+            <table class="table border border-r w-full text-left">
+              <thead class="bg-slate-400 text-black">
+                <tr class="border-primary">
+                  <th class="border-r p-2">Name</th>
+                  <th class="border-r p-2">Mahallu ID</th>
+                  <th class="border-r p-2">Date</th>
+                  <th class="border-r p-2">Reciept No</th>
+                  <th class="border-r p-2">Fund Type</th>
+                  <th class="border-r p-2">Description</th>
+                  <th class="border-r p-2">Total Amount</th>
+                  <th class="border-r p-2">Debited/Credited</th>
+                </tr>
+              </thead>
+              <tbody id="dataTable">
+                {% for fund in pallifund_data %}
+                <tr class="border-white hover:bg-black hover:text-action-color">
+                    <td class="border-r p-2">{{ fund.name }}</td>
+                    <td class="border-r p-2">{{ fund.id_no }}</td>
+                    <td class="border-r p-2">{{ fund.date }}</td>
+                    <td class="border-r p-2">{{ fund.reciept_no }}</td>
+                    <td class="border-r p-2">
+                      {{ fund.fund_type }} : {{ fund.amount }}<br>
+                        {% for additional in additionalfund_data %}
+                            {% if additional.reciept_no == fund.reciept_no %}
+                                <div>
+                                    {{ additional.fund_type }}: {{ additional.amount }}<br>
+                                    Description: {{ additional.description }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td class="border-r p-2">{{ fund.description }}</td>
+                    <td class="border-r p-2 totalAmount">{{ fund.total_amount }}</td>
+                    <td class="border-r p-2 debitCredit">{{ fund.debit_credit }}</td>
+                  </tr>
+                {% endfor %}
+                {% for fund in masapirivu_data %}
+                <tr class="border-white hover:bg-black hover:text-action-color">
+                    <td class="border-r p-2">{{ fund.name }}</td>
+                    <td class="border-r p-2">{{ fund.id_no }}</td>
+                    <td class="border-r p-2">{{ fund.date }}</td>
+                    <td class="border-r p-2">{{ fund.reciept_no }}</td>
+                    <td class="border-r p-2">
+                      <div>
+                        Palli : {{ fund.palli }}<br>
+                        Madrassa : {{ fund.madrassa }}<br>
+                        Mess : {{ fund.mess }}
+                        {{ fund.fund_type }} : {{ fund.amount }}<br>
+                        {% for additional in additionalfund_data %}
+                            {% if additional.reciept_no == fund.reciept_no %}
+                                <div>
+                                    {{ additional.fund_type }}: {{ additional.amount }}<br>
+                                    Description: {{ additional.description }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    </td>
+                    <td class="border-r p-2">{{ fund.description }}</td>
+                    <td class="border-r p-2 totalAmount">{{ fund.total_amount }}</td>
+                    <td class="border-r p-2 debitCredit">{{ fund.debit_credit }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Wait for the DOM to load
+        document.addEventListener("DOMContentLoaded", function () {
+            const dateFilterInput = document.getElementById('dateFilter');
+            const textFilterInput = document.getElementById('textFilter');
+            const dataTable = document.querySelector('#dataTable');
+            const totalCreditedCell = document.getElementById('totalCredited');
+            const totalDebitedCell = document.getElementById('totalDebited');
+    
+            function calculateTotals() {
+                let totalCredited = 0;
+                let totalDebited = 0;
+    
+                // Loop through each visible row in the data table
+                dataTable.querySelectorAll('tr').forEach(row => {
+                    const debitCreditCell = row.querySelector('td:nth-child(8)');
+                    const amountCell = row.querySelector('td:nth-child(7)');
+    
+                    if (debitCreditCell && amountCell && row.style.display !== 'none') {
+                        const debitCredit = debitCreditCell.innerText.trim();
+                        const amount = parseFloat(amountCell.innerText.trim().replace(/,/g, '')) || 0; // Handle commas in numbers
+    
+                        if (debitCredit === 'Credit') {
+                            totalCredited += amount;
+                        } else if (debitCredit === 'Debit') {
+                            totalDebited += amount;
+                        }
+                    }
+                });
+    
+                // Update totals in the table
+                totalCreditedCell.innerText = totalCredited.toFixed(2);
+                totalDebitedCell.innerText = totalDebited.toFixed(2);
+                console.log(totalCreditedCell.innerText)
+                console.log(totalDebitedCell.innerText)
+            }
+    
+            function filterTable() {
+                const dateFilter = dateFilterInput.value;
+                const textFilter = textFilterInput.value.toLowerCase();
+    
+                dataTable.querySelectorAll('tr').forEach(row => {
+                    const dateCell = row.querySelector('td:nth-child(3)');
+                    const textCells = Array.from(row.querySelectorAll('td'));
+    
+                    if (!dateCell) return; // Skip if no date cell is found
+    
+                    const dateMatch = dateFilter ? dateCell.innerText.includes(dateFilter) : true;
+                    const textMatch = textFilter ? textCells.some(cell => cell.innerText.toLowerCase().includes(textFilter)) : true;
+    
+                    // Show or hide rows based on filters
+                    if (dateMatch && textMatch) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+    
+                calculateTotals(); // Recalculate totals after filtering
+            }
+    
+            // Attach event listeners to filters
+            dateFilterInput.addEventListener('input', filterTable);
+            textFilterInput.addEventListener('input', filterTable);
+    
+            // Initial calculation on page load
+            calculateTotals();
+        });
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,139 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palli Fund</title>
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+</head>
+<body>
+    {% include 'myapp/navbar.html' %}
+
+    <h1 class="flex items-center justify-center text-xl">Palli Fund Entry</h1>
+
+    <div class="mt-4 flex items-center justify-center">
+        <form id="pallifundForm" method="POST" class="space-y-4 l:w-80 lg:w-96">
+            {% csrf_token %}
+            <div class="flex items-center space-x-4">
+                <label for="name" class="w-1/4">Name <span class="text-red-500">*</span></label>
+                <input type="text" id="name" name="name" placeholder="Enter the name" class="w-3/4 rounded-md" required>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="id_no" class="w-1/4">Id Number</label>
+                <div class="w-3/4">
+                    <input list="id_list" id="id_no" name="id_no" placeholder="Enter the ID number" class="w-full p-2 border rounded-md">
+                    <datalist id="id_list">
+                        <option value="Not a Member Of The Mahallu">
+                        <option value="Fund Recieving From Outside">
+                        <option value="Fund Giving To Outside">
+                        <option value="Others">
+                    </datalist>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="date" class="w-1/4">Date <span class="text-red-500">*</span></label>
+                <input type="date" id="date" name="date" placeholder="Select the Date" class="w-3/4 p-2 border rounded-md" required>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="reciept_no" class="w-1/4">Reciept Number <span class="text-red-500">*</span></label>
+                <input type="text" id="reciept_no" name="reciept_no" placeholder="Enter the receipt number" class="w-3/4 p-2 border rounded-md" required>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="fund_type" class="w-1/4">Fund Type <span class="text-red-500">*</span></label>
+                <div class="w-3/4">
+                    <input list="fund_type_options" id="fund_type" name="fund_type" placeholder="Enter the type of fund" class="w-full border rounded-md" required>
+                    <datalist id="fund_type_options">
+                        <option value="Maasa Pirivu">
+                        <option value="Palli Fund">
+                        <option value="Marriage Fund">
+                        <option value="Marriage Hall">
+                        <option value="Donation">
+                        <option value="Madrassa">
+                        <option value="Others">
+                    </datalist>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="description" class="w-1/4">Description</label>
+                <input type="text" id="description" name="description" placeholder="Enter the Description" class="w-3/4 rounded-md">
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <label for="amount" class="w-1/4">Amount <span class="text-red-500">*</span></label>
+                <input type="number" id="amount" name="amount" placeholder="Enter the amount" class="w-3/4 rounded-md amount-field" required>
+            </div>
+            <!-- <div class="flex items-center space-x-4">
+              <label for="amount" class="w-1/4">Amount <span class="text-red-500">*</span></label>
+              <input type="number" id="amount" name="amount" placeholder="Enter the amount" class="w-3/4 rounded-md amount-field" required>
+            </div> -->
+
+            <div id="dynamicFields" class="space-y-4 mr-14"></div>
+
+            <div class="flex items-center space-x-4">
+                <label for="total_amount" class="w-1/4">Total Amount <span class="text-red-500">*</span></label>
+                <input type="number" id="total_amount" name="total_amount" placeholder="Total amount" class="w-3/4 rounded-md" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="label-text">Credit</span>
+                    <input type="radio" name="radio10" class="radio checked:bg-blue-500" value="credit" checked="checked" />
+                </label>
+            </div>
+
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="label-text">Debit</span>
+                    <input type="radio" name="radio10" class="radio checked:bg-red-500" value="debit" />
+                </label>
+            </div>
+
+            <button type="button" id="addOptionButton" class="btn btn-info">Add More Fund</button>
+
+            <button type="submit" class="btn btn-accent">Submit</button>
+        </form>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="confirmationPopup" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-gray-300 rounded-lg p-6 shadow-lg w-96">
+            <h2 class="text-lg text-black font-semibold mb-4">Confirm Submission</h2>
+            <p class="mb-6 text-black">Are you sure you want to submit this form?</p>
+            <div class="flex justify-end space-x-4">
+                <button id="popupCancelButton" class="btn btn-error">Cancel</button>
+                <button id="popupConfirmButton"  class="btn btn-accent">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/addmore.js' %}"></script>
+    <script>
+        const form = document.getElementById('pallifundForm');
+        const popup = document.getElementById('confirmationPopup');
+        const cancelPopupButton = document.getElementById('popupCancelButton');
+        const confirmPopupButton = document.getElementById('popupConfirmButton');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent immediate form submission
+            popup.classList.remove('hidden'); // Show the popup
+        });
+
+        cancelPopupButton.addEventListener('click', function () {
+            popup.classList.add('hidden'); // Hide the popup on cancel
+        });
+
+        confirmPopupButton.addEventListener('click', function () {
+            popup.classList.add('hidden'); // Hide the popup
+            form.submit(); // Submit the form after confirmation
+        });
+    </script>
+</body>
+</html>

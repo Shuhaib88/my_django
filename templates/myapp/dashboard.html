@@ -1,0 +1,72 @@
+{% load static tailwind_tags  %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+</head>
+
+<body>
+    {% include 'myapp/navbar.html' %}
+
+    <div class="container mx-auto mt-20">
+
+        <ul role="list" class="divide-y divide-gray-100 max-w-lg mx-auto space-y-3 l:w-80 lg:w-full">
+            <li class="flex justify-between gap-x-6 py-5 hover:bg-gray-500 hover:text-white cursor-pointer border-4 border-gray-300 rounded-lg hover:scale-105 transform transition-all duration-300">
+                <a href="{% url 'pallifund' %}" class="flex min-w-0 gap-x-4 w-full">
+                    <div class="min-w-0 flex-auto text-center">
+                        <p class="text-sm/6 font-semibold text-primary hover:text-white">പള്ളി ഫണ്ട് എൻട്രി</p>
+                    </div>
+                </a>
+            </li>
+    
+            <li class="flex justify-between gap-x-6 py-5 hover:bg-gray-500 hover:text-white cursor-pointer border-4 border-gray-300 rounded-lg hover:scale-105 transform transition-all duration-300">
+                <a href="{% url 'masapirivu' %}" class="flex min-w-0 gap-x-4 w-full">
+                    <div class="min-w-0 flex-auto text-center">
+                        <p class="text-sm/6 font-semibold text-primary hover:text-white">മാസ പിരിവ്</p>
+                    </div>
+                </a>
+            </li>
+    
+            <li class="flex justify-between gap-x-6 py-5 hover:bg-gray-500 hover:text-white cursor-pointer border-4 border-gray-300 rounded-lg hover:scale-105 transform transition-all duration-300">
+                <a href="{% url 'individual_statement' %}" class="flex min-w-0 gap-x-4 w-full">
+                    <div class="min-w-0 flex-auto text-center">
+                        <p class="text-sm/6 font-semibold text-primary hover:text-white">പള്ളി അംഗങ്ങളുടെ സ്റ്റേറ്റ്മെന്റ്</p>
+                    </div>
+                </a>
+            </li>
+    
+            <li class="flex justify-between gap-x-6 py-5 hover:bg-gray-500 hover:text-white cursor-pointer border-4 border-gray-300 rounded-lg hover:scale-105 transform transition-all duration-300">
+                <a href="{% url 'acc_statement' %}" class="flex min-w-0 gap-x-4 w-full">
+                    <div class="min-w-0 flex-auto text-center">
+                        <p class="text-sm/6 font-semibold text-primary hover:text-white">അക്കൗണ്ട് സ്റ്റേറ്റ്മെന്റ്</p>
+                    </div>
+                </a>
+            </li>
+
+            <li class="flex justify-between gap-x-6 py-5 hover:bg-gray-500 hover:text-white cursor-pointer border-4 border-gray-300 rounded-lg hover:scale-105 transform transition-all duration-300">
+                <a href="{% url 'add_members' %}" class="flex min-w-0 gap-x-4 w-full">
+                    <div class="min-w-0 flex-auto text-center">
+                        <p class="text-sm/6 font-semibold text-primary hover:text-white">മഹല്ലു അംഗങ്ങളെ ചേർക്കുക</p>
+                    </div>
+                </a>
+            </li>
+
+            <li class="flex justify-between gap-x-6 py-5 hover:bg-gray-500 hover:text-white cursor-pointer border-4 border-gray-300 rounded-lg hover:scale-105 transform transition-all duration-300">
+                <a href="{% url 'list_members' %}" class="flex min-w-0 gap-x-4 w-full">
+                    <div class="min-w-0 flex-auto text-center">
+                        <p class="text-sm/6 font-semibold text-primary hover:text-white">മഹല്ലു അംഗങ്ങളുടെ പട്ടിക</p>
+                    </div>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+
+    <script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+</html>
