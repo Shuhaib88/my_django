@@ -15,4 +15,5 @@ urlpatterns = [
     path('acc_statement/', views.acc_statement, name='acc_statement'),
     path('add_members/', views.add_members_view, name='add_members'),
     path('list_members/', views.list_members, name='list_members'),
+    path('list_masapirivu/', views.list_masapirivu, name='list_masapirivu'),
 ]

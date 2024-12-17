@@ -314,8 +314,24 @@ def acc_statement(request):
 # @login_required
 def list_members(request):
 
-    members = addmahallumembers.objects.all()
+    mahallumembers = addmahallumembers.objects.all()
+    members = sorted(mahallumembers, key=lambda x: int(x.id_no))
+
+    # sorted_ids = [member.id_no for member in members]
+    # print("Sorted Member ID_NOs:", sorted_ids)
 
     return render(request, 'myapp/list_members.html', {'mahallumembers': members})
+
+# @login_required
+def list_masapirivu(request):
+
+    mahallumembers = addmahallumembers.objects.all()
+    members = sorted(mahallumembers, key=lambda x: int(x.id_no))
+
+    # sorted_ids = [member.id_no for member in members]
+    # print("Sorted Member ID_NOs:", sorted_ids)
+
+    return render(request, 'myapp/list_masapirivu.html', {'mahallumembers': members})
+
 
 
