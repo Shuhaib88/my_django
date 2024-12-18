@@ -18,51 +18,52 @@
 
         <form id="masapirivuForm" method="post" class="space-y-4 l:w-80 lg:w-96">
           {% csrf_token %}
-            <div class="flex items-center space-x-4">
-              <label for="name" class="w-1/4">Name <span class="text-red-500">*</span></label>
-              <input type="text" id="name" name="name" placeholder="Enter the name" class="w-3/4 rounded-md" required>
-            </div>
-
+            
             <div class="flex items-center space-x-4">
                 <label for="id_no" class="w-1/4">Id Number <span class="text-red-500">*</span></label>
                 <div class="w-3/4">
-                  <input type="text" id="id_no" name="id_no" placeholder="Enter the ID number" class="w-full p-2 border rounded-md" required>
+                  <input type="text" id="id_no" name="id_no" placeholder="Enter the ID number" class="w-full p-2 border rounded-md text-black" required>
                 </div>
+              </div>
+
+              <div class="flex items-center space-x-4">
+                <label for="name" class="w-1/4">Name <span class="text-red-500">*</span></label>
+                <input type="text" id="name" name="name" placeholder="Enter the name" class="w-3/4 rounded-md text-black" required>
               </div>
           
             <div class="flex items-center space-x-4">
               <label for="reciept_no" class="w-1/4">Reciept Number <span class="text-red-500">*</span></label>
-              <input type="text" id="reciept_no" name="reciept_no" placeholder="Enter the reciept number" class="w-3/4 p-2 border rounded-md" required>
+              <input type="text" id="reciept_no" name="reciept_no" placeholder="Enter the reciept number" class="w-3/4 p-2 border rounded-md text-black" required>
             </div>
 
-            <div class="flex items-center space-x-4">
+            <!-- <div class="flex items-center space-x-4">
               <label for="date" class="w-1/4">Date <span class="text-red-500">*</span></label>
-              <input type="date" id="date" name="date" placeholder="Select the Date" class="w-3/4 p-2 border rounded-md" required>
-            </div>
+              <input type="date" id="date" name="date" placeholder="Select the Date" class="w-3/4 p-2 border rounded-md text-black" required>
+            </div> -->
 
             <div class="flex items-center space-x-4">
                 <label for="palli" class="w-1/4">Palli Fund <span class="text-red-500">*</span></label>
-                <input type="number" id="palli" name="palli" placeholder="Enter the Palli Fund" class="w-3/4 rounded-md" required>
+                <input type="number" id="palli" name="palli" placeholder="Enter the Palli Fund" class="w-3/4 rounded-md text-black" required>
             </div>
           
             <div class="flex items-center space-x-4">
                 <label for="madrassa" class="w-1/4">Madrassa Fund <span class="text-red-500">*</span></label>
-                <input type="number" id="madrassa" name="madrassa" placeholder="Enter the Madrassa Fund" class="w-3/4 rounded-md" required>
+                <input type="number" id="madrassa" name="madrassa" placeholder="Enter the Madrassa Fund" class="w-3/4 rounded-md text-black" required>
             </div>
 
             <div class="flex items-center space-x-4">
                <label for="mess" class="w-1/4">Mess Fund <span class="text-red-500">*</span></label>
-               <input type="number" id="mess" name="mess" placeholder="Enter the Mess Fund" class="w-3/4 rounded-md" required>
+               <input type="number" id="mess" name="mess" placeholder="Enter the Mess Fund" class="w-3/4 rounded-md text-black" required>
             </div>
               
             <div class="flex items-center space-x-4">
               <label for="description" class="w-1/4">Description</label>
-              <input type="text" id="description" name="description" placeholder="Enter the Description" class="w-3/4 rounded-md" required>
+              <input type="text" id="description" name="description" placeholder="Enter the Description" class="w-3/4 rounded-md text-black" required>
             </div>
           
             <div class="flex items-center space-x-4">
               <label for="total" class="w-1/4">Total Amount</label>
-              <input type="text" id="total" name="total_amount" placeholder="Total amount" class="w-3/4 rounded-md bg-gray-100">
+              <input type="text" id="total" name="total_amount" placeholder="Total amount" class="w-3/4 rounded-md bg-gray-100 text-black">
             </div>
 
             <div class="form-control">
@@ -148,7 +149,30 @@
         });
     </script>
 
-<script src="{% static 'js/addmore.js' %}"></script>
+    <!-- Aoutomatic name display function -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const idNoInput = document.getElementById("id_no");
+          const nameInput = document.getElementById("name");
+      
+          // Safely parse JSON passed from Django context
+          const dataMap = JSON.parse('{{ data|escapejs }}');
+      
+          // Listen for changes in the ID input field
+          idNoInput.addEventListener("input", function () {
+              const idNoValue = idNoInput.value.trim(); // Get the entered ID
+              const matchedEntry = dataMap.find(entry => entry.id_no === idNoValue); // Match ID
+      
+              if (matchedEntry) {
+                  nameInput.value = matchedEntry.name; // Auto-fill the name field
+              } else {
+                  nameInput.value = ""; // Clear the name field
+              }
+          });
+      });
+    </script>
+
+<!-- <script src="{% static 'js/addmore.js' %}"></script> -->
 
 </body>
 </html>

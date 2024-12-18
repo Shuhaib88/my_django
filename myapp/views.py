@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import os
+import json
+from datetime import date
 from .models import addmahallumembers, addfamilymembers, masapirivu, pallifund, additionalfund
 from django.shortcuts import get_object_or_404
 
@@ -141,9 +143,14 @@ def pallifund_view(request):
 
 # @login_required
 def masapirivu_view(request):
-    if request.method == "POST":
 
-        # Main fields
+    current_date = date.today().strftime('%Y-%m-%d')
+
+    data = list(addmahallumembers.objects.values('id_no', 'name'))
+    print(f"ID and Names: {list(data)}")
+    print(f"Date: {current_date}")
+
+    if request.method == "POST":
         name = request.POST.get('name')
         id_no = request.POST.get('id_no')
         reciept_no = request.POST.get('reciept_no')
@@ -153,7 +160,6 @@ def masapirivu_view(request):
         description = request.POST.get('description')
         total_amount = request.POST.get('total_amount')
         debit_credit = request.POST.get('radio10')
-        date = request.POST.get('date')
 
         # Save the main fund record
         new_fund = masapirivu(
@@ -166,7 +172,7 @@ def masapirivu_view(request):
             description=description,
             total_amount=total_amount,
             debit_credit=debit_credit,
-            date=date
+            date=current_date
         )
         new_fund.save()
 
@@ -194,7 +200,9 @@ def masapirivu_view(request):
         messages.success(request, "Masa Pirivu Data saved successfully!")
         return redirect('masapirivu')
 
-    return render(request, 'myapp/masapirivu.html')
+    return render(request, 'myapp/masapirivu.html', {
+        'data': json.dumps(data)
+    })
 
 
 
@@ -333,5 +341,9 @@ def list_masapirivu(request):
 
     return render(request, 'myapp/list_masapirivu.html', {'sorted_data': sorted_data})
 
+# @login_required
+def edit_member_details(request):
+
+    return render(request, 'myapp/edit_member_details.html')
 
 

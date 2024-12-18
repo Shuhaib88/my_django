@@ -54,6 +54,35 @@
           </div>
     </div>
     
+    <!-- function to sort data based on date, recent on top -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("dataTable"); // Get the table body element
+    
+        function sortTableByDate() {
+          // Get all rows from the table
+          const rows = Array.from(tableBody.querySelectorAll("tr"));
+    
+          // Sort the rows based on the "Date" column
+          rows.sort((a, b) => {
+            // Extract date text from each row
+            const dateA = new Date(a.cells[2].innerText.trim()); // 3rd column - Date
+            const dateB = new Date(b.cells[2].innerText.trim());
+            
+            // Compare dates (recent first)
+            return dateB - dateA;
+          });
+    
+          // Re-insert rows into the table in sorted order
+          rows.forEach(row => tableBody.appendChild(row));
+        }
+    
+        // Call the function on page load
+        sortTableByDate();
+      });
+    </script>
+    
+    
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           const dateFilterInput = document.getElementById("dateFilter");
@@ -99,12 +128,5 @@
       });
       </script>
       
-      
-      
-      
-      
-    
-
-
 </body>
 </html>

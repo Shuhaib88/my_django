@@ -17,37 +17,23 @@
 
     <div class="mt-4 l:ml-2 sm:w-full lg:ml-60 l:w-96 lg:w-8/12">
     
-            <!-- <input type="date" id="dateFilter" class="p-2 border mb-4 l:w-28 lg:w-36" placeholder="Filter by date">
-            <input type="text" id="textFilter" class="p-2 border mb-4 l:w-28 lg:w-36" placeholder="Filter by text"> -->
-            <!-- <button class="btn btn-warning l:ml-12 xl:ml-72">Edit</button>
-            <button class="btn btn-error l:ml-36 xl:ml-10">Delete</button> -->
-
-            <!-- <div class="flex space-x-4 l:w-28 lg:w-36">
-                <input type="date" id="dateFilter" class="p-2 border flex-grow" placeholder="Filter by date">
-                <input type="text" id="textFilter" class="p-2 border flex-grow" placeholder="Filter by text">
+        <div class="flex flex-wrap space-x-4 items-center">
+            <div class="flex space-x-4 l:ml-8 lg:ml-0">
+              <input type="date" id="dateFilter" class="p-2 border flex-grow l:w-36 lg:w-40" placeholder="Filter by date">
+              <input type="text" id="textFilter" class="p-2 border flex-grow l:w-36 lg:w-40" placeholder="Filter by text">
             </div>
-
-            <div class="flex l:w-28 l:ml-0 lg:w-36 lg:ml-96">
-                <button class="btn btn-warning l:ml-12 xl:ml-72">Edit</button>
-                <button class="btn btn-error l:ml-36 xl:ml-10">Delete</button>
-            </div> -->
-
-            <div class="flex flex-wrap space-x-4 items-center">
-                <div class="flex space-x-4 l:ml-8 lg:ml-0 ">
-                  <input type="date" id="dateFilter" class="p-2 border flex-grow l:w-36 lg:w-40" placeholder="Filter by date">
-                  <input type="text" id="textFilter" class="p-2 border flex-grow l:w-36 lg:w-40" placeholder="Filter by text">
-                </div>
-              
-                <div class="flex space-x-4 l:w-full lg:w-36">
-                    <button class="btn btn-warning l:ml-12 xl:ml-72">Edit</button>
-                    <button class="btn btn-error l:ml-36 xl:ml-10">Delete</button>
-                  </div>
-              </div>
-              
-        <div class="overflow-x-auto">
+          
+            <div class="flex space-x-4 l:w-full lg:w-36">
+                <form action="{% url 'edit_member_details' %}" method="get">
+                    <button class="btn btn-warning l:ml-48 xl:ml-72 l:w-20 lg:w-36" >Edit Details</button>
+                </form>
+               <!-- <button class="btn btn-error l:ml-36 xl:ml-10">Delete</button> -->
+            </div>
+          </div>
+          
+        <div class="overflow-x-auto mt-4">
             <table class="table border border-r w-full text-left">
-                <!-- {% if id_no == id_no %}
-                {% endif %} -->
+
                 {% for addmahallumembers in addmahallumembers_data %}
                 <thead>
                     <tr class="border-primary">

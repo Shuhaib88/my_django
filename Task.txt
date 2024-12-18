@@ -1,0 +1,16 @@
+done :
+
+palli fund entry form -> confirmation -> done
+
+masa pirivu form -> confirmation -> done
+
+masa pirivu form -> reciept no and date automatic
+
+masa pirivu form ->  table according to the date
+
+pending :
+
+url and page : done, now start making table and edit
+edit -> individual mahallu member details
+
+print after the masapirivu -> printer

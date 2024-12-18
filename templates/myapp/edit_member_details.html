@@ -1,0 +1,56 @@
+
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Mahallu Member</title>
+    {% tailwind_css %}
+</head>
+<body>
+    {% include 'myapp/navbar.html' %}
+
+    <h1 class="flex items-center justify-center text-xl">Edit Mahallu Members Details</h1>
+
+    <div class="mt-4 l:ml-2 sm:w-full lg:ml-60 l:w-96 lg:w-8/12">
+        
+        <div class="overflow-x-auto">
+            <table class="table border border-r w-full text-left">
+              <!-- head -->
+              <thead class="bg-slate-300 text-black">
+                <tr class="border-primary">
+                  <th class="border-r p-2">Mahallu ID</th>
+                  <th class="border-r p-2">Name</th>
+                  <th class="border-r p-2">Date</th>
+                  <th class="border-r p-2">Reciept No</th>
+                  <th class="border-r p-2">Palli-Amount</th>
+                  <th class="border-r p-2">Madrassa-Amount</th>
+                  <th class="border-r p-2">Mess-Amount</th>
+                  <th class="border-r p-2">Description</th>
+                  <th class="border-r p-2">Total Amount</th>
+                </tr>
+              </thead>
+              <tbody id="dataTable">
+                <!-- row 1 -->
+                {% for data in sorted_data %}
+                <tr class="border-white hover:bg-black hover:text-action-color" onclick="viewIndividualStatement('{{ member.id_no }}')">
+                  <th class="border-r p-2">{{ data.id_no }}</th>
+                  <td class="border-r p-2">{{ data.name }}</td>
+                  <td class="border p-2">{{ data.date }}</td>
+                  <td class="border-r p-2">{{ data.reciept_no }}</td>
+                  <td class="border p-2">{{ data.palli }}</td>
+                  <td class="border p-2">{{ data.madrassa }}</td>
+                  <td class="border p-2">{{ data.mess }}</td>
+                  <td class="border p-2">{{ data.description }}</td>
+                  <td class="border p-2">{{ data.total_amount }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+    </div>
+    
+</body>
+</html>
