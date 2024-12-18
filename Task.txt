@@ -1,5 +1,5 @@
 done :
-
+------------------------------------------------------
 palli fund entry form -> confirmation -> done
 
 masa pirivu form -> confirmation -> done
@@ -8,9 +8,16 @@ masa pirivu form -> reciept no and date automatic
 
 masa pirivu form ->  table according to the date
 
-pending :
-
-url and page : done, now start making table and edit
 edit -> individual mahallu member details
 
+addmore delete/remove button
+------------------------------------------------------
+pending :
+------------------------------------------------------
+
+response aftert the form was submit
+
 print after the masapirivu -> printer
+
+convert the inserting data to caps complete
+oninput="this.value = this.value.toUpperCase()"

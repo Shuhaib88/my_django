@@ -70,10 +70,6 @@
                 <label for="amount" class="w-1/4">Amount <span class="text-red-500">*</span></label>
                 <input type="number" id="amount" name="amount" placeholder="Enter the amount" class="w-3/4 rounded-md amount-field" required>
             </div>
-            <!-- <div class="flex items-center space-x-4">
-              <label for="amount" class="w-1/4">Amount <span class="text-red-500">*</span></label>
-              <input type="number" id="amount" name="amount" placeholder="Enter the amount" class="w-3/4 rounded-md amount-field" required>
-            </div> -->
 
             <div id="dynamicFields" class="space-y-4 mr-14"></div>
 
@@ -98,7 +94,7 @@
 
             <button type="button" id="addOptionButton" class="btn btn-info">Add More Fund</button>
 
-            <button type="submit" class="btn btn-accent">Submit</button>
+            <button type="submit" class="btn btn-accent ml-24">Submit</button>
         </form>
     </div>
 
@@ -115,6 +111,8 @@
     </div>
 
     <script src="{% static 'js/addmore.js' %}"></script>
+
+    <!-- function for confirmation popup -->
     <script>
         const form = document.getElementById('pallifundForm');
         const popup = document.getElementById('confirmationPopup');

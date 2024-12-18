@@ -24,12 +24,12 @@
             </div>
           
             <div class="flex space-x-4 l:w-full lg:w-36">
-                <form action="{% url 'edit_member_details' %}" method="get">
-                    <button class="btn btn-warning l:ml-48 xl:ml-72 l:w-20 lg:w-36" >Edit Details</button>
-                </form>
+                <!-- <form action="{% url 'edit_member_details' %}" method="get"> -->
+                    <button class="btn btn-warning l:ml-48 xl:ml-72 l:w-20 lg:w-36 edit-btn" data-id="{{ id_no }}" >Edit Details</button>
+                <!-- </form> -->
                <!-- <button class="btn btn-error l:ml-36 xl:ml-10">Delete</button> -->
             </div>
-          </div>
+          </div> 
           
         <div class="overflow-x-auto mt-4">
             <table class="table border border-r w-full text-left">
@@ -125,6 +125,22 @@
             </table>
         </div>
     </div>
+
+    <!-- function for passin the id_no along with the url to edit_member_details -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editButtons = document.querySelectorAll('.edit-btn');
+    
+            editButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const idNo = this.getAttribute('data-id');
+                    const url = `{% url 'edit_member_details' %}?id_no=` + idNo;
+                    window.location.href = url;
+                });
+            });
+        });
+    </script>
+    
 
     <script>
         document.getElementById('dateFilter').addEventListener('input', filterTable);

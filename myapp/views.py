@@ -325,9 +325,6 @@ def list_members(request):
     mahallumembers = addmahallumembers.objects.all()
     members = sorted(mahallumembers, key=lambda x: int(x.id_no))
 
-    # sorted_ids = [member.id_no for member in members]
-    # print("Sorted Member ID_NOs:", sorted_ids)
-
     return render(request, 'myapp/list_members.html', {'mahallumembers': members})
 
 # @login_required
@@ -336,14 +333,68 @@ def list_masapirivu(request):
     data = masapirivu.objects.all()
     sorted_data = sorted(data, key=lambda x: int(x.id_no))
 
-    # sorted_ids = [member.id_no for member in members]
-    # print("Sorted Member ID_NOs:", sorted_ids)
-
     return render(request, 'myapp/list_masapirivu.html', {'sorted_data': sorted_data})
 
 # @login_required
-def edit_member_details(request):
 
-    return render(request, 'myapp/edit_member_details.html')
+def edit_member_details(request):
+    id_no = request.GET.get('id_no')
+    print(f"GET ID: {id_no}")
+
+    if request.method == "POST":
+        print(f"Request POST data: {request.POST}")
+
+        id_no = request.POST.get('id_no')  # Keep ID consistent
+        name = request.POST.get('name')
+        father_name = request.POST.get('father_name')
+        house_name = request.POST.get('house_name')
+        family_members = request.POST.getlist('family_member')
+        relations = request.POST.getlist('relation')
+
+        # Validate the POST data
+        if not id_no or not family_members or not relations:
+            print("Missing required data!")
+            return render(
+                request, 
+                'myapp/edit_member_details.html', 
+                {'error': 'Required fields are missing.'}
+            )
+
+        # Save the primary member
+        new_member = addmahallumembers(
+            id_no=id_no,
+            name=name,
+            father_name=father_name,
+            house_name=house_name,
+            family_member=family_members[0],
+            relation=relations[0]
+        )
+        addmahallumembers.objects.filter(id_no=id_no).delete()
+        addfamilymembers.objects.filter(id_no=id_no).delete()
+        new_member.save()
+        # print(f"New member added: {new_member}")
+
+        # Save the additional family members
+        for i in range(1, len(family_members)):
+            new_family_member = addfamilymembers(
+                id_no=id_no,
+                family_member=family_members[i],
+                relation=relations[i]
+            )
+            new_family_member.save()
+            # print(f"Additional family member added: {family_member}")
+
+        # Redirect to the same page after processing POST
+        return redirect(f'/edit_member_details/?id_no={id_no}')
+
+    # Fetch data for GET request
+    mahallumembers_data = addmahallumembers.objects.filter(id_no=id_no)
+    familymembers_data = addfamilymembers.objects.filter(id_no=id_no)
+
+    return render(request, 'myapp/edit_member_details.html', {
+        'mahallumembers_data': mahallumembers_data,
+        'familymembers_data': familymembers_data
+    })
+
 
 

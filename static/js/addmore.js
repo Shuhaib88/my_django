@@ -5,7 +5,7 @@ document.getElementById("addOptionButton").addEventListener("click", function ()
 
     // Create new div for the field group
     const newFieldDiv = document.createElement("div");
-    newFieldDiv.classList.add("space-y-4", "w-96"); // Space between fields
+    newFieldDiv.classList.add("space-y-4", "w-96", "fund-field-group"); // Space between fields
 
     // Fund Type Field
     const fundTypeContainer = document.createElement("div");
@@ -42,7 +42,11 @@ document.getElementById("addOptionButton").addEventListener("click", function ()
 
     amountContainer.innerHTML = `
         <label for="amount${memberCounter}" class="w-1/4">Amount <span class="text-red-500">*</span></label>
+        <div class="flex items-center space-x-4">
         <input type="number" id="amount${memberCounter}" name="amount${memberCounter}" placeholder="Enter the amount" class="w-3/4 p-2 border rounded-md amount-field" required>
+        <button class="btn btn-error remove-btn" type="button">Remove</button>
+        </div>
+        
     `;
 
     // Append all containers to the newFieldDiv
@@ -55,6 +59,13 @@ document.getElementById("addOptionButton").addEventListener("click", function ()
 
     // Increment the counter for the next set of fields
     memberCounter++;
+
+    // Add event listener to the new "Remove" button to delete the field
+    const removeButton = newFieldDiv.querySelector(".remove-btn");
+    removeButton.addEventListener("click", function() {
+        // Remove the whole field group (newFieldDiv)
+        newFieldDiv.remove();
+    });
 
     // Add event listener to the new amount input
     const newAmountInput = newFieldDiv.querySelector(".amount-field");

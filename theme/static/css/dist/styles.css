@@ -3966,6 +3966,10 @@ details.collapse summary::-webkit-details-marker {
   margin-top: -2rem;
 }
 
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
 .mb-4 {
   margin-bottom: 1rem;
 }
@@ -4008,6 +4012,10 @@ details.collapse summary::-webkit-details-marker {
 
 .ml-28 {
   margin-left: 7rem;
+}
+
+.ml-32 {
+  margin-left: 8rem;
 }
 
 .ml-36 {
@@ -4110,32 +4118,16 @@ details.collapse summary::-webkit-details-marker {
   margin-top: 2rem;
 }
 
-.mt-\[-8px\] {
-  margin-top: -8px;
+.ml-80 {
+  margin-left: 20rem;
 }
 
-.mt-\[-3\] {
-  margin-top: -3;
+.ml-6 {
+  margin-left: 1.5rem;
 }
 
-.mb-10 {
-  margin-bottom: 2.5rem;
-}
-
-.mt-\[-2\] {
-  margin-top: -2;
-}
-
-.mt-\[-5\] {
-  margin-top: -5;
-}
-
-.mt-\[-10\] {
-  margin-top: -10;
-}
-
-.ml-32 {
-  margin-left: 8rem;
+.ml-52 {
+  margin-left: 13rem;
 }
 
 .block {
@@ -4949,14 +4941,6 @@ details.collapse summary::-webkit-details-marker {
 }
 
 @media (min-width: 360px) {
-  .l\:ml-0 {
-    margin-left: 0px;
-  }
-
-  .l\:ml-12 {
-    margin-left: 3rem;
-  }
-
   .l\:ml-2 {
     margin-left: 0.5rem;
   }
@@ -4965,28 +4949,24 @@ details.collapse summary::-webkit-details-marker {
     margin-left: 9rem;
   }
 
-  .l\:ml-8 {
-    margin-left: 2rem;
-  }
-
-  .l\:ml-16 {
-    margin-left: 4rem;
-  }
-
-  .l\:ml-32 {
-    margin-left: 8rem;
-  }
-
   .l\:ml-48 {
     margin-left: 12rem;
   }
 
-  .l\:w-28 {
-    width: 7rem;
+  .l\:ml-8 {
+    margin-left: 2rem;
+  }
+
+  .l\:w-20 {
+    width: 5rem;
   }
 
   .l\:w-36 {
     width: 9rem;
+  }
+
+  .l\:w-72 {
+    width: 18rem;
   }
 
   .l\:w-80 {
@@ -4999,10 +4979,6 @@ details.collapse summary::-webkit-details-marker {
 
   .l\:w-full {
     width: 100%;
-  }
-
-  .l\:w-20 {
-    width: 5rem;
   }
 }
 
@@ -5025,6 +5001,14 @@ details.collapse summary::-webkit-details-marker {
 
   .lg\:ml-60 {
     margin-left: 15rem;
+  }
+
+  .lg\:ml-72 {
+    margin-left: 18rem;
+  }
+
+  .lg\:ml-80 {
+    margin-left: 20rem;
   }
 
   .lg\:ml-96 {
@@ -5051,8 +5035,12 @@ details.collapse summary::-webkit-details-marker {
     width: 100%;
   }
 
-  .lg\:w-20 {
-    width: 5rem;
+  .lg\:w-52 {
+    width: 13rem;
+  }
+
+  .lg\:w-6\/12 {
+    width: 50%;
   }
 }
 

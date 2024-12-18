@@ -14,43 +14,111 @@
 
     <h1 class="flex items-center justify-center text-xl">Edit Mahallu Members Details</h1>
 
-    <div class="mt-4 l:ml-2 sm:w-full lg:ml-60 l:w-96 lg:w-8/12">
+    <div class="mt-4 flex items-center justify-center ">
+
+      <form method="POST" class="space-y-4 l:w-80 lg:w-96">
+        {% csrf_token %}
         
-        <div class="overflow-x-auto">
-            <table class="table border border-r w-full text-left">
-              <!-- head -->
-              <thead class="bg-slate-300 text-black">
-                <tr class="border-primary">
-                  <th class="border-r p-2">Mahallu ID</th>
-                  <th class="border-r p-2">Name</th>
-                  <th class="border-r p-2">Date</th>
-                  <th class="border-r p-2">Reciept No</th>
-                  <th class="border-r p-2">Palli-Amount</th>
-                  <th class="border-r p-2">Madrassa-Amount</th>
-                  <th class="border-r p-2">Mess-Amount</th>
-                  <th class="border-r p-2">Description</th>
-                  <th class="border-r p-2">Total Amount</th>
-                </tr>
-              </thead>
-              <tbody id="dataTable">
-                <!-- row 1 -->
-                {% for data in sorted_data %}
-                <tr class="border-white hover:bg-black hover:text-action-color" onclick="viewIndividualStatement('{{ member.id_no }}')">
-                  <th class="border-r p-2">{{ data.id_no }}</th>
-                  <td class="border-r p-2">{{ data.name }}</td>
-                  <td class="border p-2">{{ data.date }}</td>
-                  <td class="border-r p-2">{{ data.reciept_no }}</td>
-                  <td class="border p-2">{{ data.palli }}</td>
-                  <td class="border p-2">{{ data.madrassa }}</td>
-                  <td class="border p-2">{{ data.mess }}</td>
-                  <td class="border p-2">{{ data.description }}</td>
-                  <td class="border p-2">{{ data.total_amount }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+        {% for mahallumembers in mahallumembers_data %}
+        <div class="flex items-center space-x-8">
+          <label for="id_no" class="w-1/4">Mahallu Membership Id<span class="text-red-500">*</span></label>
+          <div class="w-96">
+            <input type="text" id="id_no" name="id_no" placeholder="Enter the ID" class="w-full p-2 border rounded-md text-black" value="{{mahallumembers.id_no}}" required>
           </div>
-    </div>
+        </div>
+
+          <div class="flex items-center space-x-8">
+            <label for="name" class="w-1/4">Name <span class="text-red-500">*</span></label>
+            <input type="text" id="name" name="name" placeholder="Enter the name" class="w-3/4 rounded-md text-black" value="{{mahallumembers.name}}" required>
+          </div>
+
+          <div class="flex items-center space-x-8">
+              <label for="father_name" class="w-1/4">Father's/Husband Name<span class="text-red-500">*</span></label>
+              <input type="text" id="father_name" name="father_name" placeholder="Enter Father's/Husband Name" class="w-3/4 p-2 border rounded-md text-black" value="{{mahallumembers.father_name}}" required>
+          </div>
+
+          <div class="flex items-center space-x-8">
+              <label for="house_name" class="w-1/4">House Name<span class="text-red-500">*</span></label>
+              <input type="text" id="house_name" name="house_name" placeholder="Enter the House name" class="w-3/4 p-2 border rounded-md text-black" value="{{mahallumembers.house_name}}" required>
+          </div>
+
+          <div class="flex items-center space-x-8">
+              <label for="family_member" class="w-1/4">Family Member<span class="text-red-500">*</span></label>
+              <div class="w-3/4 space-y-4">
+                  <input id="family_member" name="family_member" placeholder="Family Member Name" class="w-full p-2 border rounded-md text-black" value="{{mahallumembers.family_member}}">
+                <input list="relation_list" id="relation" name="relation" placeholder="Relation" class="w-full p-2 border rounded-md text-black" value="{{mahallumembers.relation}}">
+                <datalist id="relation_list">
+                  <option value="Mother">
+                  <option value="Father">
+                  <option value="Grand Father">
+                  <option value="Grand Mother">
+                  <option value="Wife">
+                  <option value="Son">
+                  <option value="Daughter">
+                  <option value="Brother">
+                  <option value="Sister">
+                  <option value="Cousin">
+                </datalist>
+              </div>
+            </div>
+            {% for familymembers in familymembers_data %}
+            {% if familymembers.id_no == mahallumembers.id_no %}
+            <div class="flex items-center space-x-8 family-member" data-id="{{ familymembers.id_no }}">
+              <label for="family_member" class="w-1/4">Family Member<span class="text-red-500">*</span></label>
+              <div class="w-3/4 space-y-4">
+                  <input id="family_member" name="family_member" placeholder="Family Member Name" 
+                        class="w-full p-2 border rounded-md text-black" 
+                        value="{{familymembers.family_member}}">
+                  <div class="flex items-center space-x-4">
+                      <input list="relation_list" id="relation" name="relation" placeholder="Relation" 
+                            class="w-full p-2 border rounded-md text-black" 
+                            value="{{familymembers.relation}}">
+                      <button class="btn btn-error remove-btn" type="button">Remove</button>
+                  </div>
+                  <datalist id="relation_list">
+                      <option value="Mother">
+                      <option value="Father">
+                      <option value="Grand Father">
+                      <option value="Grand Mother">
+                      <option value="Wife">
+                      <option value="Son">
+                      <option value="Daughter">
+                      <option value="Brother">
+                      <option value="Sister">
+                      <option value="Cousin">
+                  </datalist>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+            
+
+            <div id="dynamicFields" class="space-y-4 mr-14"></div>
+
+            <button type="button" id="addOptionButton" class="btn btn-info hover:bg-created-blue">
+              Add Family Members
+            </button>
+            <button type="submit" class="btn btn-accent ml-24">Submit</button>
+        </form>
+  </div>
+
+  <!-- function to remove the addmore field -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add event listener to all remove buttons
+        document.querySelectorAll('.remove-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const parentDiv = this.closest('.family-member');
+                if (parentDiv) {
+                    parentDiv.remove(); // Remove the corresponding element from the DOM
+                }
+            });
+        });
+    });
+</script>
+
+  <script src="{% static 'js/add_members.js' %}"></script>
     
 </body>
 </html>
