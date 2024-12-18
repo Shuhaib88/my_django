@@ -15,8 +15,8 @@
     <h1 class="flex items-center justify-center text-xl">Masapirivu List</h1>
 
     <div class="mt-4 l:ml-2 sm:w-full lg:ml-60 l:w-96 lg:w-8/12">
-        <!-- Input field for filtering -->
-        <input type="text" id="tableFilter" class="p-2 border mb-4" placeholder="Search For Data">
+        <input type="date" id="dateFilter" class="p-2 border mb-4" placeholder="Filter by date">
+        <input type="text" id="textFilter" class="p-2 border mb-4" placeholder="Search For Data">
         
         <div class="overflow-x-auto">
             <table class="table border border-r w-full text-left">
@@ -25,44 +25,86 @@
                 <tr class="border-primary">
                   <th class="border-r p-2">Mahallu ID</th>
                   <th class="border-r p-2">Name</th>
-                  <th class="border-r p-2">Fathers Name</th>
-                  <th class="p-2">House Name</th>
+                  <th class="border-r p-2">Date</th>
+                  <th class="border-r p-2">Reciept No</th>
+                  <th class="border-r p-2">Palli-Amount</th>
+                  <th class="border-r p-2">Madrassa-Amount</th>
+                  <th class="border-r p-2">Mess-Amount</th>
+                  <th class="border-r p-2">Description</th>
+                  <th class="border-r p-2">Total Amount</th>
                 </tr>
               </thead>
               <tbody id="dataTable">
                 <!-- row 1 -->
-                {% for member in mahallumembers %}
+                {% for data in sorted_data %}
                 <tr class="border-white hover:bg-black hover:text-action-color" onclick="viewIndividualStatement('{{ member.id_no }}')">
-                  <th class="border-r p-2">{{ member.id_no }}</th>
-                  <td class="border-r p-2">{{ member.name }}</td>
-                  <td class="border-r p-2">{{ member.father_name }}</td>
-                  <td class="p-2">{{ member.house_name }}</td>
+                  <th class="border-r p-2">{{ data.id_no }}</th>
+                  <td class="border-r p-2">{{ data.name }}</td>
+                  <td class="border p-2">{{ data.date }}</td>
+                  <td class="border-r p-2">{{ data.reciept_no }}</td>
+                  <td class="border p-2">{{ data.palli }}</td>
+                  <td class="border p-2">{{ data.madrassa }}</td>
+                  <td class="border p-2">{{ data.mess }}</td>
+                  <td class="border p-2">{{ data.description }}</td>
+                  <td class="border p-2">{{ data.total_amount }}</td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
     </div>
-
+    
     <script>
-        document.getElementById('tableFilter').addEventListener('input', filterTable);
+      document.addEventListener("DOMContentLoaded", function () {
+          const dateFilterInput = document.getElementById("dateFilter");
+          const textFilterInput = document.getElementById("textFilter");
+          const dataTable = document.querySelector("#dataTable");
+      
+          // Function to filter table rows
+          function filterTable() {
+              const dateFilter = dateFilterInput.value.trim(); // Date filter value
+              const textFilter = textFilterInput.value.trim().toLowerCase(); // Text filter value
+      
+              dataTable.querySelectorAll("tr").forEach(row => {
+                  const idCell = row.querySelector("th:nth-child(1)"); // `id_no` column is in `<th>`
+                  const dateCell = row.querySelector("td:nth-child(3)"); // Date column
+                  const allCellsText = Array.from(row.querySelectorAll("td")).map(cell => cell.innerText.toLowerCase());
+      
+                  // Parse `id_no` to integer for filtering
+                  let idMatches = true;
+                  if (textFilter && idCell) {
+                      const idValue = idCell.innerText.trim();
+                      const idParsed = parseInt(idValue, 10); // Convert `id_no` to an integer
+                      if (!isNaN(idParsed)) {
+                          // If filter text can be parsed as an integer, compare as numbers
+                          const filterParsed = parseInt(textFilter, 10);
+                          idMatches = !isNaN(filterParsed) ? idParsed === filterParsed : false;
+                      } else {
+                          // If `id_no` isn't a number, compare as strings
+                          idMatches = idValue.toLowerCase().includes(textFilter);
+                      }
+                  }
+      
+                  const dateMatches = dateFilter ? (dateCell?.innerText.trim().includes(dateFilter)) : true;
+                  const textMatches = textFilter ? allCellsText.some(cellText => cellText.includes(textFilter)) : true;
+      
+                  // Show row if all conditions match
+                  row.style.display = (dateMatches && (idMatches || textMatches)) ? "" : "none";
+              });
+          }
+      
+          // Attach input event listeners to filters
+          dateFilterInput.addEventListener("input", filterTable);
+          textFilterInput.addEventListener("input", filterTable);
+      });
+      </script>
+      
+      
+      
+      
+      
+    
 
-        function filterTable() {
-            const filter = document.getElementById('tableFilter').value.toLowerCase();
-            const rows = document.querySelectorAll('#dataTable tr');
-
-            rows.forEach(row => {
-                const cells = Array.from(row.querySelectorAll('th, td')).map(cell => cell.innerText.toLowerCase());
-                const match = cells.some(cell => cell.includes(filter));
-                row.style.display = match ? '' : 'none';
-            });
-        }
-
-        function viewIndividualStatement(id_no) {
-            window.location.href = "{% url 'individual_statement' %}?id_no=" + id_no;
-            // window.location.href = "{% url 'individual_statement' %}?id_no={{ fund.id_no }}";
-        }
-    </script>
 
 </body>
 </html>

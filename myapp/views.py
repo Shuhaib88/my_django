@@ -325,13 +325,13 @@ def list_members(request):
 # @login_required
 def list_masapirivu(request):
 
-    mahallumembers = addmahallumembers.objects.all()
-    members = sorted(mahallumembers, key=lambda x: int(x.id_no))
+    data = masapirivu.objects.all()
+    sorted_data = sorted(data, key=lambda x: int(x.id_no))
 
     # sorted_ids = [member.id_no for member in members]
     # print("Sorted Member ID_NOs:", sorted_ids)
 
-    return render(request, 'myapp/list_masapirivu.html', {'mahallumembers': members})
+    return render(request, 'myapp/list_masapirivu.html', {'sorted_data': sorted_data})
 
 
 
