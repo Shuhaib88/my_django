@@ -130,20 +130,18 @@ def pallifund_view(request):
                     amount=amount
                 )
                 new_fund_detail.save()
-                print(f"Saved Fund Detail: {new_fund_detail}")
-
+                # print(f"Saved Fund Detail: {new_fund_detail}")
             # Increment to check the next set of fields
             index += 1
 
-        messages.success(request, "Palli Fund entry saved successfully!")
-        return redirect('pallifund')
-
+        context = {
+            'success': True
+        }
+        return render(request, 'myapp/pallifund.html', context)
     return render(request, 'myapp/pallifund.html')
 
 
 # @login_required
-
-
 def masapirivu_view(request):
 
     current_date = date.today().strftime('%Y-%m-%d')
@@ -197,9 +195,6 @@ def masapirivu_view(request):
     return render(request, 'myapp/masapirivu.html', {
         'data': json.dumps(data)
     })
-
-
-
 
 # @login_required
 def add_members_view(request):
@@ -256,11 +251,12 @@ def add_members_view(request):
             # Increment the index
             index += 1
 
-        messages.success(request, "Mahallu Members Added Successfully, including family members!")
-        return redirect('add_members')
+        context = {
+            'success': True
+        }
+        return render(request, 'myapp/pallifund.html', context)
 
     return render(request, 'myapp/add_members.html')
-
 
 # @login_required
 def individual_statement(request):
@@ -287,15 +283,13 @@ def individual_statement(request):
         pallifund_data = pallifund.objects.all()
         masapirivu_data = masapirivu.objects.all()
         additionalfund_data = additionalfund.objects.all()
-
+ 
     return render(request, 'myapp/individual_statement.html', {
         'id_no': id_no,
         'pallifund_data': pallifund_data,
         'masapirivu_data': masapirivu_data,
         'additionalfund_data': additionalfund_data,
     })
-
-
 
 # @login_required
 def acc_statement(request):

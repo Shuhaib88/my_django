@@ -9,8 +9,8 @@ document.getElementById("addOptionButton").addEventListener("click", function ()
     newField.innerHTML = `
         <label for="family_member${memberCounter}" class="w-1/4">Family Member<span class="text-red-500">*</span></label>
         <div class="w-3/4 space-y-4">
-            <input id="family_member${memberCounter}" name="family_member${memberCounter}" placeholder="Family Member Name" class="w-full p-2 border rounded-md">
-            <input list="relation_list" id="relation${memberCounter}" name="relation${memberCounter}" placeholder="Relation" class="w-full p-2 border rounded-md">
+            <input id="family_member${memberCounter}" name="family_member${memberCounter}" placeholder="Family Member Name" class="text-black w-full p-2 border rounded-md">
+            <input list="relation_list" id="relation${memberCounter}" name="relation${memberCounter}" placeholder="Relation" class="text-black w-full p-2 border rounded-md">
             <datalist id="relation_list">
                 <option value="Mother">
                 <option value="Father">

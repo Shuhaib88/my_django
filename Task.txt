@@ -11,13 +11,16 @@ masa pirivu form ->  table according to the date
 edit -> individual mahallu member details
 
 addmore delete/remove button
+
+response aftert the form was submit
 ------------------------------------------------------
 pending :
 ------------------------------------------------------
-
-response aftert the form was submit
 
 print after the masapirivu -> printer
 
 convert the inserting data to caps complete
 oninput="this.value = this.value.toUpperCase()"
+
+
+(response aftert the form was submit in edit mahallu members got a trouble)

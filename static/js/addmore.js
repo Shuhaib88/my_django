@@ -14,7 +14,7 @@ document.getElementById("addOptionButton").addEventListener("click", function ()
     fundTypeContainer.innerHTML = `
         <label for="fund_type${memberCounter}" class="w-1/4">Fund Type <span class="text-red-500">*</span></label>
         <div class="w-3/4">
-            <input list="fund_type_options${memberCounter}" id="fund_type${memberCounter}" name="fund_type${memberCounter}" placeholder="Enter the type of fund" class="w-full p-2 border rounded-md" required>
+            <input list="fund_type_options${memberCounter}" id="fund_type${memberCounter}" name="fund_type${memberCounter}" placeholder="Enter the type of fund" class="text-black w-full p-2 border rounded-md" required>
             <datalist id="fund_type_options${memberCounter}">
                 <option value="Maasa Pirivu">
                 <option value="Palli Fund">
@@ -33,7 +33,7 @@ document.getElementById("addOptionButton").addEventListener("click", function ()
 
     descriptionContainer.innerHTML = `
         <label for="description${memberCounter}" class="w-1/4">Description</label>
-        <input type="text" id="description${memberCounter}" name="description${memberCounter}" placeholder="Enter the Description" class="w-3/4 p-2 border rounded-md">
+        <input type="text" id="description${memberCounter}" name="description${memberCounter}" placeholder="Enter the Description" class="text-black w-3/4 p-2 border rounded-md">
     `;
 
     // Amount Field
@@ -43,7 +43,7 @@ document.getElementById("addOptionButton").addEventListener("click", function ()
     amountContainer.innerHTML = `
         <label for="amount${memberCounter}" class="w-1/4">Amount <span class="text-red-500">*</span></label>
         <div class="flex items-center space-x-4">
-        <input type="number" id="amount${memberCounter}" name="amount${memberCounter}" placeholder="Enter the amount" class="w-3/4 p-2 border rounded-md amount-field" required>
+        <input type="number" id="amount${memberCounter}" name="amount${memberCounter}" placeholder="Enter the amount" class="text-black w-3/4 p-2 border rounded-md amount-field" required>
         <button class="btn btn-error remove-btn" type="button">Remove</button>
         </div>
         

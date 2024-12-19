@@ -17,7 +17,7 @@
 
     <div class="mt-4 flex items-center justify-center ">
 
-        <form method="POST" class="space-y-4 l:w-80 lg:w-96">
+        <form method="POST" id="addmembers" class="space-y-4 l:w-80 lg:w-96">
           {% csrf_token %}
 
           <div class="flex items-center space-x-8">
@@ -71,8 +71,98 @@
               <button type="submit" class="btn btn-accent">Submit</button>
 
           </form>
+    </div>
+    <!-- Confirmation Popup -->
+    <div id="confirmationPopup" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-gray-300 rounded-lg p-6 shadow-lg w-96">
+          <h2 class="text-lg text-black font-semibold mb-4">Confirm Submission</h2>
+          <div id="popupContent" class="mb-6 text-black">
+              <!-- Form data will appear here -->
+          </div>
+          <div class="flex justify-end space-x-4">
+              <button id="popupCancelButton" class="btn btn-error">Cancel</button>
+              <button id="popupConfirmButton"  class="btn btn-accent">OK</button>
+          </div>
+      </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("addmembers");
+        const popup = document.getElementById("confirmationPopup");
+        const popupContent = document.getElementById("popupContent");
+        const cancelPopupButton = document.getElementById("popupCancelButton");
+        const confirmPopupButton = document.getElementById("popupConfirmButton");
+
+        // Define custom names for form fields
+        const fieldNames = {
+            id_no: "ID Number",
+            name: "Full Name",
+            father_name: "Father/Husband Name",
+            house_name: "House Name",
+            family_member: "Family Member",
+            relation: "Relation",
+        };
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent default submission
+            
+            // Gather form data
+            const formData = new FormData(form);
+            const entries = Array.from(formData.entries());
+
+            // Generate HTML preview of data using custom field names
+            let contentHtml = '<ul>';
+            entries.forEach(([name, value]) => {
+                if (name !== "csrfmiddlewaretoken") { // Skip CSRF token
+                    const displayName = fieldNames[name] || name; // Use custom name if defined
+                    contentHtml += `<li><strong>${displayName}:</strong> ${value}</li>`;
+                }
+            });
+            contentHtml += '</ul>';
+            
+            // Set the content and show the popup
+            popupContent.innerHTML = contentHtml;
+            popup.classList.remove("hidden");
+        });
+
+        // Handle cancel and confirm actions
+        cancelPopupButton.addEventListener("click", function () {
+            popup.classList.add("hidden");
+        });
+
+        confirmPopupButton.addEventListener("click", function () {
+            popup.classList.add("hidden");
+            form.submit(); // Submit the form after confirmation
+        });
+    });
+  </script>
+
+  <!-- function to display success Dialog box -->
+  {% if success %}
+  <div id="confirmationPopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-gray-400 rounded-lg p-6 shadow-lg w-96">
+      <h3 class="text-black font-bold">Mahallu Member Added Successfully!</h3>
+          <button id="popupConfirmButton" class="btn btn-accent ml-56" onclick="closePopupAndCleanUrl()">OK</button>
+      </div>
+  </div>
+
+  <!-- function for reciept after data save -->
+  <script>
+      function closePopupAndCleanUrl() {
+          // Close the popup
+          const popup = document.getElementById('confirmationPopup');
+          popup.style.display = 'none';
           
-    </div>    
+          // Remove the popup from DOM entirely
+          popup.remove();
+          
+          // Redirect to the clean URL
+          window.location.href = window.location.pathname;
+      }
+  </script>
+  {% endif %}
+
     <script src="{% static 'js/add_members.js' %}"></script>
 </body>
 </html>

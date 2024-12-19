@@ -115,6 +115,7 @@ myapp_additionalfund
 \pset pager off
 
 select * from myapp_pallifund;
+delete from myapp_pallifund where id_no='';
 
 select * from myapp_masapirivu;
 delete from myapp_masapirivu where id_no='';
