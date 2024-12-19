@@ -121,10 +121,13 @@ select * from myapp_masapirivu;
 delete from myapp_masapirivu where id_no='';
 
 select * from myapp_additionalfund;
+delete from myapp_additionalfund where id_no='';
 
 select * from myapp_addmahallumembers;
+delete from myapp_addmahallumembers where id_no='';
 
 select * from myapp_addfamilymembers;
+delete from myapp_addfamilymembers where id_no='';
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
 ALTER TABLE myapp_additionalfund ADD id_no VARCHAR(30);

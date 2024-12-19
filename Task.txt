@@ -19,6 +19,11 @@ pending :
 
 print after the masapirivu -> printer
 
+download all table data as excel format
+individual statement 
+account statement
+masapirivu table 
+
 convert the inserting data to caps complete
 oninput="this.value = this.value.toUpperCase()"
 
