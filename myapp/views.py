@@ -142,6 +142,8 @@ def pallifund_view(request):
 
 
 # @login_required
+
+
 def masapirivu_view(request):
 
     current_date = date.today().strftime('%Y-%m-%d')
@@ -176,33 +178,26 @@ def masapirivu_view(request):
         )
         new_fund.save()
 
-        # Process dynamic fields
-        fund_type_keys = [key for key in request.POST.keys() if key.startswith('fund_type')]
-        description_keys = [key for key in request.POST.keys() if key.startswith('description')]
-        amount_keys = [key for key in request.POST.keys() if key.startswith('amount')]
-
-        for i in range(len(fund_type_keys)):  # Iterate over the dynamically added fields
-            fund_type = request.POST.get(fund_type_keys[i])
-            description = request.POST.get(description_keys[i])
-            amount = request.POST.get(amount_keys[i])
-
-            # Only save if both fund_type and amount are provided
-            if fund_type and amount:
-                new_fund_detail = additionalfund(
-                    reciept_no=reciept_no,
-                    fund_type=fund_type,
-                    description=description,
-                    amount=amount
-                )
-                new_fund_detail.save()
-                print(f"Saved Fund Detail: {new_fund_detail}")
-
-        messages.success(request, "Masa Pirivu Data saved successfully!")
-        return redirect('masapirivu')
+        context = {
+            'data': json.dumps(data),
+            'success': True,
+            'submitted_data': {
+                'id_no': id_no,
+                'name': name,
+                'reciept_no': reciept_no,
+                'date': current_date,
+                'palli': palli,
+                'madrassa': madrassa,
+                'mess': mess,
+                'total_amount': total_amount,
+            }
+        }
+        return render(request, 'myapp/masapirivu.html', context)
 
     return render(request, 'myapp/masapirivu.html', {
         'data': json.dumps(data)
     })
+
 
 
 

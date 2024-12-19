@@ -117,6 +117,7 @@ myapp_additionalfund
 select * from myapp_pallifund;
 
 select * from myapp_masapirivu;
+delete from myapp_masapirivu where id_no='';
 
 select * from myapp_additionalfund;
 

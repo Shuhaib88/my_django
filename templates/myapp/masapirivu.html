@@ -22,18 +22,18 @@
             <div class="flex items-center space-x-4">
                 <label for="id_no" class="w-1/4">Id Number <span class="text-red-500">*</span></label>
                 <div class="w-3/4">
-                  <input type="text" id="id_no" name="id_no" placeholder="Enter the ID number" class="w-full p-2 border rounded-md text-black" required>
+                  <input type="text" id="id_no" name="id_no" value='1' placeholder="Enter the ID number" class="w-full p-2 border rounded-md text-black" required>
                 </div>
               </div>
 
               <div class="flex items-center space-x-4">
                 <label for="name" class="w-1/4">Name <span class="text-red-500">*</span></label>
-                <input type="text" id="name" name="name" placeholder="Enter the name" class="w-3/4 rounded-md text-black" required>
+                <input type="text" id="name" name="name" value='a' placeholder="Enter the name" class="w-3/4 rounded-md text-black" required>
               </div>
           
             <div class="flex items-center space-x-4">
               <label for="reciept_no" class="w-1/4">Reciept Number <span class="text-red-500">*</span></label>
-              <input type="text" id="reciept_no" name="reciept_no" placeholder="Enter the reciept number" class="w-3/4 p-2 border rounded-md text-black" required>
+              <input type="text" id="reciept_no" name="reciept_no" value='a' placeholder="Enter the reciept number" class="w-3/4 p-2 border rounded-md text-black" required>
             </div>
 
             <!-- <div class="flex items-center space-x-4">
@@ -43,27 +43,27 @@
 
             <div class="flex items-center space-x-4">
                 <label for="palli" class="w-1/4">Palli Fund <span class="text-red-500">*</span></label>
-                <input type="number" id="palli" name="palli" placeholder="Enter the Palli Fund" class="w-3/4 rounded-md text-black" required>
+                <input type="number" id="palli" name="palli" value='1' placeholder="Enter the Palli Fund" class="w-3/4 rounded-md text-black" required>
             </div>
           
             <div class="flex items-center space-x-4">
                 <label for="madrassa" class="w-1/4">Madrassa Fund <span class="text-red-500">*</span></label>
-                <input type="number" id="madrassa" name="madrassa" placeholder="Enter the Madrassa Fund" class="w-3/4 rounded-md text-black" required>
+                <input type="number" id="madrassa" name="madrassa" value='1' placeholder="Enter the Madrassa Fund" class="w-3/4 rounded-md text-black" required>
             </div>
 
             <div class="flex items-center space-x-4">
                <label for="mess" class="w-1/4">Mess Fund <span class="text-red-500">*</span></label>
-               <input type="number" id="mess" name="mess" placeholder="Enter the Mess Fund" class="w-3/4 rounded-md text-black" required>
+               <input type="number" id="mess" name="mess" value='1' placeholder="Enter the Mess Fund" class="w-3/4 rounded-md text-black" required>
             </div>
               
             <div class="flex items-center space-x-4">
               <label for="description" class="w-1/4">Description</label>
-              <input type="text" id="description" name="description" placeholder="Enter the Description" class="w-3/4 rounded-md text-black" required>
+              <input type="text" id="description" name="description" value='a' placeholder="Enter the Description" class="w-3/4 rounded-md text-black" required>
             </div>
           
             <div class="flex items-center space-x-4">
               <label for="total" class="w-1/4">Total Amount</label>
-              <input type="text" id="total" name="total_amount" placeholder="Total amount" class="w-3/4 rounded-md bg-gray-100 text-black">
+              <input type="text" id="total" name="total_amount" value='3' placeholder="Total amount" class="w-3/4 rounded-md bg-gray-100 text-black">
             </div>
 
             <div class="form-control">
@@ -96,6 +96,39 @@
             </div>
         </div>
     </div>
+
+    {% if success %}
+    <div id="confirmationPopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-gray-400 rounded-lg p-6 shadow-lg w-96">
+          <h3 class="text-black font-bold">Data Saved Successfully!</h3>
+          <p class="text-black font-bold">ID: {{ submitted_data.id_no }}</p>
+          <p class="text-black font-bold">Name: {{ submitted_data.name }}</p>
+          <p class="text-black font-bold">Receipt No.: {{ submitted_data.reciept_no }}</p>
+          <p class="text-black font-bold">Date: {{ submitted_data.date }}</p>
+          <p class="text-black font-bold">Palli: {{ submitted_data.palli }}</p>
+          <p class="text-black font-bold">Madrassa: {{ submitted_data.madrassa }}</p>
+          <p class="text-black font-bold">Mess: {{ submitted_data.mess }}</p>
+          <p class="text-black font-bold">Total Amount: {{ submitted_data.total_amount }}</p>
+            <button id="popupConfirmButton" class="btn btn-accent ml-56" onclick="closePopupAndCleanUrl()">OK</button>
+        </div>
+    </div>
+    
+    <script>
+        function closePopupAndCleanUrl() {
+            // Close the popup
+            const popup = document.getElementById('confirmationPopup');
+            popup.style.display = 'none';
+            
+            // Remove the popup from DOM entirely
+            popup.remove();
+            
+            // Redirect to the clean URL
+            window.location.href = window.location.pathname;
+        }
+    </script>
+    {% endif %}
+
+  
 
     <!-- Masapirivu Function to calculate and update the total amount -->
     <script>
