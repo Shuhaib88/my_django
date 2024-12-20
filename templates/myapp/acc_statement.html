@@ -16,8 +16,10 @@
     <div class="mt-4 l:ml-2 sm:w-full lg:ml-60 l:w-96 lg:w-8/12">
         <input type="date" id="dateFilter" class="p-2 border mb-4" placeholder="Filter by date">
         <input type="text" id="textFilter" class="p-2 border mb-4" placeholder="Filter by text">
+        <button onclick="exportTableToExcel('dataTable')" class="px-4 py-2 bg-created-orange ml-96 text-black font-bold rounded-md">Download</button>
 
-        <table class="table border-separate border-spacing-0">
+
+        <table id="financialTable" class="table border-separate border-spacing-0">
             <thead class="bg-slate-400 text-black">
                 <tr>
                     <th class="border-2 border-white px-6 py-2">Debit/Credit</th>
@@ -174,6 +176,53 @@
             calculateTotals();
         });
     </script>
+
+    <script>
+        function exportTableToExcel(tableID, filename = 'Account_statement.xlsx') {
+            // Define table headers (this can also be fetched dynamically if required)
+            const headers = [
+                "Name",
+                "Mahallu ID",
+                "Date",
+                "Receipt No",
+                "Fund Type",
+                "Description",
+                "Total Amount",
+                "Debit/Credit"
+            ];
+
+            // Get the table element
+            const table = document.getElementById(tableID);
+            const rows = table.querySelectorAll('tbody tr'); // Exclude the <thead>
+
+            // Initialize array to store rows
+            const data = [];
+
+            // Add headers as the first row
+            data.push(headers);
+
+            // Iterate through table rows
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td'); // Only data cells
+                const rowData = Array.from(cells).map(cell => cell.innerText.trim());
+                data.push(rowData); // Add each row's data
+            });
+
+            // Create workbook and worksheet
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(data); // Convert Array-of-Arrays to Sheet
+
+            // Append worksheet to the workbook
+            XLSX.utils.book_append_sheet(wb, ws, 'Mahallu Members');
+
+            // Save the workbook
+            XLSX.writeFile(wb, filename);
+        }
+    </script>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
 </body>
 </html>

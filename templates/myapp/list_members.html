@@ -17,6 +17,8 @@
     <div class="mt-4 l:ml-2 sm:w-full lg:ml-60 l:w-96 lg:w-8/12">
         <!-- Input field for filtering -->
         <input type="text" id="tableFilter" class="p-2 border mb-4" placeholder="Search For Data">
+        <button onclick="exportTableToExcel('dataTable')" class="px-4 py-2 bg-created-orange ml-96 text-black font-bold rounded-md">Download</button>
+
         
         <div class="overflow-x-auto">
             <table class="table border border-r w-full text-left">
@@ -63,6 +65,48 @@
             // window.location.href = "{% url 'individual_statement' %}?id_no={{ fund.id_no }}";
         }
     </script>
+
+    <script>
+      function exportTableToExcel(tableID, filename = 'Mahallu_Members_List.xlsx') {
+          // Define table headers
+          const headers = [
+              "Mahallu ID",
+              "Name",
+              "Father's Name",
+              "House Name"
+          ];
+
+          // Get the table element
+          const table = document.getElementById(tableID);
+          const rows = table.querySelectorAll('tbody tr'); // Exclude the <thead>
+
+          // Initialize array to store rows
+          const data = [];
+
+          // Add headers as the first row
+          data.push(headers);
+
+          // Iterate through table rows
+          rows.forEach(row => {
+              const cells = row.querySelectorAll('th, td'); // Select both header cells and data cells
+              const rowData = Array.from(cells).map(cell => cell.innerText.trim());
+              data.push(rowData); // Add each row's data
+          });
+
+          // Create workbook and worksheet
+          const wb = XLSX.utils.book_new();
+          const ws = XLSX.utils.aoa_to_sheet(data); // Convert Array-of-Arrays to Sheet
+
+          // Append worksheet to the workbook
+          XLSX.utils.book_append_sheet(wb, ws, 'Mahallu Members');
+
+          // Save the workbook
+          XLSX.writeFile(wb, filename);
+      }
+    </script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 </body>
 </html>

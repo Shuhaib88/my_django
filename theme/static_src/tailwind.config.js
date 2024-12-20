@@ -20,6 +20,7 @@ module.exports = {
             "highlight-bg": "#f4f4f4",
             "action-color": "#34d399",
             "created-blue": "#128aff",
+            "created-orange": "#e65c0b",
           },
           screens: {
             l: '360px',

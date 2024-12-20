@@ -25,14 +25,15 @@
           
             <div class="flex space-x-4 l:w-full lg:w-36">
                 <!-- <form action="{% url 'edit_member_details' %}" method="get"> -->
-                    <button class="btn btn-warning l:ml-48 xl:ml-72 l:w-20 lg:w-36 edit-btn" data-id="{{ id_no }}" >Edit Details</button>
+                    <button class="btn btn-warning font-bold l:ml-48 xl:ml-72 l:w-20 lg:w-36 edit-btn" data-id="{{ id_no }}" >Edit Details</button>
+                    <button onclick="exportTableToExcel('individual_statement', 'Individual_account_statement.xlsx')" class="px-4 py-2 bg-created-orange ml-96 text-black font-bold rounded-md">Download</button>
                 <!-- </form> -->
                <!-- <button class="btn btn-error l:ml-36 xl:ml-10">Delete</button> -->
             </div>
           </div> 
           
         <div class="overflow-x-auto mt-4">
-            <table class="table border border-r w-full text-left">
+            <table id="individual_statement" class="table border border-r w-full text-left">
 
                 {% for addmahallumembers in addmahallumembers_data %}
                 <thead>
@@ -143,29 +144,66 @@
     
 
     <script>
-        document.getElementById('dateFilter').addEventListener('input', filterTable);
-        document.getElementById('textFilter').addEventListener('input', filterTable);
-
-        function filterTable() {
-            const dateFilter = document.getElementById('dateFilter').value;
-            const textFilter = document.getElementById('textFilter').value.toLowerCase();
-            const rows = document.querySelectorAll('#dataTable tr');
-
-            rows.forEach(row => {
-                const dateCell = row.querySelector('td:nth-child(3)').innerText;
-                const textCells = Array.from(row.querySelectorAll('td')).map(cell => cell.innerText.toLowerCase());
-
-                const dateMatch = dateFilter ? dateCell.includes(dateFilter) : true;
-                const textMatch = textFilter ? textCells.some(cell => cell.includes(textFilter)) : true;
-
-                if (dateMatch && textMatch) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+        function exportTableToExcel(tableID, filename = 'Individual_account_statement.xlsx') {
+            // Initialize workbook and data array
+            const data = [];
+    
+            // Select table
+            const table = document.getElementById(tableID);
+            const theads = table.querySelectorAll("thead");
+            const tbody = table.querySelector("tbody");
+    
+            // Loop through each <thead> for the multi-header
+            theads.forEach((thead, index) => {
+                const rows = thead.querySelectorAll("tr");
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll("th");
+                    const rowData = Array.from(cells).map(cell => {
+                        // Handle colspan to provide structure for Excel
+                        const colspan = cell.colSpan || 1;
+                        return {
+                            value: cell.innerText.trim(),
+                            colspan: colspan
+                        };
+                    });
+    
+                    // Flatten cells, replicating colspans as blank entries where needed
+                    const flatRow = [];
+                    rowData.forEach(cell => {
+                        flatRow.push(cell.value); // Add the actual cell value
+                        for (let i = 1; i < cell.colspan; i++) {
+                            flatRow.push(""); // Add empty cells for colspan
+                        }
+                    });
+                    data.push(flatRow);
+                });
+    
+                // Add a blank line to separate multiple header blocks, if needed
+                if (index !== theads.length - 1) data.push([]);
             });
+    
+            // Loop through the <tbody> rows
+            const rows = tbody.querySelectorAll("tr");
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("td");
+                const rowData = Array.from(cells).map(cell => cell.innerText.trim());
+                data.push(rowData);
+            });
+    
+            // Create workbook and worksheet
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(data);
+    
+            // Append worksheet to workbook
+            XLSX.utils.book_append_sheet(wb, ws, 'Mahallu Report');
+    
+            // Save the workbook
+            XLSX.writeFile(wb, filename);
         }
     </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
 
 </body>
 </html>
