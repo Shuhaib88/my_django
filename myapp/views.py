@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import os
 import json
 from datetime import date
-from .models import addmahallumembers, addfamilymembers, masapirivu, pallifund, additionalfund
+from .models import addmahallumembers, addfamilymembers, masapirivu, pallifund, additionalfund, balance
 from django.shortcuts import get_object_or_404
 
 
@@ -147,8 +147,11 @@ def masapirivu_view(request):
     current_date = date.today().strftime('%Y-%m-%d')
 
     data = list(addmahallumembers.objects.values('id_no', 'name'))
-    print(f"ID and Names: {list(data)}")
-    print(f"Date: {current_date}")
+    balances = list(balance.objects.all().values('id_no', 'balance'))
+    masapirivu_data = list(masapirivu.objects.all().values('id_no', 'name'))
+    print(f"data: {data}")
+    print(f"balances: {balances}")
+    print(f"masapirivu_data: {masapirivu_data}")
 
     if request.method == "POST":
         name = request.POST.get('name')
@@ -160,8 +163,8 @@ def masapirivu_view(request):
         description = request.POST.get('description')
         total_amount = request.POST.get('total_amount')
         debit_credit = request.POST.get('radio10')
+        balance_value = request.POST.get('balance')
 
-        # Save the main fund record
         new_fund = masapirivu(
             name=name,
             id_no=id_no,
@@ -176,8 +179,17 @@ def masapirivu_view(request):
         )
         new_fund.save()
 
+        balance_amount = balance(
+            id_no=id_no,
+            balance=balance_value
+        )
+        balance.objects.filter(id_no=id_no).delete()
+        balance_amount.save()
+
         context = {
             'data': json.dumps(data),
+            'balances': json.dumps(balances),
+            'masapirivu_data': json.dumps(masapirivu_data),
             'success': True,
             'submitted_data': {
                 'id_no': id_no,
@@ -193,7 +205,9 @@ def masapirivu_view(request):
         return render(request, 'myapp/masapirivu.html', context)
 
     return render(request, 'myapp/masapirivu.html', {
-        'data': json.dumps(data)
+        'data': json.dumps(data),
+        'balances': json.dumps(balances),
+        'masapirivu_data': json.dumps(masapirivu_data),
     })
 
 # @login_required
@@ -339,6 +353,7 @@ def edit_member_details(request):
         house_name = request.POST.get('house_name')
         family_members = request.POST.getlist('family_member')
         relations = request.POST.getlist('relation')
+        phone = request.POST.getlist('phone_no')
 
         # Validate the POST data
         if not id_no or not family_members or not relations:
@@ -356,12 +371,12 @@ def edit_member_details(request):
             father_name=father_name,
             house_name=house_name,
             family_member=family_members[0],
-            relation=relations[0]
+            relation=relations[0],
+            phone_no=phone[0],
         )
         addmahallumembers.objects.filter(id_no=id_no).delete()
         addfamilymembers.objects.filter(id_no=id_no).delete()
         new_member.save()
-        # print(f"New member added: {new_member}")
 
         # Save the additional family members
         for i in range(1, len(family_members)):
@@ -371,7 +386,6 @@ def edit_member_details(request):
                 relation=relations[i]
             )
             new_family_member.save()
-            # print(f"Additional family member added: {family_member}")
 
         # Redirect to the same page after processing POST
         return redirect(f'/edit_member_details/?id_no={id_no}')

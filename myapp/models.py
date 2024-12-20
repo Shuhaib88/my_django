@@ -26,6 +26,10 @@ class masapirivu(models.Model):
     debit_credit = models.CharField(max_length=6)
     date = models.CharField(max_length=15)
 
+class balance(models.Model):
+    id_no = models.CharField(max_length=6)
+    balance = models.CharField(max_length=7)
+
 class additionalfund(models.Model):
     reciept_no = models.CharField(max_length=30)
     fund_type = models.CharField(max_length=100)
@@ -39,6 +43,7 @@ class addmahallumembers(models.Model):
     house_name = models.CharField(max_length=30)
     family_member = models.CharField(max_length=20)
     relation = models.CharField(max_length=10)
+    phone_no = models.CharField(max_length=10)
 
 class addfamilymembers(models.Model):
     id_no = models.CharField(max_length=30)

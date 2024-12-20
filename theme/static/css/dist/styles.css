@@ -4593,6 +4593,11 @@ details.collapse summary::-webkit-details-marker {
   background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
 }
 
+.bg-created-orange {
+  --tw-bg-opacity: 1;
+  background-color: rgb(230 92 11 / var(--tw-bg-opacity, 1));
+}
+
 .bg-gray-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
@@ -4671,11 +4676,6 @@ details.collapse summary::-webkit-details-marker {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
-}
-
-.bg-created-orange {
-  --tw-bg-opacity: 1;
-  background-color: rgb(230 92 11 / var(--tw-bg-opacity, 1));
 }
 
 .bg-opacity-50 {

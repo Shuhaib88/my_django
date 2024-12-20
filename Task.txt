@@ -13,19 +13,26 @@ edit -> individual mahallu member details
 addmore delete/remove button
 
 response aftert the form was submit
-------------------------------------------------------
-pending :
-------------------------------------------------------
-
-print after the masapirivu -> printer
 
 download all table data as excel format
 individual statement 
 account statement
 masapirivu table 
 
+edit mahallu members remove button
+
+individual statement sorting with date
+
+masa pirivu balance and reciept_no automatic
+
+add mahallu members add phone no
+------------------------------------------------------
+pending :
+------------------------------------------------------
+
+print after the masapirivu -> printer > format, font details
+------------------------------------------------------
 convert the inserting data to caps complete
 oninput="this.value = this.value.toUpperCase()"
-
 
 (response aftert the form was submit in edit mahallu members got a trouble)

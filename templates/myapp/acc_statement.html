@@ -106,7 +106,39 @@
             </table>
         </div>
     </div>
-
+    <!-- Sorting acording to the date -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tbody = document.getElementById("dataTable");
+            const dateColumnIndex = 2; // Date is the 3rd column (index 2)
+    
+            // Function to parse dates
+            function parseDate(dateString) {
+                // Modify this if the date format differs (e.g., YYYY-MM-DD)
+                const parts = dateString.trim().split("-");
+                return new Date(parts[0], parts[1] - 1, parts[2]); // Convert to Date object
+            }
+    
+            // Function to sort rows by date
+            function sortTableByDate() {
+                const rows = Array.from(tbody.querySelectorAll("tr"));
+    
+                // Sort rows in descending order of date
+                rows.sort((rowA, rowB) => {
+                    const dateA = parseDate(rowA.cells[dateColumnIndex].textContent);
+                    const dateB = parseDate(rowB.cells[dateColumnIndex].textContent);
+                    return dateB - dateA; // Recent dates come first
+                });
+    
+                // Reappend rows to the tbody in sorted order
+                rows.forEach(row => tbody.appendChild(row));
+            }
+    
+            // Call the sort function immediately on page load
+            sortTableByDate();
+        });
+    </script>
+    <!-- calculate the total  -->
     <script>
         // Wait for the DOM to load
         document.addEventListener("DOMContentLoaded", function () {
@@ -176,7 +208,7 @@
             calculateTotals();
         });
     </script>
-
+    <!-- download/export to excel format -->
     <script>
         function exportTableToExcel(tableID, filename = 'Account_statement.xlsx') {
             // Define table headers (this can also be fetched dynamically if required)
@@ -219,8 +251,6 @@
             XLSX.writeFile(wb, filename);
         }
     </script>
-
-
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     

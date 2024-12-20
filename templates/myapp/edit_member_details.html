@@ -33,6 +33,11 @@
           </div>
 
           <div class="flex items-center space-x-8">
+            <label for="name" class="w-1/4">Phone No <span class="text-red-500">*</span></label>
+            <input type="text" id="phone_no" name="phone_no" placeholder="Enter the Phone No" class="w-3/4 rounded-md text-black" value="{{mahallumembers.phone_no}}" required>
+          </div>
+
+          <div class="flex items-center space-x-8">
               <label for="father_name" class="w-1/4">Father's/Husband Name<span class="text-red-500">*</span></label>
               <input type="text" id="father_name" name="father_name" placeholder="Enter Father's/Husband Name" class="w-3/4 p-2 border rounded-md text-black" value="{{mahallumembers.father_name}}" required>
           </div>
@@ -183,7 +188,7 @@
     });
 </script>
 
-  <script src="{% static 'js/add_members.js' %}"></script>
+<script src="{% static 'js/add_members.js' %}"></script>
     
 </body>
 </html>

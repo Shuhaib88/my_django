@@ -134,6 +134,12 @@ ALTER TABLE myapp_additionalfund ADD id_no VARCHAR(30);
 
 ALTER TABLE myapp_additionalfund DROP COLUMN id_no;
 
+ALTER TABLE myapp_addmahallumembers ADD phone_no VARCHAR(10);
+
+UPDATE myapp_addmahallumembers
+SET phone_no = 1234567890
+WHERE id_no='0001';
+
 ------------------------------------------------------------------------------------------------------------------------------------------------
 manually re-arrage the order of the 
 ------------------------------------------------------------------------------------------------------------------------------------------------

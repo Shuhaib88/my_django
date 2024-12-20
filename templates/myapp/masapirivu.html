@@ -14,8 +14,8 @@
     {% include 'myapp/navbar.html' %}
 
     <h1 class=" flex items-center justify-center text-xl">Maasa Pirivu</h1>
-    <div class="mt-4 flex items-center justify-center">
 
+    <div class="mt-4 flex items-center justify-center">
         <form id="masapirivuForm" method="post" class="space-y-4 l:w-80 lg:w-96">
           {% csrf_token %}
             
@@ -52,13 +52,18 @@
             </div>
               
             <div class="flex items-center space-x-4">
-              <label for="description" class="w-1/4">Description</label>
+              <label for="description" class="w-1/4">Description <span class="text-red-500">*</span></label>
               <input type="text" id="description" name="description" placeholder="Enter the Description" class="w-3/4 rounded-md text-black" required>
             </div>
           
             <div class="flex items-center space-x-4">
-              <label for="total" class="w-1/4">Total Amount</label>
+              <label for="total" class="w-1/4">Total Amount </label>
               <input type="text" id="total" name="total_amount" placeholder="Total amount" class="w-3/4 rounded-md bg-gray-100 text-black">
+            </div>
+
+            <div class="flex items-center space-x-4">
+              <label for="total" class="w-1/4">Balance Amount</label>
+              <input type="text" id="balance" name="balance" placeholder="Balance amount not found" class="w-3/4 rounded-md bg-gray-100 text-black">
             </div>
 
             <div class="form-control">
@@ -115,6 +120,8 @@
         </div>
     </div>
 
+
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <!-- function for reciept after data save -->
     <script>
@@ -166,38 +173,6 @@
         }
     </script>
     {% endif %}
-
-  
-
-    <!-- Masapirivu Function to calculate and update the total amount -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          // Function to calculate and update the total
-          function calculateTotal() {
-              // Get references to the input fields
-              const palli = parseFloat(document.getElementById("palli")?.value) || 0;
-              const madrassa = parseFloat(document.getElementById("madrassa")?.value) || 0;
-              const mess = parseFloat(document.getElementById("mess")?.value) || 0;
-
-              // Calculate the total and round to the nearest integer
-              const total = Math.round(palli + madrassa + mess);
-
-              // Update the "Total Amount" field
-              const totalField = document.getElementById("total");
-              if (totalField) {
-                  totalField.value = total.toString(); // Display as integer
-              }
-          }
-
-          // Attach event listeners to each input field
-          ["palli", "madrassa", "mess"].forEach((fieldId) => {
-              const field = document.getElementById(fieldId);
-              if (field) {
-                  field.addEventListener("input", calculateTotal);
-              }
-          });
-      });
-    </script>
 
     <!-- popup confirmation after clicking the submit button -->
     <script>
@@ -253,8 +228,6 @@
           });
       });
     </script>
-  
-
     <!-- Aoutomatic name display function -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -277,7 +250,86 @@
           });
       });
     </script>
-
+    <!-- total amount, automatic balance amount -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const balances = JSON.parse('{{ balances | escapejs }}');
+        const masapirivuData = JSON.parse('{{ masapirivu_data | escapejs }}');
+    
+        const idNoInput = document.getElementById("id_no");
+        const balanceInput = document.getElementById("balance");
+        const nameInput = document.getElementById("name");
+        const receiptNoInput = document.getElementById("reciept_no");
+        const totalInput = document.getElementById("total");
+    
+        // Store the original balance
+        let originalBalance = 0;
+    
+        // Update "Receipt Number" based on the largest ID in masapirivuData
+        if (masapirivuData.length > 0) {
+          const maxIdNo = Math.max(...masapirivuData.map(data => parseInt(data.id_no, 10)));
+          receiptNoInput.value = maxIdNo + 1;
+        } else {
+          receiptNoInput.value = "000001";
+        }
+    
+        // Update balance and store the original balance on ID input
+        idNoInput.addEventListener("input", () => {
+          const enteredId = idNoInput.value.trim();
+    
+          // Find balance data
+          const balanceData = balances.find(b => b.id_no === enteredId);
+    
+          if (balanceData) {
+            // Store the original balance and update the field
+            originalBalance = Math.round(balanceData.balance);
+            balanceInput.value = originalBalance;
+    
+            // Optionally auto-fill name if found in masapirivuData
+            const userData = masapirivuData.find(data => data.id_no === enteredId);
+            nameInput.value = userData ? userData.name : "";
+          } else {
+            originalBalance = 0; // Reset original balance if ID is not found
+            balanceInput.value = ""; // Clear balance field
+            nameInput.value = ""; // Clear name field
+          }
+        });
+    
+        // Function to update the balance based on total amount
+        function updateBalance() {
+          const totalAmount = parseInt(totalInput.value) || 0;
+    
+          // Calculate the new balance
+          const newBalance = originalBalance - totalAmount;
+    
+          // Update balance input field
+          balanceInput.value = newBalance >= 0 ? newBalance : "Insufficient balance";
+        }
+    
+        // Calculate total amount and update the balance
+        function calculateTotal() {
+          const palli = parseInt(document.getElementById("palli")?.value) || 0;
+          const madrassa = parseInt(document.getElementById("madrassa")?.value) || 0;
+          const mess = parseInt(document.getElementById("mess")?.value) || 0;
+    
+          // Calculate and update the total
+          const total = palli + madrassa + mess;
+          totalInput.value = total.toString();
+    
+          // Update the balance
+          updateBalance();
+        }
+    
+        // Attach input listeners to fund fields
+        ["palli", "madrassa", "mess"].forEach((fieldId) => {
+          const field = document.getElementById(fieldId);
+          if (field) {
+            field.addEventListener("input", calculateTotal);
+          }
+        });
+      });
+    </script>
+    
 <!-- <script src="{% static 'js/addmore.js' %}"></script> -->
 
 </body>

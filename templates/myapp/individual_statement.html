@@ -42,6 +42,7 @@
                             <ul class="ml-5">
                                 <li>Mahallu ID No: {{id_no}}</li>
                                 <li>Name: {{addmahallumembers.name}}</li>
+                                <li>Phone No: {{addmahallumembers.phone_no}}</li>
                                 <li>Father's/Husband Name: {{addmahallumembers.father_name}}</li>
                                 <li>House Name: {{addmahallumembers.house_name}}</li>
                             </ul>
@@ -141,8 +142,40 @@
             });
         });
     </script>
+    <!-- function to sort data based on date, recent on top -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tbody = document.getElementById("dataTable");
+            const dateColumnIndex = 1; // Date is the 2nd column (index 1)
     
-
+            // Function to parse dates
+            function parseDate(dateString) {
+                // Modify parsing based on the date format, e.g., YYYY-MM-DD
+                const parts = dateString.trim().split("-");
+                return new Date(parts[0], parts[1] - 1, parts[2]); // Convert to Date object
+            }
+    
+            // Function to sort rows based on date
+            function sortTableByDate() {
+                const rows = Array.from(tbody.querySelectorAll("tr"));
+    
+                // Sort rows in descending order of date
+                rows.sort((rowA, rowB) => {
+                    const dateA = parseDate(rowA.cells[dateColumnIndex].textContent);
+                    const dateB = parseDate(rowB.cells[dateColumnIndex].textContent);
+                    return dateB - dateA; // Recent dates come first
+                });
+    
+                // Reinsert rows into tbody in sorted order
+                rows.forEach(row => tbody.appendChild(row));
+            }
+    
+            // Automatically sort the table on page load
+            sortTableByDate();
+        });
+    </script>
+    
+    <!-- Download as excel format -->
     <script>
         function exportTableToExcel(tableID, filename = 'Individual_account_statement.xlsx') {
             // Initialize workbook and data array

@@ -20,6 +20,7 @@ class Migration(migrations.Migration):
                 ('house_name', models.CharField(max_length=30)),
                 ('family_members', models.CharField(max_length=20)),
                 ('relation', models.CharField(max_length=10)),
+                ('phone_no', models.CharField(max_length=10)),
             ],
         ),
     ]
