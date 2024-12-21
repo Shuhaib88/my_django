@@ -177,7 +177,7 @@ def masapirivu_view(request):
             debit_credit=debit_credit,
             date=current_date
         )
-        # new_fund.save()
+        new_fund.save()
 
         balance.objects.filter(id_no=id_no).delete()
         balance_amount = balance(
