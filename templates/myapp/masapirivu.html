@@ -123,53 +123,65 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <!-- function for reciept after data save -->
     <script>
-        function closePopupAndCleanUrl() {
-            // Close the popup
-            const popup = document.getElementById('confirmationPopup');
-            popup.style.display = 'none';
-            popup.remove();
-            window.location.href = window.location.pathname;
-        }
-        function generatePDF() {
-            // Initialize jsPDF
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Set font size and initial position
-            doc.setFontSize(16);
-            doc.text('Masapirivu Receipt', 105, 20, { align: 'center' });
-            
-            // Set font size for content
-            doc.setFontSize(12);
-            
-            // Add content
-            const content = [
-                ['ID:', '{{ submitted_data.id_no }}'],
-                ['Name:', '{{ submitted_data.name }}'],
-                ['Receipt No.:', '{{ submitted_data.reciept_no }}'],
-                ['Date:', '{{ submitted_data.date }}'],
-                ['Palli:', '{{ submitted_data.palli }}'],
-                ['Madrassa:', '{{ submitted_data.madrassa }}'],
-                ['Mess:', '{{ submitted_data.mess }}'],
-                ['Total Amount:', '{{ submitted_data.total_amount }}']
-            ];
-
-            // Add each line of content
-            let yPos = 40;
-            content.forEach(([label, value]) => {
-                doc.text(`${label} ${value}`, 20, yPos);
-                yPos += 10;
-            });
-
-            // Add footer
-            doc.setFontSize(10);
-            doc.text('This is a computer generated receipt', 105, yPos + 20, { align: 'center' });
-
-            // Open PDF in new tab instead of downloading
-            const pdfData = doc.output('bloburl');
-            window.open(pdfData, '_blank');
-        }
-    </script>
+      function closePopupAndCleanUrl() {
+          // Close the popup
+          const popup = document.getElementById('confirmationPopup');
+          popup.style.display = 'none';
+          popup.remove();
+          window.location.href = window.location.pathname;
+      }
+      function generatePDF() {
+          // Initialize jsPDF
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+  
+          // Header content
+          const headerContent = [
+              'Palakkad Hithayathul Islam Mahallu Jama athu',
+              'P O Akaloor, Palakkad - 679302, Palakkad District',
+          ];
+  
+          // Centered header title
+          doc.setFontSize(20); // Reasonable font size for header
+          let yHeaderPos = 20; // Start position for header
+          headerContent.forEach(line => {
+            doc.text(line, 20, yHeaderPos);
+              yHeaderPos += 8; // Line spacing for header
+          });
+  
+          // Main title
+          doc.setFontSize(40);
+          doc.text('Masapirivu Receipt', 105, yHeaderPos + 10, { align: 'center' });
+  
+          // Content
+          const content = [
+              ['ID:', '{{ submitted_data.id_no }}'],
+              ['Name:', '{{ submitted_data.name }}'],
+              ['Receipt No.:', '{{ submitted_data.reciept_no }}'],
+              ['Date:', '{{ submitted_data.date }}'],
+              ['Palli:', '{{ submitted_data.palli }}'],
+              ['Madrassa:', '{{ submitted_data.madrassa }}'],
+              ['Mess:', '{{ submitted_data.mess }}'],
+              ['Total Amount:', '{{ submitted_data.total_amount }}']
+          ];
+  
+          doc.setFontSize(40); // Font size for content
+          let yPos = yHeaderPos + 30; // Add a gap below the header
+          content.forEach(([label, value]) => {
+              doc.text(`${label} ${value}`, 20, yPos); // Left-align content at X=20
+              yPos += 16; // Add more spacing between content lines
+          });
+  
+          // Footer
+          doc.setFontSize(10);
+          doc.text('This is a computer-generated receipt', 105, yPos + 20, { align: 'center' });
+  
+          // Open PDF in new tab instead of downloading
+          const pdfData = doc.output('bloburl');
+          window.open(pdfData, '_blank');
+      }
+  </script>
+  
     {% endif %}
 
     <!-- popup confirmation after clicking the submit button -->
@@ -183,7 +195,7 @@
 
           const fieldNames = {
                 id_no: "ID Number",
-                name: "Full Name",
+                name: "Name",
                 reciept_no: "Receipt Number",
                 palli: "Palli Fund",
                 madrassa: "Madrassa Fund",

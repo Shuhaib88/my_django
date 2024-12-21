@@ -149,9 +149,9 @@ def masapirivu_view(request):
     data = list(addmahallumembers.objects.values('id_no', 'name'))
     balances = list(balance.objects.all().values('id_no', 'balance'))
     masapirivu_data = list(masapirivu.objects.all().values('id_no', 'name'))
-    print(f"data: {data}")
+    # print(f"data: {data}")
     # print(f"balances: {balances}")
-    print(f"masapirivu_data: {masapirivu_data}")
+    # print(f"masapirivu_data: {masapirivu_data}")
 
     if request.method == "POST":
         name = request.POST.get('name')
@@ -177,7 +177,7 @@ def masapirivu_view(request):
             debit_credit=debit_credit,
             date=current_date
         )
-        new_fund.save()
+        # new_fund.save()
 
         balance.objects.filter(id_no=id_no).delete()
         balance_amount = balance(
