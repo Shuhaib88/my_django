@@ -150,7 +150,7 @@ def masapirivu_view(request):
     balances = list(balance.objects.all().values('id_no', 'balance'))
     masapirivu_data = list(masapirivu.objects.all().values('id_no', 'name'))
     print(f"data: {data}")
-    print(f"balances: {balances}")
+    # print(f"balances: {balances}")
     print(f"masapirivu_data: {masapirivu_data}")
 
     if request.method == "POST":
@@ -179,16 +179,17 @@ def masapirivu_view(request):
         )
         new_fund.save()
 
+        balance.objects.filter(id_no=id_no).delete()
         balance_amount = balance(
             id_no=id_no,
             balance=balance_value
         )
-        balance.objects.filter(id_no=id_no).delete()
         balance_amount.save()
 
         context = {
             'data': json.dumps(data),
-            'balances': json.dumps(balances),
+            # 'balances': json.dumps(balances),
+            'balances': json.dumps(list(balance.objects.values('id_no', 'balance'))),
             'masapirivu_data': json.dumps(masapirivu_data),
             'success': True,
             'submitted_data': {
@@ -206,7 +207,8 @@ def masapirivu_view(request):
 
     return render(request, 'myapp/masapirivu.html', {
         'data': json.dumps(data),
-        'balances': json.dumps(balances),
+        # 'balances': json.dumps(balances),
+        'balances': json.dumps(list(balance.objects.values('id_no', 'balance'))),
         'masapirivu_data': json.dumps(masapirivu_data),
     })
 
@@ -220,8 +222,9 @@ def add_members_view(request):
         name = request.POST.get('name')
         father_name = request.POST.get('father_name')
         house_name = request.POST.get('house_name')
-        family_member = request.POST.get('family_member')
-        relation = request.POST.get('relation')
+        family_members = request.POST.getlist('family_member')
+        relations = request.POST.getlist('relation')
+        phone = request.POST.getlist('phone_no')
 
         # Save the main member
         new_member = addmahallumembers(
@@ -229,46 +232,25 @@ def add_members_view(request):
             name=name,
             father_name=father_name,
             house_name=house_name,
-            family_member=family_member,
-            relation=relation
+            family_member=family_members[0],
+            relation=relations[0],
+            phone_no=phone[0],
         )
         new_member.save()
-        print(f"New member saved: {new_member}")
 
-        # Initialize counters for incremental numeric keys
-        index = 1
-        
-        while True:
-            family_member_key = f'family_member{index}'
-            relation_key = f'relation{index}'
-
-            # Break the loop if neither key exists in POST data
-            if family_member_key not in request.POST and relation_key not in request.POST:
-                break
-
-            # Get values from POST data
-            family_member_name = request.POST.get(family_member_key)
-            family_member_relation = request.POST.get(relation_key)
-
-            # Debugging each pair
-            print(f"Processing: {family_member_key} -> {family_member_name}, {relation_key} -> {family_member_relation}")
-
-            if family_member_name and family_member_relation:  # Ensure both fields are present
-                new_family_member = addfamilymembers(
-                    id_no=id_no,
-                    family_member=family_member_name,
-                    relation=family_member_relation
-                )
-                new_family_member.save()
-                print(f"Saved family member: {new_family_member}")
-
-            # Increment the index
-            index += 1
+        # Save the additional family members
+        for i in range(1, len(family_members)):
+            new_family_member = addfamilymembers(
+                id_no=id_no,
+                family_member=family_members[i],
+                relation=relations[i]
+            )
+            new_family_member.save()
 
         context = {
             'success': True
         }
-        return render(request, 'myapp/pallifund.html', context)
+        return render(request, 'myapp/add_members.html', context)
 
     return render(request, 'myapp/add_members.html')
 

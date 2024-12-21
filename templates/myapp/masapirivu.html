@@ -233,19 +233,21 @@
       document.addEventListener("DOMContentLoaded", function () {
           const idNoInput = document.getElementById("id_no");
           const nameInput = document.getElementById("name");
-      
+
           // Safely parse JSON passed from Django context
           const dataMap = JSON.parse('{{ data|escapejs }}');
-      
+
           // Listen for changes in the ID input field
           idNoInput.addEventListener("input", function () {
-              const idNoValue = idNoInput.value.trim(); // Get the entered ID
-              const matchedEntry = dataMap.find(entry => entry.id_no === idNoValue); // Match ID
-      
+              const idNoValue = idNoInput.value.trim();
+              console.log("Entered ID:", idNoValue);
+              const matchedEntry = dataMap.find(entry => entry.id_no === idNoValue);
+              console.log("Matched Entry:", matchedEntry);
+
               if (matchedEntry) {
-                  nameInput.value = matchedEntry.name; // Auto-fill the name field
+                  nameInput.value = matchedEntry.name;
               } else {
-                  nameInput.value = ""; // Clear the name field
+                  nameInput.value = "";
               }
           });
       });
@@ -285,13 +287,9 @@
             originalBalance = Math.round(balanceData.balance);
             balanceInput.value = originalBalance;
     
-            // Optionally auto-fill name if found in masapirivuData
-            const userData = masapirivuData.find(data => data.id_no === enteredId);
-            nameInput.value = userData ? userData.name : "";
           } else {
             originalBalance = 0; // Reset original balance if ID is not found
             balanceInput.value = ""; // Clear balance field
-            nameInput.value = ""; // Clear name field
           }
         });
     

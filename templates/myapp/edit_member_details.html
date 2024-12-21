@@ -20,6 +20,9 @@
         {% csrf_token %}
         
         {% for mahallumembers in mahallumembers_data %}
+        <button id="goBackButton" class="btn btn-warning font-bold l:ml-48 xl:ml-72 l:w-20 lg:w-36 edit-btn">
+          Go Back to Statement
+      </button>
         <div class="flex items-center space-x-8">
           <label for="id_no" class="w-1/4">Mahallu Membership Id<span class="text-red-500">*</span></label>
           <div class="w-96">
@@ -172,7 +175,21 @@
         });
     });
   </script>
+  <!-- Goback function -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const goBackButton = document.getElementById("goBackButton");
+        const idNoInput = document.getElementById("id_no"); // Ensure you have an input element with id="id_no"
 
+        goBackButton.addEventListener("click", function () {
+            const idNoValue = idNoInput.value.trim(); // Retrieve the ID number from input
+            const url = `{% url 'individual_statement' %}?id_no=` + encodeURIComponent(idNoValue);
+
+            // Redirect to the dynamically generated URL
+            window.location.href = url;
+        });
+    });
+  </script>
   <!-- function to remove the addmore field -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
