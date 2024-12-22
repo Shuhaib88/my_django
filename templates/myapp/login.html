@@ -14,12 +14,17 @@
 <body class=" min-h-screen flex items-center justify-center">
 
     <div class="container">
+        <h1 class="text-2xl font-bold mb-4 text-center">Palakkad Hithayathul Islam Mahallu JamaAthu</h1>
+        <img 
+        src="{% static 'icons/icon_192x192.png' %}" 
+        alt="Icon" 
+        class="mx-auto w-40 h-40 mb-2" />
         <h1 class="text-2xl font-bold mb-4 text-center">Login page</h1>
 
         {% if messages %}
-            <div class="mb-4">
+            <div class="mb-4 text-center">
                 {% for message in messages %}
-                    <div class="p-4 rounded {{ message.tags }}">
+                    <div class="p-4 rounded text-red-500 border border-red-500 mb-2 {{ message.tags }}">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -30,16 +35,15 @@
             {% csrf_token %}
             <div class="mb-4">
                 <label for="username" class="block text-sm font-medium">User Name</label>
-                <input type="text" id="name" name="username" class="mt-1 block w-full border border-gray-300 rounded px-2 py-1" required>
+                <input type="text" id="name" name="username" class="mt-1 block w-full border text-black border-gray-300 rounded px-2 py-1" required>
             </div>
             <div class="mb-4">
                 <label for="password" class="block text-sm font-medium">Password</label>
-                <input type="password" id="field_of_job" name="password" class="mt-1 block w-full border border-gray-300 rounded px-2 py-1" required>
+                <input type="password" id="field_of_job" name="password" class="mt-1 block w-full border text-black border-gray-300 rounded px-2 py-1" required>
             </div>
 
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">login</button>
-            <a href="{% url 'signup' %}" id="secondarybtn" class="btn btn-outline btn-secondary">Sign up</a>
-
+            <!-- <a href="{% url 'admin' %}" id="secondarybtn" class="btn btn-outline font-bold bg-created-pink hover:bg-created-orange ml-5">Create User</a> -->
+            <button type="submit" class=" bg-blue-700  hover:bg-created-orange text-white px-4 py-2 ml-32 rounded">login</button>
         </form>
     </div>
 

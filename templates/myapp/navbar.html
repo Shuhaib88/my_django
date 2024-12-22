@@ -22,7 +22,6 @@
             <li><a href="{% url 'pallifund' %}">പള്ളി ഫണ്ട് എൻട്രി</a></li>
             <li><a href="{% url 'masapirivu' %}">മാസ പിരിവ് എൻട്രി</a></li>
             <li><a href="{% url 'list_masapirivu' %}">മാസ പിരിവ് പട്ടിക</a></li>
-            <!-- <li><a href="{% url 'individual_statement' %}">പള്ളി അംഗങ്ങളുടെ സ്റ്റേറ്റ്മെന്റ്</a></li> -->
             <li><a href="{% url 'acc_statement' %}">അക്കൗണ്ട് സ്റ്റേറ്റ്മെന്റ്</a></li>
             <li><a href="{% url 'add_members' %}">മഹല്ലു അംഗങ്ങളെ ചേർക്കുക</a></li>
             <li><a href="{% url 'list_members' %}">മഹല്ലു അംഗങ്ങളുടെ പട്ടിക</a></li>
@@ -34,9 +33,11 @@
       <div class="form-control">
         <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
       </div>
+      <a class="username">Username</a>
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
+            
             <img
               alt="Tailwind CSS Navbar component"
               src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
@@ -48,10 +49,18 @@
           <li>
             <a class="justify-between">
               Profile
-              <span class="badge">New</span>
             </a>
           </li>
-          <li><a>Settings</a></li>
+          {% if user.is_superuser %}
+            <li><a href="{% url 'admin' %}">Create User</a></li>
+            <!-- create user function -->
+            <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                  const goBackButton = document.getElementById("createuser");
+                      window.location.href = url;
+              });
+            </script>
+          {% endif %}
           <li><a href="{% url 'logout' %}">Logout</a></li>
         </ul>
       </div>
@@ -86,3 +95,23 @@
         </svg>
       </label>
   </div>
+
+  
+
+<script>
+  // Function to get the cookie value by name
+  function getCookie(name) {
+      let value = `; ${document.cookie}`;
+      let parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  const username = getCookie('username');
+
+  if (username) {
+      const profileLink = document.querySelector('.justify-between');
+      const user = document.querySelector('.username');
+      profileLink.textContent = username;
+      user.textContent = username;
+  }
+</script>

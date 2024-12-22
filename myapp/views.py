@@ -24,60 +24,63 @@ def service_worker(request):
 
 def login(request):
     if request.method == "POST":
-        # Get the form data
+
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        # Use Django's authenticate function to check the username and password
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            # Authentication successful
-            auth_login(request, user)  # Log the user in (session is managed automatically)
-            messages.success(request, "Login successful!")
-            return redirect("dashboard")  # Replace "home" with the name of your home URL pattern
+            auth_login(request, user)
+            response = redirect("dashboard")
+            response.set_cookie("username", username)
+            return response
         else:
-            # Authentication failed
             messages.error(request, "Invalid username or password.")
 
     return render(request, 'myapp/login.html')
 
-def signup(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+# def signup(request):
+#     if request.method == "POST":
+#         username = request.POST.get("username")
+#         password = request.POST.get("password")
 
-        # Check if the username already exists
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists!")
-            return render(request, "userlogin/signup.html")
+#         # Check if the username already exists
+#         if User.objects.filter(username=username).exists():
+#             messages.error(request, "Username already exists!")
+#             return render(request, "userlogin/signup.html")
 
-        try:
-            # Create a new user and save it to the database
-            user = User.objects.create_user(username=username, password=password)
-            user.save()  # Commit the user to the database
-            messages.success(request, "User created successfully! Please log in.")
-            return redirect("login")  # Redirect to the login page
-        except Exception as e:
-            messages.error(request, f"An error occurred: {e}")
-            return render(request, "userlogin/signup.html")
+#         try:
+#             # Create a new user and save it to the database
+#             user = User.objects.create_user(username=username, password=password)
+#             user.save()  # Commit the user to the database
+#             messages.success(request, "User created successfully! Please log in.")
+#             return redirect("login")  # Redirect to the login page
+#         except Exception as e:
+#             messages.error(request, f"An error occurred: {e}")
+#             return render(request, "userlogin/signup.html")
 
-    return render(request, 'myapp/signup.html')
+#     return render(request, 'myapp/signup.html')
 
 def logout(request):
+    response = redirect("login")
+    response.delete_cookie('username')
     auth_logout(request)
-    messages.success(request, "You have been logged out.")
-    return redirect("login")
+    return response
     
 @login_required
 def index(request):
     return render(request, 'myapp/index.html')
 
-# @login_required
+@login_required
 def dashboard(request):
     return render(request, 'myapp/dashboard.html')
 
-# @login_required
+@login_required
+def admin(request):
+    return render(request, 'admin')
+
+@login_required
 def pallifund_view(request):
     if request.method == "POST":
 
@@ -141,14 +144,14 @@ def pallifund_view(request):
     return render(request, 'myapp/pallifund.html')
 
 
-# @login_required
+@login_required
 def masapirivu_view(request):
 
     current_date = date.today().strftime('%Y-%m-%d')
 
     data = list(addmahallumembers.objects.values('id_no', 'name'))
     balances = list(balance.objects.all().values('id_no', 'balance'))
-    masapirivu_data = list(masapirivu.objects.all().values('id_no', 'name'))
+    masapirivu_data = list(masapirivu.objects.all().values('id_no', 'name', 'reciept_no'))
     # print(f"data: {data}")
     # print(f"balances: {balances}")
     # print(f"masapirivu_data: {masapirivu_data}")
@@ -212,7 +215,7 @@ def masapirivu_view(request):
         'masapirivu_data': json.dumps(masapirivu_data),
     })
 
-# @login_required
+@login_required
 def add_members_view(request):
     if request.method == "POST":
         print(f"Request POST data: {request.POST}")
@@ -254,7 +257,7 @@ def add_members_view(request):
 
     return render(request, 'myapp/add_members.html')
 
-# @login_required
+@login_required
 def individual_statement(request):
     id_no = request.GET.get('id_no')  # Get id_no from the query parameter
     if id_no:
@@ -287,7 +290,7 @@ def individual_statement(request):
         'additionalfund_data': additionalfund_data,
     })
 
-# @login_required
+@login_required
 def acc_statement(request):
 
     pallifund_data = pallifund.objects.all()
@@ -304,7 +307,7 @@ def acc_statement(request):
         'additionalfund_data': additionalfund_data,
     })
 
-# @login_required
+@login_required
 def list_members(request):
 
     mahallumembers = addmahallumembers.objects.all()
@@ -312,7 +315,7 @@ def list_members(request):
 
     return render(request, 'myapp/list_members.html', {'mahallumembers': members})
 
-# @login_required
+@login_required
 def list_masapirivu(request):
 
     data = masapirivu.objects.all()
@@ -320,8 +323,8 @@ def list_masapirivu(request):
 
     return render(request, 'myapp/list_masapirivu.html', {'sorted_data': sorted_data})
 
-# @login_required
 
+@login_required
 def edit_member_details(request):
     id_no = request.GET.get('id_no')
     print(f"GET ID: {id_no}")

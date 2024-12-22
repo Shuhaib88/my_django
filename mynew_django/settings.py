@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'mynew_django.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
+# local host database config
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -107,6 +107,18 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+# Railway database config
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'YINOMGefSNRZMIrAnzDOwPcqXAfmfJMN',
+#         'HOST': 'autorack.proxy.rlwy.net',
+#         'PORT': '54301',
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

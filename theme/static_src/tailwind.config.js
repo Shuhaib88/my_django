@@ -21,6 +21,7 @@ module.exports = {
             "action-color": "#34d399",
             "created-blue": "#128aff",
             "created-orange": "#e65c0b",
+            "created-pink":"#c4009b",
           },
           screens: {
             l: '360px',
