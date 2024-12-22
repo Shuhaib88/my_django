@@ -97,27 +97,27 @@ WSGI_APPLICATION = 'mynew_django.wsgi.application'
 #     }
 # }
 # local host database config
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'plkd_mahallu',
-        'USER': 'shuhaib',
-        'PASSWORD': '@88737softkind',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-# Railway database config
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'railway',
-#         'USER': 'postgres',
-#         'PASSWORD': 'YINOMGefSNRZMIrAnzDOwPcqXAfmfJMN',
-#         'HOST': 'autorack.proxy.rlwy.net',
-#         'PORT': '54301',
+#         'NAME': 'plkd_mahallu',
+#         'USER': 'shuhaib',
+#         'PASSWORD': '@88737softkind',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
 #     }
 # }
+# Railway database config
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'YINOMGefSNRZMIrAnzDOwPcqXAfmfJMN',
+        'HOST': 'autorack.proxy.rlwy.net',
+        'PORT': '54301',
+    }
+}
 
 
 # Password validation
