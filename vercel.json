@@ -6,7 +6,8 @@
         "use": "@vercel/python",
         "config": {
             "maxLambdaSize": "15mb",
-            "runtime":"python3.13"
+            "runtime":"python3.8",
+            "buildCommand": "bash vercel-build-steps.sh"
         }
       }
     ],
@@ -16,4 +17,4 @@
         "dest": "mynew_django/wsgi.py"
       }
     ]
-  }
+}
