@@ -1,0 +1,17 @@
+{
+    "name": "Mahallu App",
+    "short_name": "Mahallu App",
+    "description": "A Django-based PWA",
+    "start_url": "/",
+    "display": "standalone",
+    "scope": "/",
+    "orientation": "any",
+    "background_color": "#ffffff",
+    "theme_color": "#0d6efd",
+    "status_bar": "default",
+    "icons": [{"src": "/static/icons/icon_192x192.png", "sizes": "192x192"}, {"src": "/static/icons/icon_360x360.png", "sizes": "360x360"}],
+    "dir": "ltr",
+    "lang": "en-US",
+    "screenshots" : [],
+    "shortcuts" : []
+  }
