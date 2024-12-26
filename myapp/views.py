@@ -89,9 +89,9 @@ def pallifund_view(request):
         name = request.POST.get('name')
         id_no = request.POST.get('id_no')
         reciept_no = request.POST.get('reciept_no')
-        fund_type = request.POST.get('fund_type')
-        description = request.POST.get('description')
-        amount = request.POST.get('amount')
+        main_fund_type = request.POST.get('fund_type')
+        main_description = request.POST.get('description')
+        main_amount = request.POST.get('amount')
         total_amount = request.POST.get('total_amount')
         debit_credit = request.POST.get('radio10')
         date = request.POST.get('date')
@@ -101,9 +101,9 @@ def pallifund_view(request):
             name=name,
             id_no=id_no,
             reciept_no=reciept_no,
-            fund_type=fund_type,
-            description=description,
-            amount=amount,
+            fund_type=main_fund_type,
+            description=main_description,
+            amount=main_amount,
             total_amount=total_amount,
             debit_credit=debit_credit,
             date=date
@@ -111,6 +111,7 @@ def pallifund_view(request):
         new_fund.save()
 
         # Use an incremental index to retrieve additional dynamic fields
+        additional_funds = []
         index = 1  # Start from 1
         while True:
             fund_type_key = f"fund_type{index}"
@@ -134,10 +135,15 @@ def pallifund_view(request):
                     amount=amount
                 )
                 new_fund_detail.save()
-                # print(f"Saved Fund Detail: {new_fund_detail}")
-            # Increment to check the next set of fields
-            index += 1
 
+                additional_funds.append({
+                    'fund_type': fund_type,
+                    'description': description,
+                    'amount': amount,
+                })
+                
+            index += 1
+            
         context = {
             'success': True,
             'submitted_data': {
@@ -145,12 +151,16 @@ def pallifund_view(request):
                 'name': name,
                 'reciept_no': reciept_no,
                 'date': date,
-                'fund_type': fund_type,
-                'description': description,
-                'amount': amount,
+                'main_fund': {
+                    'fund_type': main_fund_type,
+                    'description': main_description,
+                    'amount': main_amount,
+                },
                 'total_amount': total_amount,
+                'additional_funds': additional_funds,  # Dynamic fields included as a list
             }
         }
+        print(f'context : {context}')
         return render(request, 'myapp/pallifund.html', context)
     return render(request, 'myapp/pallifund.html')
 

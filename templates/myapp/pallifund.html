@@ -173,15 +173,33 @@
     {% if success %}
     <div id="confirmationPopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div class="bg-gray-400 rounded-lg p-6 shadow-lg w-96">
-          <h3 class="text-black font-bold">Masapirivu Data Saved Successfully!</h3>
+          <h3 class="text-black font-bold">Palli Fund Data Saved Successfully!</h3>
+          
           <p class="text-black font-bold">ID: {{ submitted_data.id_no }}</p>
           <p class="text-black font-bold">Name: {{ submitted_data.name }}</p>
           <p class="text-black font-bold">Receipt No.: {{ submitted_data.reciept_no }}</p>
           <p class="text-black font-bold">Date: {{ submitted_data.date }}</p>
-          <p class="text-black font-bold">Fund Type: {{ submitted_data.fund_type }}</p>
-          <p class="text-black font-bold">Description: {{ submitted_data.description }}</p>
-          <p class="text-black font-bold">Amount: {{ submitted_data.amount }}</p>
+          <p class="text-black font-bold">Fund Type: {{ submitted_data.main_fund.fund_type }}</p>
+          <p class="text-black font-bold">Description: {{ submitted_data.main_fund.description }}</p>
+          <p class="text-black font-bold">Amount: {{ submitted_data.main_fund.amount }}</p>
           <p class="text-black font-bold">Total Amount: {{ submitted_data.total_amount }}</p>
+      
+          <!-- Display additional funds if present -->
+          {% if submitted_data.additional_funds %}
+            <div class="mt-4">
+              <h4 class="text-black font-bold">Additional Funds:</h4>
+              <ul class="list-disc pl-6">
+                {% for fund in submitted_data.additional_funds %}
+                  <li class="text-black">
+                    Fund Type: {{ fund.fund_type }}, 
+                    Description: {{ fund.description }}, 
+                    Amount: {{ fund.amount }}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
           <div class="flex items-center gap-2">
             <button id="printReceiptButton" class="btn btn-error ml-12" onclick="generatePDF()">Print Receipt</button>
             <button id="popupConfirmButton" class="btn btn-accent ml-14" onclick="closePopupAndCleanUrl()">OK</button>
@@ -190,96 +208,70 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
     <!-- function for reciept after data save -->
     <script>
-      function closePopupAndCleanUrl() {
-          // Close the popup
-          const popup = document.getElementById('confirmationPopup');
-          popup.style.display = 'none';
-          popup.remove();
-          window.location.href = window.location.pathname;
-      }
-      function generatePDF() {
-          // Initialize jsPDF
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF();
-  
-          // Header content
-          const headerContent = [
-              'PAZHAYALAKKIDI HIDAYATHUL ISLAM MAHALLU JAMA ATH',
-              'JAMA ATH',
-              'P O Akaloor,Pazhayalakkidi, Palakkad',
-              '679302, Palakkad District',
-          ];
-  
-          // Centered header title
-          doc.setFontSize(25); // Reasonable font size for header
-          let yHeaderPos = 20; // Start position for header
-          headerContent.forEach(line => {
-            doc.text(line, 20, yHeaderPos);
-              yHeaderPos += 8; // Line spacing for header
-          });
-  
-          // Main title
-          doc.setFontSize(40);
-          doc.text('Masapirivu Receipt', 105, yHeaderPos + 10, { align: 'center' });
-  
-          // Content
-          const content = [
-              ['ID:', '{{ submitted_data.id_no }}'],
-              ['Name:', '{{ submitted_data.name }}'],
-              ['Receipt No.:', '{{ submitted_data.reciept_no }}'],
-              ['Date:', '{{ submitted_data.date }}'],
-              ['Fund Type:', '{{ submitted_data.fund_type }}'],
-              ['Description:', '{{ submitted_data.description }}'],
-              ['Amount:', '{{ submitted_data.amount }}'],
-          ];
-  
-          doc.setFontSize(40); // Font size for content
-          let yPos = yHeaderPos + 30; // Add a gap below the header
-          content.forEach(([label, value]) => {
-              doc.text(`${label} ${value}`, 20, yPos); // Left-align content at X=20
-              yPos += 16; // Add more spacing between content lines
-          });
-
-          // Special formatting for Total Amount
-          const totalAmount = '{{ submitted_data.total_amount }}';
-          doc.setFontSize(50); // Larger font size for Total Amount
-          yPos += 16; // Add a gap above the total amount
-          doc.text(`Total Amount: ${totalAmount}`, 20, yPos);
-
-          // Open PDF in new tab instead of downloading
-          const pdfData = doc.output('bloburl');
-          window.open(pdfData, '_blank');
-      }
-  </script>
-  
-    {% endif %}
-    
-    <!-- function to display success Dialog box -->
-    <!-- {% if success %}
-    <div id="confirmationPopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-gray-400 rounded-lg p-6 shadow-lg w-96">
-        <h3 class="text-black font-bold">Pallifund Data Saved Successfully!</h3>
-            <button id="popupConfirmButton" class="btn btn-accent ml-56" onclick="closePopupAndCleanUrl()">OK</button>
-        </div>
-    </div> -->
-
-    <!-- function for reciept after data save -->
-    <!-- <script>
         function closePopupAndCleanUrl() {
             // Close the popup
             const popup = document.getElementById('confirmationPopup');
             popup.style.display = 'none';
-            
-            // Remove the popup from DOM entirely
             popup.remove();
-            
-            // Redirect to the clean URL
             window.location.href = window.location.pathname;
         }
+        function generatePDF() {
+            // Initialize jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+    
+            // Header content
+            const headerContent = [
+                'PAZHAYALAKKIDI HIDAYATHUL ISLAM',
+                '           MAHALLU JAMA ATH',
+                'P O Akaloor,Pazhayalakkidi, Palakkad',
+                '         679302, Palakkad District',
+            ];
+    
+            // Centered header title
+            doc.setFontSize(25); // Reasonable font size for header
+            let yHeaderPos = 20; // Start position for header
+            headerContent.forEach(line => {
+              doc.text(line, 20, yHeaderPos);
+                yHeaderPos += 8; // Line spacing for header
+            });
+    
+            // Main title
+            doc.setFontSize(40);
+            doc.text('Masapirivu Receipt', 105, yHeaderPos + 10, { align: 'center' });
+
+            const content = [
+                ['ID :', '{{ submitted_data.id_no }}'],
+                ['Name :', '{{ submitted_data.name }}'],
+                ['Receipt No :', '{{ submitted_data.reciept_no }}'],
+                ['Date :', '{{ submitted_data.date }}'],
+                ['Fund Type :', '{{ submitted_data.main_fund.fund_type }}'],
+                ['Description :', '{{ submitted_data.main_fund.description }}'],
+                ['Amount :', '{{ submitted_data.main_fund.amount }}'],
+            ];
+    
+            doc.setFontSize(40); // Font size for content
+            let yPos = yHeaderPos + 30; // Add a gap below the header
+            content.forEach(([label, value]) => {
+                doc.text(`${label} ${value}`, 20, yPos); // Left-align content at X=20
+                yPos += 16; // Add more spacing between content lines
+            });
+            
+            // Special formatting for Total Amount
+            const totalAmount = '{{ submitted_data.total_amount }}';
+            doc.setFontSize(50); // Larger font size for Total Amount
+            yPos += 16; // Add a gap above the total amount
+            doc.text(`Total Amount: ${totalAmount}`, 20, yPos);
+  
+            // Open PDF in new tab instead of downloading
+            const pdfData = doc.output('bloburl');
+            window.open(pdfData, '_blank');
+        }
     </script>
-    {% endif %} -->
+    {% endif %}
 
     <script src="{% static 'js/addmore.js' %}"></script>
         
