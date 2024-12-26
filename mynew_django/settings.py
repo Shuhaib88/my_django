@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-2ce3mmmg!&1j#wd5g5_peyx^0glw1*@d28ze)(xx##s)j2&48$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app',  'mynew_django.vercel.app', '127.0.0.1', 'localhost', '139.59.6.114']
+ALLOWED_HOSTS = ['.vercel.app',  'mynew_django.vercel.app', '192.168.1.2', '127.0.0.1', 'localhost', '139.59.6.114']
 
 # Application definition
 
@@ -91,27 +91,27 @@ WSGI_APPLICATION = 'mynew_django.wsgi.app'
 #     }
 # }
 # local host database config
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'plkd_mahallu',
-#         'USER': 'shuhaib',
-#         'PASSWORD': '@88737softkind',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
-# Railway database config
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'YINOMGefSNRZMIrAnzDOwPcqXAfmfJMN',
-        'HOST': 'autorack.proxy.rlwy.net',
-        'PORT': '54301',
+        'NAME': 'plkd_mahallu',
+        'USER': 'shuhaib',
+        'PASSWORD': '@88737softkind',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+# Railway database config
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'YINOMGefSNRZMIrAnzDOwPcqXAfmfJMN',
+#         'HOST': 'autorack.proxy.rlwy.net',
+#         'PORT': '54301',
+#     }
+# }
 
 
 # Password validation

@@ -74,6 +74,8 @@ def index(request):
 
 @login_required
 def dashboard(request):
+    if not request.user.is_authenticated:  # Extra safety check
+        return redirect('login')
     return render(request, 'myapp/dashboard.html')
 
 @login_required
