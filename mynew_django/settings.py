@@ -96,11 +96,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'plkd_mahallu',
         'USER': 'shuhaib',
-        'PASSWORD': 'password',
+        'PASSWORD': '@88737softkind',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
+
+# 'PASSWORD': '@88737softkind',
 # Railway database config
 # DATABASES = {
 #     'default': {

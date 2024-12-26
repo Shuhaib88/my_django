@@ -84,9 +84,8 @@ def admin(request):
 
 @login_required
 def pallifund_view(request):
-    if request.method == "POST":
 
-        # Capture the static fields
+    if request.method == "POST":
         name = request.POST.get('name')
         id_no = request.POST.get('id_no')
         reciept_no = request.POST.get('reciept_no')
@@ -140,7 +139,17 @@ def pallifund_view(request):
             index += 1
 
         context = {
-            'success': True
+            'success': True,
+            'submitted_data': {
+                'id_no': id_no,
+                'name': name,
+                'reciept_no': reciept_no,
+                'date': date,
+                'fund_type': fund_type,
+                'description': description,
+                'amount': amount,
+                'total_amount': total_amount,
+            }
         }
         return render(request, 'myapp/pallifund.html', context)
     return render(request, 'myapp/pallifund.html')
@@ -154,9 +163,6 @@ def masapirivu_view(request):
     data = list(addmahallumembers.objects.values('id_no', 'name'))
     balances = list(balance.objects.all().values('id_no', 'balance'))
     masapirivu_data = list(masapirivu.objects.all().values('id_no', 'name', 'reciept_no'))
-    # print(f"data: {data}")
-    # print(f"balances: {balances}")
-    # print(f"masapirivu_data: {masapirivu_data}")
 
     if request.method == "POST":
         name = request.POST.get('name')
@@ -230,6 +236,7 @@ def add_members_view(request):
         family_members = request.POST.getlist('family_member')
         relations = request.POST.getlist('relation')
         phone = request.POST.getlist('phone_no')
+        balance_value = request.POST.get('balance')
 
         # Save the main member
         new_member = addmahallumembers(
@@ -242,6 +249,13 @@ def add_members_view(request):
             phone_no=phone[0],
         )
         new_member.save()
+
+        balance.objects.filter(id_no=id_no).delete()
+        balance_amount = balance(
+            id_no=id_no,
+            balance=balance_value
+        )
+        balance_amount.save()
 
         # Save the additional family members
         for i in range(1, len(family_members)):

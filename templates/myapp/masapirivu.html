@@ -138,11 +138,13 @@
           // Header content
           const headerContent = [
               'PAZHAYALAKKIDI HIDAYATHUL ISLAM MAHALLU JAMA ATH',
-              'P O Akaloor, Palakkad - 679302, Palakkad District',
+              'JAMA ATH',
+              'P O Akaloor,Pazhayalakkidi, Palakkad',
+              '679302, Palakkad District',
           ];
   
           // Centered header title
-          doc.setFontSize(20); // Reasonable font size for header
+          doc.setFontSize(25); // Reasonable font size for header
           let yHeaderPos = 20; // Start position for header
           headerContent.forEach(line => {
             doc.text(line, 20, yHeaderPos);
@@ -162,7 +164,6 @@
               ['Palli:', '{{ submitted_data.palli }}'],
               ['Madrassa:', '{{ submitted_data.madrassa }}'],
               ['Mess:', '{{ submitted_data.mess }}'],
-              ['Total Amount:', '{{ submitted_data.total_amount }}']
           ];
   
           doc.setFontSize(40); // Font size for content
@@ -316,7 +317,7 @@
           const newBalance = originalBalance - totalAmount;
     
           // Update balance input field
-          balanceInput.value = newBalance >= 0 ? newBalance : "Insufficient balance";
+          balanceInput.value = newBalance >= 0 ? newBalance : "0";
         }
     
         // Calculate total amount and update the balance
