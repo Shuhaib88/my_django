@@ -241,10 +241,10 @@
     
             // Main title
             doc.setFontSize(40);
-            doc.text('Masapirivu Receipt', 105, yHeaderPos + 10, { align: 'center' });
+            doc.text('Receipt', 105, yHeaderPos + 10, { align: 'center' });
 
             const content = [
-                ['ID :', '{{ submitted_data.id_no }}'],
+                ['Mahallu Card No :', '{{ submitted_data.id_no }}'],
                 ['Name :', '{{ submitted_data.name }}'],
                 ['Receipt No :', '{{ submitted_data.reciept_no }}'],
                 ['Date :', '{{ submitted_data.date }}'],

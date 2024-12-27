@@ -137,10 +137,10 @@
   
           // Header content
           const headerContent = [
-              'PAZHAYALAKKIDI HIDAYATHUL ISLAM MAHALLU JAMA ATH',
-              'JAMA ATH',
+              'PAZHAYALAKKIDI HIDAYATHUL ISLAM ',
+              '          MAHALLU JAMA ATH',
               'P O Akaloor,Pazhayalakkidi, Palakkad',
-              '679302, Palakkad District',
+              '        679302, Palakkad District',
           ];
   
           // Centered header title
@@ -157,13 +157,13 @@
   
           // Content
           const content = [
-              ['ID:', '{{ submitted_data.id_no }}'],
-              ['Name:', '{{ submitted_data.name }}'],
-              ['Receipt No.:', '{{ submitted_data.reciept_no }}'],
-              ['Date:', '{{ submitted_data.date }}'],
-              ['Palli:', '{{ submitted_data.palli }}'],
-              ['Madrassa:', '{{ submitted_data.madrassa }}'],
-              ['Mess:', '{{ submitted_data.mess }}'],
+              ['Mahallu Card No :', '{{ submitted_data.id_no }}'],
+              ['Name :', '{{ submitted_data.name }}'],
+              ['Receipt No :', '{{ submitted_data.reciept_no }}'],
+              ['Date :', '{{ submitted_data.date }}'],
+              ['Palli :', '{{ submitted_data.palli }}'],
+              ['Madrassa :', '{{ submitted_data.madrassa }}'],
+              ['Mess :', '{{ submitted_data.mess }}'],
           ];
   
           doc.setFontSize(40); // Font size for content

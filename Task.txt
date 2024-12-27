@@ -1,37 +1,28 @@
-done :
-------------------------------------------------------
-palli fund entry form -> confirmation -> done
+--------------------------------------------------------------------------------
+stable version
 
-masa pirivu form -> confirmation -> done
+version 1.o.1
+--------------------------------------------------------------------------------
+changes :
+--------------------------------------------------------------------------------
+remove the required field for the add mahallu members
 
-masa pirivu form -> reciept no and date automatic
+masapirivu reciept edit
 
-masa pirivu form ->  table according to the date
+pallifund reciept edit
 
-edit -> individual mahallu member details
+add_members relation varchar changes to 20
 
-addmore delete/remove button
-
-response aftert the form was submit
-
-download all table data as excel format
-individual statement 
-account statement
-masapirivu table 
-
-edit mahallu members remove button
-
-individual statement sorting with date
-
-masa pirivu balance and reciept_no automatic
-
-add mahallu members add phone no
-------------------------------------------------------
+--------------------------------------------------------------------------------
 pending :
-------------------------------------------------------
+--------------------------------------------------------------------------------
 
-print after the masapirivu -> printer > format, font details
-------------------------------------------------------
+edit_member_details.html > balance visibility and change balance from mahallu members details
+
+individual_statement.html > view balance amount in the individual_statement details
+
+pallifund.html > js code reciept > brign the additional fund description and amount in the reciept
+--------------------------------------------------------------------------------
 convert the inserting data to caps complete
 oninput="this.value = this.value.toUpperCase()"
 

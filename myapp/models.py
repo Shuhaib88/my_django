@@ -42,13 +42,13 @@ class addmahallumembers(models.Model):
     father_name = models.CharField(max_length=30)
     house_name = models.CharField(max_length=30)
     family_member = models.CharField(max_length=20)
-    relation = models.CharField(max_length=10)
+    relation = models.CharField(max_length=20)
     phone_no = models.CharField(max_length=10)
 
 class addfamilymembers(models.Model):
     id_no = models.CharField(max_length=30)
     family_member = models.CharField(max_length=30)
-    relation = models.CharField(max_length=10)
+    relation = models.CharField(max_length=20)
 
 
 
