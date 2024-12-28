@@ -292,9 +292,12 @@ def individual_statement(request):
         additionalfund_data = additionalfund.objects.all()
         addmahallumembers_data = addmahallumembers.objects.filter(id_no=id_no)
         addfamilymembers_data = addfamilymembers.objects.filter(id_no=id_no)
+        balance_data = balance.objects.filter(id_no=id_no)
 
-        print("Palli Fund Data:")
-        print(f"{id_no}")
+        print(f"id = {id_no}")
+
+        for record in balance_data:
+                print(f"Balance for ID {id_no}: {record.balance}")
 
         return render(request, 'myapp/individual_statement.html', {
             'id_no' : id_no,
@@ -303,6 +306,7 @@ def individual_statement(request):
             'additionalfund_data': additionalfund_data,
             'addmahallumembers_data': addmahallumembers_data,
             'addfamilymembers_data': addfamilymembers_data,
+            'balance' : balance_data,    
         })
     else:
         pallifund_data = pallifund.objects.all()
@@ -365,6 +369,7 @@ def edit_member_details(request):
         family_members = request.POST.getlist('family_member')
         relations = request.POST.getlist('relation')
         phone = request.POST.getlist('phone_no')
+        balance_values = request.POST.getlist('balance')
 
         # Validate the POST data
         if not id_no or not family_members or not relations:
@@ -373,6 +378,17 @@ def edit_member_details(request):
                 request, 
                 'myapp/edit_member_details.html', 
                 {'error': 'Required fields are missing.'}
+            )
+
+        balance_value = balance_values[0] if balance_values else "0"  # Default balance if not provided
+
+        # Ensure balance_value does not exceed the max length of 7
+        if len(balance_value) > 7:
+            print(f"Error: Balance value '{balance_value}' exceeds length limit.")
+            return render(
+                request,
+                'myapp/edit_member_details.html',
+                {'error': f"Balance value '{balance_value}' exceeds the allowed length."}
             )
 
         # Save the primary member
@@ -387,7 +403,14 @@ def edit_member_details(request):
         )
         addmahallumembers.objects.filter(id_no=id_no).delete()
         addfamilymembers.objects.filter(id_no=id_no).delete()
+        balance.objects.filter(id_no=id_no).delete()
         new_member.save()
+        new_balance = balance(
+            id_no=id_no,
+            balance=balance_value,
+        )
+        print(f"Saving Balance: ID: {id_no}, Balance: {balance_value}")
+        new_balance.save()
 
         # Save the additional family members
         for i in range(1, len(family_members)):
@@ -401,14 +424,23 @@ def edit_member_details(request):
         # Redirect to the same page after processing POST
         return redirect(f'/edit_member_details/?id_no={id_no}')
 
-    # Fetch data for GET request
     mahallumembers_data = addmahallumembers.objects.filter(id_no=id_no)
     familymembers_data = addfamilymembers.objects.filter(id_no=id_no)
+    balance_data = balance.objects.filter(id_no=id_no).values()  # Use .values() to retrieve JSON-like data
+
+    if balance_data.exists():  # Check if there's any data
+        balance_list = list(balance_data)  # Convert QuerySet to a list
+        print(f"Balance data found: {balance_list}")
+    else:
+        balance_list = [{"id": None, "id_no": id_no, "balance": "0"}]  # Pass default 0 balance if none
+        print(f"No balance data found. Setting default: {balance_list}")
 
     return render(request, 'myapp/edit_member_details.html', {
         'mahallumembers_data': mahallumembers_data,
-        'familymembers_data': familymembers_data
+        'familymembers_data': familymembers_data,
+        'balance': (balance_list),
     })
+
 
 
 

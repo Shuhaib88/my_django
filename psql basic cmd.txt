@@ -6,6 +6,17 @@ Shuhaib
 @88737softkind
 
 \pset pager off
+
+\conninfo
+
+----------------------------------------------------------------------------------------------
+ssh root@68.183.91.111
+
+psql -U shuhaib -d plkd_mahallu
+
+\conninfo
+
+python3 manage.py runserver 0.0.0.0:8000
 ----------------------------------------------------------------------------------------------
 tables :
 ----------------------------------------------------------------------------------------------
@@ -58,6 +69,16 @@ delete data from table :
 
 delete from myapp_addfamilymembers where id_no='';   
 ----------------------------------------------------------------------------------------------
+Reorder the id in the table :
+
+WITH reordered AS (
+    SELECT id, ROW_NUMBER() OVER () AS new_id
+    FROM myapp_balance
+)
+UPDATE myapp_balance
+SET id = reordered.new_id
+FROM reordered
+WHERE myapp_balance.id = reordered.id;
 
 ----------------------------------------------------------------------------------------------
 

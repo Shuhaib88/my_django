@@ -38,7 +38,7 @@
                 {% for addmahallumembers in addmahallumembers_data %}
                 <thead>
                     <tr class="border-primary">
-                        <th class="border-r p-2 text-primary" colspan="4">
+                        <th class="border-r p-2 text-primary" colspan="3">
                             <ul class="ml-5">
                                 <li>Mahallu ID No: {{id_no}}</li>
                                 <li>Name: {{addmahallumembers.name}}</li>
@@ -55,6 +55,14 @@
                                 {% if addfamilymembers.id_no == id_no %}
                                 <li class="text-primary">{{addfamilymembers.family_member}} - {{addfamilymembers.relation}}</li>
                                 {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </th>
+                        <th class="border-r p-2" colspan="">
+                            <ul class="ml-5">
+                                <li class="text-primary">Balance Amount : </li>
+                                {% for balance_amount in balance %}
+                                <li class="text-primary">{{ balance_amount.balance }}</li>
                                 {% endfor %}
                             </ul>
                         </th>
