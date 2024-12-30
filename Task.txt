@@ -13,15 +13,19 @@ pallifund reciept edit
 
 add_members relation varchar changes to 20
 
---------------------------------------------------------------------------------
-pending :
---------------------------------------------------------------------------------
+version 1.o.2
 
 edit_member_details.html > balance visibility and change balance from mahallu members details
 
 individual_statement.html > view balance amount in the individual_statement details
 
 pallifund.html > js code reciept > brign the additional fund description and amount in the reciept
+
+--------------------------------------------------------------------------------
+pending :
+--------------------------------------------------------------------------------
+
+
 --------------------------------------------------------------------------------
 convert the inserting data to caps complete
 oninput="this.value = this.value.toUpperCase()"
