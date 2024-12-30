@@ -12,6 +12,12 @@ Shuhaib
 ----------------------------------------------------------------------------------------------
 ssh root@68.183.91.111
 
+pip install -r requirements.txt
+
+python manage.py collectstatic
+
+python manage.py runserver 0.0.0.0:8000
+
 psql -U shuhaib -d plkd_mahallu
 
 \conninfo
