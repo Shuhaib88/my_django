@@ -1,6 +1,19 @@
 --------------------------------------------------------------------------------
 stable version
 
+version 1.o.3
+--------------------------------------------------------------------------------
+changes :
+--------------------------------------------------------------------------------
+masa pirivu order as reciept no
+
+masa pirivu total amount data in account statement
+
+multiple filter in mahallu member list
+
+Masapirivi listil print button
+--------------------------------------------------------------------------------
+
 version 1.o.1
 --------------------------------------------------------------------------------
 changes :
@@ -22,9 +35,8 @@ individual_statement.html > view balance amount in the individual_statement deta
 pallifund.html > js code reciept > brign the additional fund description and amount in the reciept
 
 --------------------------------------------------------------------------------
-pending :
+pending - version 1.o.3:
 --------------------------------------------------------------------------------
-
 
 --------------------------------------------------------------------------------
 convert the inserting data to caps complete

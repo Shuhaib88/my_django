@@ -27,11 +27,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="border-white hover:bg-black hover:text-action-color">
+                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle">
                     <td class="border-2 border-white px-6 py-2">Total Amount Credited</td>
                     <td id="totalCredited" class="border-2 border-white px-6 py-2"></td>
                 </tr>
-                <tr class="border-white hover:bg-black hover:text-action-color">
+                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle">
                     <td class="border-2 border-white px-6 py-2">Total Amount Debited</td>
                     <td id="totalDebited" class="border-2 border-white px-6 py-2"></td>
                 </tr>
@@ -41,7 +41,7 @@
         <div class="overflow-x-auto">
             <table class="table border border-r w-full text-left">
               <thead class="bg-slate-400 text-black">
-                <tr class="border-primary">
+                <tr class="border-primary text-center align-middle">
                   <th class="border-r p-2">Name</th>
                   <th class="border-r p-2">Mahallu ID</th>
                   <th class="border-r p-2">Date</th>
@@ -54,7 +54,7 @@
               </thead>
               <tbody id="dataTable">
                 {% for fund in pallifund_data %}
-                <tr class="border-white hover:bg-black hover:text-action-color">
+                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle">
                     <td class="border-r p-2">{{ fund.name }}</td>
                     <td class="border-r p-2">{{ fund.id_no }}</td>
                     <td class="border-r p-2">{{ fund.date }}</td>
@@ -76,7 +76,7 @@
                   </tr>
                 {% endfor %}
                 {% for fund in masapirivu_data %}
-                <tr class="border-white hover:bg-black hover:text-action-color">
+                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle">
                     <td class="border-r p-2">{{ fund.name }}</td>
                     <td class="border-r p-2">{{ fund.id_no }}</td>
                     <td class="border-r p-2">{{ fund.date }}</td>
@@ -138,6 +138,7 @@
             sortTableByDate();
         });
     </script>
+    
     <!-- calculate the total  -->
     <script>
         // Wait for the DOM to load
@@ -151,30 +152,35 @@
             function calculateTotals() {
                 let totalCredited = 0;
                 let totalDebited = 0;
-    
+
                 // Loop through each visible row in the data table
-                dataTable.querySelectorAll('tr').forEach(row => {
-                    const debitCreditCell = row.querySelector('td:nth-child(8)');
-                    const amountCell = row.querySelector('td:nth-child(7)');
-    
+                dataTable.querySelectorAll('tr').forEach((row, index) => {
+                    const debitCreditCell = row.querySelector('.debitCredit'); // Check if cell exists
+                    const amountCell = row.querySelector('.totalAmount');
+
+
                     if (debitCreditCell && amountCell && row.style.display !== 'none') {
                         const debitCredit = debitCreditCell.innerText.trim();
-                        const amount = parseFloat(amountCell.innerText.trim().replace(/,/g, '')) || 0; // Handle commas in numbers
-    
-                        if (debitCredit === 'Credit') {
+                        const amount = parseFloat(amountCell.innerText.trim().replace(/,/g, '')) || 0; // Parse number
+
+                        if (debitCredit === 'credit') {
                             totalCredited += amount;
-                        } else if (debitCredit === 'Debit') {
+                        } else if (debitCredit === 'debit') {
                             totalDebited += amount;
                         }
+                    } else {
+                        console.log(`Skipping Row ${index + 1}: Either hidden or missing required fields.`);
                     }
                 });
-    
+
                 // Update totals in the table
                 totalCreditedCell.innerText = totalCredited.toFixed(2);
                 totalDebitedCell.innerText = totalDebited.toFixed(2);
-                console.log(totalCreditedCell.innerText)
-                console.log(totalDebitedCell.innerText)
+
+                console.log(`Final Total Credited: ${totalCredited.toFixed(2)}`);
+                console.log(`Final Total Debited: ${totalDebited.toFixed(2)}`);
             }
+
     
             function filterTable() {
                 const dateFilter = dateFilterInput.value;

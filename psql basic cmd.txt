@@ -16,13 +16,41 @@ pip install -r requirements.txt
 
 python manage.py collectstatic
 
+python3 -m venv myenv
+
+source venv/bin/activate
+
 python manage.py runserver 0.0.0.0:8000
+
+screen -S Django-server
+
+Ctrl + A, D
+
+screen -ls
+
+screen -r Django-server
 
 psql -U shuhaib -d plkd_mahallu
 
 \conninfo
 
 python3 manage.py runserver 0.0.0.0:8000
+
+----------------------------------------------------------------------------------------------
+Create screen session:
+screen -S session_name
+
+Detteach session :
+Ctrl + A, D
+
+list session:
+screen -ls
+
+Reattach session:
+screen -r session_name
+
+Terminate sessio:
+exit
 ----------------------------------------------------------------------------------------------
 tables :
 ----------------------------------------------------------------------------------------------

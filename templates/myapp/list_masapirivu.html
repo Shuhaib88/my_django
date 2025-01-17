@@ -33,56 +33,241 @@
                   <th class="border-r p-2">Mess-Amount</th>
                   <th class="border-r p-2">Description</th>
                   <th class="border-r p-2">Total Amount</th>
+                  <th class="border-r p-2">Print</th>
                 </tr>
               </thead>
               <tbody id="dataTable">
                 <!-- row 1 -->
                 {% for data in sorted_data %}
-                <tr class="border-white hover:bg-black hover:text-action-color" onclick="viewIndividualStatement('{{ member.id_no }}')">
-                  <th class="border-r p-2">{{ data.id_no }}</th>
-                  <td class="border-r p-2">{{ data.name }}</td>
-                  <td class="border p-2">{{ data.date }}</td>
-                  <td class="border-r p-2">{{ data.reciept_no }}</td>
-                  <td class="border p-2">{{ data.palli }}</td>
-                  <td class="border p-2">{{ data.madrassa }}</td>
-                  <td class="border p-2">{{ data.mess }}</td>
-                  <td class="border p-2">{{ data.description }}</td>
-                  <td class="border p-2">{{ data.total_amount }}</td>
+                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle" onclick="viewIndividualStatement('{{ member.id_no }}')">
+                  <th class="border p-2 ">{{ data.id_no }}</th>
+                  <td class="border p-2 ">{{ data.name }}</td>
+                  <td class="border p-2 ">{{ data.date }}</td>
+                  <td class="border p-2 ">{{ data.reciept_no }}</td>
+                  <td class="border p-2 ">{{ data.palli }}</td>
+                  <td class="border p-2 ">{{ data.madrassa }}</td>
+                  <td class="border p-2 ">{{ data.mess }}</td>
+                  <td class="border p-2 ">{{ data.description }}</td>
+                  <td class="border p-2 ">{{ data.total_amount }}</td>
+                  <td class="border p-2 ">
+                    <button 
+                      id="printReceiptButton" 
+                      class="btn btn-error w-24 h-3" 
+                      onclick="showPopup({
+                        id: '{{ data.id_no }}',
+                        name: '{{ data.name }}',
+                        date: '{{ data.date }}',
+                        receiptNo: '{{ data.reciept_no }}',
+                        palli: '{{ data.palli }}',
+                        madrassa: '{{ data.madrassa }}',
+                        mess: '{{ data.mess }}',
+                        totalAmount: '{{ data.total_amount }}'
+                      })"
+                    >
+                      Print
+                    </button>
+                  </td>
                 </tr>
                 {% endfor %}
+                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle">
+                    <th class="border p-2" colspan="4">Total</th>
+                    <td class="pallitotal border p-2"></td>
+                    <td class="madrassatotal border p-2"></td>
+                    <td class="messtotal border p-2"></th>
+                    <th class="border p-2">Grand Total</td>
+                    <td class="grandtotal border p-2" colspan="2"></td>
+                </tr>
+
               </tbody>
             </table>
           </div>
     </div>
+
+    <!-- Confirmation Popup -->
+    <div 
+    id="confirmationPopup" 
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden"
+    >
+    <div class="bg-gray-400 rounded-lg p-6 shadow-lg w-96 text-center">
+        <h3 class="text-black font-bold"></h3>
+        <p class="id text-black font-bold"></p>
+        <p class="name text-black font-bold"></p> 
+        <p class="receiptNo text-black font-bold"></p>
+        <p class="date text-black font-bold"></p>
+        <p class="palli text-black font-bold"></p>
+        <p class="madrassa text-black font-bold"></p>
+        <p class="mess text-black font-bold"></p>
+        <p class="totalAmount text-black font-bold"></p>
+    <div class="flex items-center gap-2">
+        <button id="printReceiptButton2" class="btn btn-error ml-12" >Print Receipt</button>
+        <button id="popupConfirmButton" class="btn btn-accent ml-14" onclick="closePopup()">OK</button>
+    </div>
+    </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          // Initialize sums for "palli", "madrassa", "mess", and "grand total"
+          let palliTotal = 0;
+          let madrassaTotal = 0;
+          let messTotal = 0;
+          let grandTotal = 0;
+        
+          // Select all table rows with data (skip total row)
+          const rows = document.querySelectorAll("tr:not(:last-child)");
+        
+          rows.forEach((row) => {
+            // Get the "palli", "madrassa", "mess", and "total amount" cells in the current row
+            const palliCell = row.querySelector("td:nth-child(5)");
+            const madrassaCell = row.querySelector("td:nth-child(6)");
+            const messCell = row.querySelector("td:nth-child(7)");
+            const totalAmountCell = row.querySelector("td:nth-child(9)");
+        
+            // Extract and parse the amounts, if present
+            if (palliCell && madrassaCell && messCell && totalAmountCell) {
+              palliTotal += parseFloat(palliCell.textContent) || 0;
+              madrassaTotal += parseFloat(madrassaCell.textContent) || 0;
+              messTotal += parseFloat(messCell.textContent) || 0;
+              grandTotal += parseFloat(totalAmountCell.textContent) || 0;
+            }
+          });
+        
+          // Update the totals in the corresponding table cells
+          document.querySelector(".pallitotal").textContent = palliTotal.toFixed(2);
+          document.querySelector(".madrassatotal").textContent = madrassaTotal.toFixed(2);
+          document.querySelector(".messtotal").textContent = messTotal.toFixed(2);
+          document.querySelector(".grandtotal").textContent = grandTotal.toFixed(2);
+        });
+        </script>
+        
+        
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <!-- Function to popup print box -->
+    <script>
+    function showPopup(data) {
+        // Populate the popup with the data
+        document.querySelector('#confirmationPopup h3').innerText = 'Print Data !';
+        document.querySelector('#confirmationPopup .id').innerText = `ID: ${data.id}`;
+        document.querySelector('#confirmationPopup .name').innerText = `Name: ${data.name}`;
+        document.querySelector('#confirmationPopup .receiptNo').innerText = `Receipt No.: ${data.receiptNo}`;
+        document.querySelector('#confirmationPopup .date').innerText = `Date: ${data.date}`;
+        document.querySelector('#confirmationPopup .palli').innerText = `Palli: ${data.palli}`;
+        document.querySelector('#confirmationPopup .madrassa').innerText = `Madrassa: ${data.madrassa}`;
+        document.querySelector('#confirmationPopup .mess').innerText = `Mess: ${data.mess}`;
+        document.querySelector('#confirmationPopup .totalAmount').innerText = `Total Amount: ${data.totalAmount}`;
+
+        // Update the "Print Receipt" button's onclick function to pass data to generatePDF
+        const printButton = document.getElementById('printReceiptButton2');
+        printButton.onclick = function () {
+            generatePDF(data);
+        };
+
+        // Show the popup by removing the "hidden" class
+        document.getElementById('confirmationPopup').classList.remove('hidden');
+    }
+
+    function generatePDF(data) {
+          // Initialize jsPDF
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+  
+          // Header content
+          const headerContent = [
+              'PAZHAYALAKKIDI HIDAYATHUL ISLAM ',
+              '          MAHALLU JAMA ATH',
+              'P O Akaloor,Pazhayalakkidi, Palakkad',
+              '        679302, Palakkad District',
+          ];
+  
+          // Centered header title
+          doc.setFontSize(25); // Reasonable font size for header
+          let yHeaderPos = 20; // Start position for header
+          headerContent.forEach(line => {
+            doc.text(line, 20, yHeaderPos);
+              yHeaderPos += 8; // Line spacing for header
+          });
+  
+          // Main title
+          doc.setFontSize(40);
+          doc.text('Masapirivu Receipt', 105, yHeaderPos + 10, { align: 'center' });
+  
+          // Content
+          const content = [
+              ['Mahallu Card No :', data.id],
+              ['Name :', data.name],
+              ['Receipt No :', data.reciept_no],
+              ['Date :', data.date],
+              ['Palli :', data.palli],
+              ['Madrassa :', data.madrassa],
+              ['Mess :', data.mess],
+          ];
+  
+          doc.setFontSize(40); // Font size for content
+          let yPos = yHeaderPos + 30; // Add a gap below the header
+          content.forEach(([label, value]) => {
+              doc.text(`${label} ${value}`, 20, yPos); // Left-align content at X=20
+              yPos += 16; // Add more spacing between content lines
+          });
+
+          // Special formatting for Total Amount
+          const totalAmount = data.totalAmount;
+          doc.setFontSize(50); // Larger font size for Total Amount
+          yPos += 16; // Add a gap above the total amount
+          doc.text(`Total Amount: ${totalAmount}`, 20, yPos);
+
+          // Open PDF in new tab instead of downloading
+          const pdfData = doc.output('bloburl');
+          window.open(pdfData, '_blank');
+    }
+
+    function closePopup() {
+    // Hide the popup by adding the "hidden" class
+    document.getElementById('confirmationPopup').classList.add('hidden');
+    }
+
+    function closePopupAndCleanUrl() {
+    // Call closePopup to hide the popup
+    closePopup();
+    // Additional logic if needed to clean the URL or reset fields
+    console.log('Popup closed, additional actions here!');
+    }
+    </script>
+
+    
     
     <!-- function to sort data based on date, recent on top -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const tableBody = document.getElementById("dataTable"); // Get the table body element
+        // Wait for the DOM to load
+        document.addEventListener("DOMContentLoaded", function () {
+            const tableBody = document.getElementById("dataTable");
     
-        function sortTableByDate() {
-          // Get all rows from the table
-          const rows = Array.from(tableBody.querySelectorAll("tr"));
+            function sortTableByReceiptNo() {
+                // Get all rows in the table body
+                const rows = Array.from(tableBody.querySelectorAll("tr"));
     
-          // Sort the rows based on the "Date" column
-          rows.sort((a, b) => {
-            // Extract date text from each row
-            const dateA = new Date(a.cells[2].innerText.trim()); // 3rd column - Date
-            const dateB = new Date(b.cells[2].innerText.trim());
-            
-            // Compare dates (recent first)
-            return dateB - dateA;
-          });
+                // Sort rows based on the Receipt Number (4th column)
+                rows.sort((rowA, rowB) => {
+                    const receiptNoA = rowA.querySelector("td:nth-child(4)").innerText.trim();
+                    const receiptNoB = rowB.querySelector("td:nth-child(4)").innerText.trim();
     
-          // Re-insert rows into the table in sorted order
-          rows.forEach(row => tableBody.appendChild(row));
-        }
+                    // Convert receipt numbers to integers for numeric sorting
+                    const numA = parseInt(receiptNoA, 10);
+                    const numB = parseInt(receiptNoB, 10);
     
-        // Call the function on page load
-        sortTableByDate();
-      });
+                    return numB - numA; // Sort in ascending order
+                });
+    
+                // Clear and re-add the sorted rows to the table body
+                tableBody.innerHTML = "";
+                rows.forEach(row => tableBody.appendChild(row));
+            }
+    
+            // Sort the table rows on page load
+            sortTableByReceiptNo();
+        });
     </script>
-    
     
     <script>
       document.addEventListener("DOMContentLoaded", function () {
