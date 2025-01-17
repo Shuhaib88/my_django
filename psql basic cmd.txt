@@ -12,13 +12,15 @@ Shuhaib
 ----------------------------------------------------------------------------------------------
 ssh root@68.183.91.111
 
-pip install -r requirements.txt
-
-python manage.py collectstatic
+apt install python3-venv
 
 python3 -m venv myenv
 
-source venv/bin/activate
+source myenv/bin/activate
+
+pip install -r requirements.txt
+
+python3 manage.py collectstatic
 
 python manage.py runserver 0.0.0.0:8000
 

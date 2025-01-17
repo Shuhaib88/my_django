@@ -36,6 +36,17 @@
                   <th class="border-r p-2">Print</th>
                 </tr>
               </thead>
+              <thead class="bg-slate-600 text-white">
+                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle">
+                  <th class="border p-2" colspan="4">Total</th>
+                  <td class="pallitotal border p-2"></td>
+                  <td class="madrassatotal border p-2"></td>
+                  <td class="messtotal border p-2"></th>
+                  <th class="border p-2">Grand Total</td>
+                  <td class="grandtotal border p-2" colspan="2"></td>
+              </tr>
+              </thead>
+
               <tbody id="dataTable">
                 <!-- row 1 -->
                 {% for data in sorted_data %}
@@ -69,15 +80,6 @@
                   </td>
                 </tr>
                 {% endfor %}
-                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle">
-                    <th class="border p-2" colspan="4">Total</th>
-                    <td class="pallitotal border p-2"></td>
-                    <td class="madrassatotal border p-2"></td>
-                    <td class="messtotal border p-2"></th>
-                    <th class="border p-2">Grand Total</td>
-                    <td class="grandtotal border p-2" colspan="2"></td>
-                </tr>
-
               </tbody>
             </table>
           </div>
@@ -105,40 +107,77 @@
     </div>
     </div>
 
+    <!-- function to show the grand total -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          // Initialize sums for "palli", "madrassa", "mess", and "grand total"
-          let palliTotal = 0;
-          let madrassaTotal = 0;
-          let messTotal = 0;
-          let grandTotal = 0;
-        
-          // Select all table rows with data (skip total row)
-          const rows = document.querySelectorAll("tr:not(:last-child)");
-        
-          rows.forEach((row) => {
-            // Get the "palli", "madrassa", "mess", and "total amount" cells in the current row
-            const palliCell = row.querySelector("td:nth-child(5)");
-            const madrassaCell = row.querySelector("td:nth-child(6)");
-            const messCell = row.querySelector("td:nth-child(7)");
-            const totalAmountCell = row.querySelector("td:nth-child(9)");
-        
-            // Extract and parse the amounts, if present
-            if (palliCell && madrassaCell && messCell && totalAmountCell) {
-              palliTotal += parseFloat(palliCell.textContent) || 0;
-              madrassaTotal += parseFloat(madrassaCell.textContent) || 0;
-              messTotal += parseFloat(messCell.textContent) || 0;
-              grandTotal += parseFloat(totalAmountCell.textContent) || 0;
-            }
-          });
-        
-          // Update the totals in the corresponding table cells
-          document.querySelector(".pallitotal").textContent = palliTotal.toFixed(2);
-          document.querySelector(".madrassatotal").textContent = madrassaTotal.toFixed(2);
-          document.querySelector(".messtotal").textContent = messTotal.toFixed(2);
-          document.querySelector(".grandtotal").textContent = grandTotal.toFixed(2);
-        });
-        </script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const dateFilterInput = document.getElementById("dateFilter");
+          const textFilterInput = document.getElementById("textFilter");
+          const rows = document.querySelectorAll("tbody#dataTable tr");
+  
+          function calculateTotals() {
+              let palliTotal = 0;
+              let madrassaTotal = 0;
+              let messTotal = 0;
+              let grandTotal = 0;
+  
+              // Recalculate totals based on visible rows
+              rows.forEach((row) => {
+                  if (row.style.display !== "none") {
+                      const palliCell = row.querySelector("td:nth-child(5)");
+                      const madrassaCell = row.querySelector("td:nth-child(6)");
+                      const messCell = row.querySelector("td:nth-child(7)");
+                      const totalAmountCell = row.querySelector("td:nth-child(9)");
+  
+                      // Add visible amounts to the total
+                      palliTotal += parseFloat(palliCell?.textContent) || 0;
+                      madrassaTotal += parseFloat(madrassaCell?.textContent) || 0;
+                      messTotal += parseFloat(messCell?.textContent) || 0;
+                      grandTotal += parseFloat(totalAmountCell?.textContent) || 0;
+                  }
+              });
+  
+              // Update totals in the UI
+              document.querySelector(".pallitotal").textContent = palliTotal.toFixed(2);
+              document.querySelector(".madrassatotal").textContent = madrassaTotal.toFixed(2);
+              document.querySelector(".messtotal").textContent = messTotal.toFixed(2);
+              document.querySelector(".grandtotal").textContent = grandTotal.toFixed(2);
+          }
+  
+          function filterTable() {
+              const dateFilterValue = dateFilterInput.value;
+              const textFilterValue = textFilterInput.value.toLowerCase();
+  
+              rows.forEach((row) => {
+                  const dateCell = row.querySelector("td:nth-child(3)");
+                  const textCells = Array.from(row.querySelectorAll("td"));
+  
+                  if (!dateCell) return;
+  
+                  const matchesDate = dateFilterValue
+                      ? dateCell.textContent.includes(dateFilterValue)
+                      : true;
+  
+                  const matchesText = textFilterValue
+                      ? textCells.some((cell) => cell.textContent.toLowerCase().includes(textFilterValue))
+                      : true;
+  
+                  // Show or hide rows based on filters
+                  row.style.display = matchesDate && matchesText ? "" : "none";
+              });
+  
+              // Recalculate totals after filtering
+              calculateTotals();
+          }
+  
+          // Attach input event listeners
+          dateFilterInput.addEventListener("input", filterTable);
+          textFilterInput.addEventListener("input", filterTable);
+  
+          // Perform an initial calculation
+          calculateTotals();
+      });
+  </script>
+  
         
         
 
@@ -268,7 +307,8 @@
             sortTableByReceiptNo();
         });
     </script>
-    
+
+    <!-- function to filter the data -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
           const dateFilterInput = document.getElementById("dateFilter");
