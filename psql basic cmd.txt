@@ -32,6 +32,10 @@ screen -ls
 
 screen -r Django-server
 
+screen -S 3931.django_server -X quit
+
+pkill screen
+
 psql -U shuhaib -d plkd_mahallu
 
 \conninfo

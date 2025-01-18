@@ -16,7 +16,13 @@
     <div class="mt-4 l:ml-2 sm:w-full lg:ml-60 l:w-96 lg:w-8/12">
         <input type="date" id="dateFilter" class="p-2 border mb-4" placeholder="Filter by date">
         <input type="text" id="textFilter" class="p-2 border mb-4" placeholder="Filter by text">
-        <button onclick="exportTableToExcel('dataTable')" class="px-4 py-2 bg-created-orange ml-96 text-black font-bold rounded-md">Download</button>
+        <!-- <button onclick="exportTableToExcel('dataTable')" class="px-4 py-2 bg-created-orange ml-96 text-black font-bold rounded-md">Download</button> -->
+        <button 
+            onclick="exportTablesToSingleSheet('dataTable', 'financialTable')" 
+            class="px-4 py-2 bg-created-orange ml-96 text-black font-bold rounded-md">
+            Download Data
+        </button>
+
 
 
         <table id="financialTable" class="table border-separate border-spacing-0">
@@ -39,7 +45,7 @@
         </table>
 
         <div class="overflow-x-auto">
-            <table class="table border border-r w-full text-left">
+            <table id="tableName" class="table border border-r w-full text-left">
               <thead class="bg-slate-400 text-black">
                 <tr class="border-primary text-center align-middle">
                   <th class="border-r p-2">Name</th>
@@ -216,9 +222,9 @@
     </script>
     <!-- download/export to excel format -->
     <script>
-        function exportTableToExcel(tableID, filename = 'Account_statement.xlsx') {
-            // Define table headers (this can also be fetched dynamically if required)
-            const headers = [
+        function exportTablesToSingleSheet(transactionTableID, financialTableID, filename = 'Account_Statement.xlsx') {
+            // Define headers for transaction table
+            const transactionHeaders = [
                 "Name",
                 "Mahallu ID",
                 "Date",
@@ -229,34 +235,84 @@
                 "Debit/Credit"
             ];
 
-            // Get the table element
-            const table = document.getElementById(tableID);
-            const rows = table.querySelectorAll('tbody tr'); // Exclude the <thead>
+            // Get transaction table data
+            const transactionTable = document.getElementById(transactionTableID);
+            const transactionRows = transactionTable.querySelectorAll('tr');
+            const transactionData = [transactionHeaders];
 
-            // Initialize array to store rows
-            const data = [];
-
-            // Add headers as the first row
-            data.push(headers);
-
-            // Iterate through table rows
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td'); // Only data cells
-                const rowData = Array.from(cells).map(cell => cell.innerText.trim());
-                data.push(rowData); // Add each row's data
+            // Process transaction rows
+            transactionRows.forEach(row => {
+                if (row.style.display !== 'none') {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length > 0) {  // Check if it's a data row
+                        const rowData = Array.from(cells).map(cell => {
+                            // Handle nested content in Fund Type column
+                            if (cell.querySelector('div')) {
+                                return cell.innerText.replace(/\n+/g, ' ');  // Replace multiple newlines with space
+                            }
+                            return cell.innerText.trim();
+                        });
+                        transactionData.push(rowData);
+                    }
+                }
             });
+
+            // Get financial summary table data
+            const financialTable = document.getElementById(financialTableID);
+            const financialRows = financialTable.querySelectorAll('tbody tr');
+            const financialData = [['Financial Summary']];  // Add a title for the summary section
+            
+            financialRows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length > 0) {
+                    const rowData = Array.from(cells).map(cell => cell.innerText.trim());
+                    financialData.push(rowData);
+                }
+            });
+
+            // Add some spacing between tables
+            const spacerRow = Array(transactionHeaders.length).fill('');
+            
+            // Combine all data
+            const combinedData = [
+                ...financialData,
+                spacerRow,
+                ...transactionData
+            ];
 
             // Create workbook and worksheet
             const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet(data); // Convert Array-of-Arrays to Sheet
+            const ws = XLSX.utils.aoa_to_sheet(combinedData);
 
-            // Append worksheet to the workbook
-            XLSX.utils.book_append_sheet(wb, ws, 'Mahallu Members');
+            // Add some styling to the worksheet
+            const range = XLSX.utils.decode_range(ws['!ref']);
+            const headerStyle = { font: { bold: true }, fill: { fgColor: { rgb: "CCCCCC" } } };
 
-            // Save the workbook
+            // Style the financial summary header
+            ws['A1'].s = headerStyle;
+
+            // Style the transaction headers
+            const transactionHeaderRow = financialData.length + 2; // Add 2 for the spacer row
+            for (let C = range.s.c; C <= range.e.c; C++) {
+                const headerCell = XLSX.utils.encode_cell({ r: transactionHeaderRow - 1, c: C });
+                if (ws[headerCell]) {
+                    ws[headerCell].s = headerStyle;
+                }
+            }
+
+            // Append worksheet to workbook and save
+            XLSX.utils.book_append_sheet(wb, ws, 'Account_Statement');
+            
+            if (combinedData.length <= 2) {
+                alert('No data available to export.');
+                return;
+            }
+
             XLSX.writeFile(wb, filename);
         }
     </script>
+    
+    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
