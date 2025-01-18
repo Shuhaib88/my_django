@@ -357,75 +357,75 @@
       });
     </script>
 
-<script>
-    function exportTableToExcel(tableID, filename = 'Visible_Masapirivu_Details.xlsx') {
-        // Define table headers
-        const headers = [
-            "Mahallu ID",
-            "Name",
-            "Date",
-            "Receipt No",
-            "Palli-Amount",
-            "Madrassa-Amount",
-            "Mess-Amount",
-            "Description",
-            "Total Amount"
-        ];
+    <script>
+        function exportTableToExcel(tableID, filename = 'Visible_Masapirivu_Details.xlsx') {
+            // Define table headers
+            const headers = [
+                "Mahallu ID",
+                "Name",
+                "Date",
+                "Receipt No",
+                "Palli-Amount",
+                "Madrassa-Amount",
+                "Mess-Amount",
+                "Description",
+                "Total Amount"
+            ];
 
 
-        // Get the table element
-        const table = document.getElementById(tableID);
-        const data = [];
+            // Get the table element
+            const table = document.getElementById(tableID);
+            const data = [];
 
-        // Add headers as the first row
-        data.push(headers);
+            // Add headers as the first row
+            data.push(headers);
 
 
-        // Helper function to check visibility
-        const isVisible = (el) => {
-            const style = window.getComputedStyle(el);
-            return style.display !== 'none' && style.visibility !== 'hidden';
-        };
+            // Helper function to check visibility
+            const isVisible = (el) => {
+                const style = window.getComputedStyle(el);
+                return style.display !== 'none' && style.visibility !== 'hidden';
+            };
 
-        // Capture rows from <tbody> that are visible
-        const tbodyRows = table.querySelectorAll('tbody tr');
-        tbodyRows.forEach(row => {
-            if (isVisible(row)) { // Check if the row is visible
-                const rowData = Array.from(row.querySelectorAll('th, td')).filter(cell => isVisible(cell)).map(cell => cell.innerText.trim());
+            // Capture rows from <tbody> that are visible
+            const tbodyRows = table.querySelectorAll('tbody tr');
+            tbodyRows.forEach(row => {
+                if (isVisible(row)) { // Check if the row is visible
+                    const rowData = Array.from(row.querySelectorAll('th, td')).filter(cell => isVisible(cell)).map(cell => cell.innerText.trim());
+                    if (rowData.length) data.push(rowData);
+                }
+            });
+
+            // Add an empty row for spacing
+            data.push([]);
+
+            const headers2 = [
+                "",
+                "Palli",
+                "Madrassa",
+                "Mess",
+                ""
+            ];
+            data.push(headers2);
+
+            // Capture the Total and Grand Total row with id="total" (if visible)
+            const totalRow = document.getElementById('total');
+            if (totalRow && isVisible(totalRow)) {
+                const rowData = Array.from(totalRow.querySelectorAll('th, td')).filter(cell => isVisible(cell)).map(cell => cell.innerText.trim());
                 if (rowData.length) data.push(rowData);
             }
-        });
 
-        // Add an empty row for spacing
-        data.push([]);
+            // Create a workbook and worksheet
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(data);
 
-        const headers2 = [
-            "",
-            "Palli",
-            "Madrassa",
-            "Mess",
-            ""
-        ];
-        data.push(headers2);
+            // Append the worksheet to the workbook
+            XLSX.utils.book_append_sheet(wb, ws, 'Visible Details');
 
-        // Capture the Total and Grand Total row with id="total" (if visible)
-        const totalRow = document.getElementById('total');
-        if (totalRow && isVisible(totalRow)) {
-            const rowData = Array.from(totalRow.querySelectorAll('th, td')).filter(cell => isVisible(cell)).map(cell => cell.innerText.trim());
-            if (rowData.length) data.push(rowData);
+            // Save the workbook as an Excel file
+            XLSX.writeFile(wb, filename);
         }
-
-        // Create a workbook and worksheet
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.aoa_to_sheet(data);
-
-        // Append the worksheet to the workbook
-        XLSX.utils.book_append_sheet(wb, ws, 'Visible Details');
-
-        // Save the workbook as an Excel file
-        XLSX.writeFile(wb, filename);
-    }
-</script>
+    </script>
 
 
 

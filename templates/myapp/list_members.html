@@ -76,7 +76,12 @@
                   });
               });
           });
-});
+      });
+
+      function viewIndividualStatement(id_no) {
+          window.location.href = "{% url 'individual_statement' %}?id_no=" + id_no;
+          // window.location.href = "{% url 'individual_statement' %}?id_no={{ fund.id_no }}";
+      }
 
   </script>
   
