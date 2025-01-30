@@ -1,0 +1,195 @@
+
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Masapirivu</title>
+    {% tailwind_css %}
+</head>
+<body>
+    {% include 'myapp/navbar.html' %}
+
+    <h1 class="flex items-center justify-center text-xl">Edit Masapirivu Details</h1>
+
+    <div class="mt-4 flex items-center justify-center ">
+
+      <form method="POST" id="edit_member_detail" class="space-y-4 l:w-80 lg:w-96">
+        {% csrf_token %}
+        
+        <button id="goBackButton" class="btn btn-warning font-bold l:ml-48 xl:ml-72 l:w-20 lg:w-36 edit-btn">
+          Go Back to Masapirivu List
+      </button>
+
+      {% for data in masapirivu_data %}
+        <div class="flex items-center space-x-8">
+          <label for="id_no" class="w-1/4">Mahallu Membership Id<span class="text-red-500">*</span></label>
+          <div class="w-96">
+            <input type="text" id="id_no" name="id_no" placeholder="Enter the ID" class="w-full p-2 border rounded-md text-black" value="{{data.id_no}}" >
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-8">
+          <label for="name" class="w-1/4">name <span class="text-red-500">*</span></label>
+          <input type="text" id="name" name="name" placeholder="Enter the name" class="w-3/4 rounded-md text-black" value="{{data.name}}" >
+        </div>
+
+          <div class="flex items-center space-x-8">
+            <label for="name" class="w-1/4">Date <span class="text-red-500">*</span></label>
+            <input type="text" id="date" name="date" placeholder="Date" class="w-3/4 rounded-md text-black" value="{{data.date}}" >
+          </div>
+
+          <div class="flex items-center space-x-8">
+            <label for="name" class="w-1/4">Reciept No <span class="text-red-500">*</span></label>
+            <input type="text" id="reciept_no" name="reciept_no" placeholder="Enter the Phone No" class="w-3/4 rounded-md text-black" value="{{data.reciept_no}}" >
+          </div>
+
+          <div class="flex items-center space-x-8">
+              <label for="father_name" class="w-1/4">Palli Amount<span class="text-red-500">*</span></label>
+              <input type="text" id="palli_amount" name="palli_amount" placeholder="Enter Father's/Husband Name" class="w-3/4 p-2 border rounded-md text-black" value="{{data.palli}}" oninput="calculateTotal()">
+          </div>
+
+          <div class="flex items-center space-x-8">
+              <label for="house_name" class="w-1/4">Madrassa Amount<span class="text-red-500">*</span></label>
+              <input type="text" id="madrassa_amount" name="madrassa_amount" placeholder="Enter the House name" class="w-3/4 p-2 border rounded-md text-black" value="{{data.madrassa}}" oninput="calculateTotal()">
+          </div>
+
+          <div class="flex items-center space-x-8">
+            <label for="house_name" class="w-1/4">Mess Amount<span class="text-red-500">*</span></label>
+            <input type="text" id="mess_amount" name="mess_amount" placeholder="Enter the House name" class="w-3/4 p-2 border rounded-md text-black" value="{{data.mess}}" oninput="calculateTotal()">
+        </div>
+
+        <div class="flex items-center space-x-8">
+          <label for="house_name" class="w-1/4">Description<span class="text-red-500">*</span></label>
+          <input type="text" id="description" name="description" placeholder="Enter the House name" class="w-3/4 p-2 border rounded-md text-black" value="{{data.description}}" >
+        </div>
+
+        <div class="flex items-center space-x-8">
+          <label for="house_name" class="w-1/4">Total Amount<span class="text-red-500">*</span></label>
+          <input type="text" id="total" name="total" placeholder="Enter the House name" class="w-3/4 p-2 border rounded-md text-black" value="{{data.total_amount}}" >
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-accent ml-72">Submit</button>
+        </form>
+  </div>
+
+  <!-- Confirmation Box -->
+  <div id="confirmationPopup" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-gray-300 rounded-lg p-6 shadow-lg w-96">
+        <h2 class="text-lg text-black font-semibold mb-4">Confirm Submission!</h2>
+  <p class="mb-6 text-black font-bold">Are you sure you want to change this data ?</p>
+        <div id="popupContent" class="mb-6 text-black">
+
+            <!-- Form data will appear here -->
+        </div>
+        <div class="flex justify-end space-x-4">
+            <button id="popupCancelButton" class="btn btn-error">Cancel</button>
+            <button id="popupConfirmButton" class="btn btn-accent">OK</button>
+        </div>
+    </div>
+  </div>
+  <!-- function for calculateTotal -->
+  <script>
+    function calculateTotal() {
+        // Get the values from the input fields
+        const palliAmount = parseFloat(document.getElementById('palli_amount').value) || 0;
+        const madrassaAmount = parseFloat(document.getElementById('madrassa_amount').value) || 0;
+        const messAmount = parseFloat(document.getElementById('mess_amount').value) || 0;
+
+        // Calculate the total
+        const totalAmount = palliAmount + madrassaAmount + messAmount;
+
+        // Set the total amount in the total field
+        document.getElementById('total').value = Math.round(totalAmount);
+    }
+  </script>
+
+    <!-- Goback function -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const goBackButton = document.getElementById("goBackButton");
+
+          goBackButton.addEventListener("click", function () {
+              const url = `{% url 'list_masapirivu' %}`;
+
+              window.location.href = url;
+          });
+      });
+    </script>
+
+    <!-- Confirmation Box js code-->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("edit_member_detail");
+        const popup = document.getElementById("confirmationPopup");
+        const popupContent = document.getElementById("popupContent");
+        const cancelPopupButton = document.getElementById("popupCancelButton");
+        const confirmPopupButton = document.getElementById("popupConfirmButton");
+
+        const fieldNames = {
+              id_no: "ID NO",
+              name: "Name",
+              date: "Date",
+              reciept_no: "Reciept No",
+              palli_amount: "Palli Amount",
+              madrassa_amount: "Madrassa Amount",
+              mess_amount: "Mess Amount",
+              description: "Madrassa Amount",
+              total: "Total Amount",
+          };
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent default submission
+            
+            // Gather form data
+            const formData = new FormData(form);
+            const entries = Array.from(formData.entries());
+            
+            // Generate HTML preview of data
+            let contentHtml = '<ul>';
+            entries.forEach(([name, value]) => {
+                if (name !== "csrfmiddlewaretoken") { // Skip CSRF token
+                  const displayName = fieldNames[name] || name;
+                    contentHtml += `<li><strong>${displayName}:</strong> ${value}</li>`;
+                }
+            });
+            contentHtml += '</ul>';
+            
+            // Set the content and show the popup
+            popupContent.innerHTML = contentHtml;
+            popup.classList.remove("hidden");
+        });
+
+        // Handle cancel and confirm actions
+        cancelPopupButton.addEventListener("click", function () {
+            popup.classList.add("hidden");
+        });
+
+        confirmPopupButton.addEventListener("click", function () {
+            popup.classList.add("hidden");
+            form.submit(); // Submit the form after confirmation
+        });
+    });
+  </script>
+
+  <!-- function to remove the addmore field -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add event listener to all remove buttons
+        document.querySelectorAll('.remove-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const parentDiv = this.closest('.family-member');
+                if (parentDiv) {
+                    parentDiv.remove(); // Remove the corresponding element from the DOM
+                }
+            });
+        });
+    });
+</script>
+
+<script src="{% static 'js/add_members.js' %}"></script>    
+</body>
+</html>

@@ -221,6 +221,7 @@ def masapirivu_view(request):
                 'palli': palli,
                 'madrassa': madrassa,
                 'mess': mess,
+                'description': description,
                 'total_amount': total_amount,
             }
         }
@@ -391,7 +392,7 @@ def edit_member_details(request):
                 {'error': f"Balance value '{balance_value}' exceeds the allowed length."}
             )
 
-        # Save the primary member
+        # Save the primary member to variable
         new_member = addmahallumembers(
             id_no=id_no,
             name=name,
@@ -401,15 +402,20 @@ def edit_member_details(request):
             relation=relations[0],
             phone_no=phone[0],
         )
+
+        # Delete process
         addmahallumembers.objects.filter(id_no=id_no).delete()
         addfamilymembers.objects.filter(id_no=id_no).delete()
         balance.objects.filter(id_no=id_no).delete()
+
+        # Save the Relations
         new_member.save()
+        # Save the Relations
         new_balance = balance(
             id_no=id_no,
             balance=balance_value,
         )
-        print(f"Saving Balance: ID: {id_no}, Balance: {balance_value}")
+
         new_balance.save()
 
         # Save the additional family members
@@ -426,7 +432,7 @@ def edit_member_details(request):
 
     mahallumembers_data = addmahallumembers.objects.filter(id_no=id_no)
     familymembers_data = addfamilymembers.objects.filter(id_no=id_no)
-    balance_data = balance.objects.filter(id_no=id_no).values()  # Use .values() to retrieve JSON-like data
+    balance_data = balance.objects.filter(id_no=id_no).values()
 
     if balance_data.exists():  # Check if there's any data
         balance_list = list(balance_data)  # Convert QuerySet to a list
@@ -441,6 +447,45 @@ def edit_member_details(request):
         'balance': (balance_list),
     })
 
+@login_required
+def edit_masapirivu_details(request):
+    reciept_no = request.GET.get('reciept_no')
+    print(f"GET ID: {reciept_no}")
 
+    if request.method == "POST":
+        print(f"Request POST data: {request.POST}")
+
+        id_no = request.POST.get('id_no')
+        name = request.POST.get('name')
+        date = request.POST.get('date')
+        reciept_no = request.POST.get('reciept_no')
+        palli_amount = request.POST.get('palli_amount')
+        madrassa_amount = request.POST.get('madrassa_amount')
+        mess_amount = request.POST.get('mess_amount')
+        description = request.POST.get('description')
+        total = request.POST.get('total')
+
+        new_data = masapirivu(
+            id_no=id_no,
+            name=name,
+            reciept_no =reciept_no ,
+            palli=palli_amount,
+            madrassa=madrassa_amount,
+            mess=mess_amount,
+            description=description,
+            total_amount=total,
+            date=date,
+        )
+
+        masapirivu.objects.filter(reciept_no=reciept_no).delete()
+
+        new_data.save()
+        
+
+    masapirivu_data = masapirivu.objects.filter(reciept_no=reciept_no)
+
+    return render(request, 'myapp/edit_masapirivu_details.html', {
+        'masapirivu_data':masapirivu_data,
+        })
 
 

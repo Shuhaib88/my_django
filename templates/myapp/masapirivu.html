@@ -112,6 +112,7 @@
           <p class="text-black font-bold">Palli: {{ submitted_data.palli }}</p>
           <p class="text-black font-bold">Madrassa: {{ submitted_data.madrassa }}</p>
           <p class="text-black font-bold">Mess: {{ submitted_data.mess }}</p>
+          <p class="text-black font-bold">Description: {{ submitted_data.description }}</p>
           <p class="text-black font-bold">Total Amount: {{ submitted_data.total_amount }}</p>
           <div class="flex items-center gap-2">
             <button id="printReceiptButton" class="btn btn-error ml-12" onclick="generatePDF()">Print Receipt</button>
@@ -164,6 +165,7 @@
               ['Palli :', '{{ submitted_data.palli }}'],
               ['Madrassa :', '{{ submitted_data.madrassa }}'],
               ['Mess :', '{{ submitted_data.mess }}'],
+              ['Description :', '{{ submitted_data.description }}'],
           ];
   
           doc.setFontSize(40); // Font size for content

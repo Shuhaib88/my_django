@@ -53,7 +53,7 @@
               <tbody id="dataTable">
                 <!-- row 1 -->
                 {% for data in sorted_data %}
-                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle" onclick="viewIndividualStatement('{{ member.id_no }}')">
+                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle" onclick="editmasapirivu('{{ data.reciept_no }}', '{{ data.id_no }}')" style="cursor: pointer;">
                   <th class="border p-2 ">{{ data.id_no }}</th>
                   <td class="border p-2 ">{{ data.name }}</td>
                   <td class="border p-2 ">{{ data.date }}</td>
@@ -64,10 +64,10 @@
                   <td class="border p-2 ">{{ data.description }}</td>
                   <td class="border p-2 ">{{ data.total_amount }}</td>
                   <td class="border p-2 ">
-                    <button 
+                    <button
                       id="printReceiptButton" 
                       class="btn btn-error w-24 h-3" 
-                      onclick="showPopup({
+                      onclick="event.stopPropagation(); showPopup({
                         id: '{{ data.id_no }}',
                         name: '{{ data.name }}',
                         date: '{{ data.date }}',
@@ -75,6 +75,7 @@
                         palli: '{{ data.palli }}',
                         madrassa: '{{ data.madrassa }}',
                         mess: '{{ data.mess }}',
+                        description: '{{ data.description }}',
                         totalAmount: '{{ data.total_amount }}'
                       })"
                     >
@@ -102,6 +103,7 @@
         <p class="palli text-black font-bold"></p>
         <p class="madrassa text-black font-bold"></p>
         <p class="mess text-black font-bold"></p>
+        <p class="description text-black font-bold"></p>
         <p class="totalAmount text-black font-bold"></p>
     <div class="flex items-center gap-2">
         <button id="printReceiptButton2" class="btn btn-error ml-12" >Print Receipt</button>
@@ -109,6 +111,12 @@
     </div>
     </div>
     </div>
+
+    <script>
+        function editmasapirivu(reciept_no, id_no) {
+          window.location.href = "{% url 'edit_masapirivu_details' %}?reciept_no=" + reciept_no;
+        }
+    </script>
 
     <!-- function to show the grand total -->
     <script>
@@ -189,6 +197,7 @@
     <!-- Function to popup print box -->
     <script>
     function showPopup(data) {
+        // console.log(data)
         // Populate the popup with the data
         document.querySelector('#confirmationPopup h3').innerText = 'Print Data !';
         document.querySelector('#confirmationPopup .id').innerText = `ID: ${data.id}`;
@@ -198,6 +207,7 @@
         document.querySelector('#confirmationPopup .palli').innerText = `Palli: ${data.palli}`;
         document.querySelector('#confirmationPopup .madrassa').innerText = `Madrassa: ${data.madrassa}`;
         document.querySelector('#confirmationPopup .mess').innerText = `Mess: ${data.mess}`;
+        document.querySelector('#confirmationPopup .description').innerText = `Description: ${data.description}`;
         document.querySelector('#confirmationPopup .totalAmount').innerText = `Total Amount: ${data.totalAmount}`;
 
         // Update the "Print Receipt" button's onclick function to pass data to generatePDF
@@ -244,6 +254,7 @@
               ['Palli :', data.palli],
               ['Madrassa :', data.madrassa],
               ['Mess :', data.mess],
+              ['Description :', data.description],
           ];
   
           doc.setFontSize(40); // Font size for content

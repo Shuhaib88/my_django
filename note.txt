@@ -1,0 +1,7 @@
+    addmahallumembers_data = addmahallumembers.objects.filter(id_no=id_no)
+
+        'addmahallumembers_data':addmahallumembers_data,
+
+    id_no = request.GET.get('id_no')
+
+window.location.href = "{% url 'edit_masapirivu_details' %}?reciept_no=" + reciept_no + "&id_no=" + id_no;

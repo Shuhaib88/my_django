@@ -20,6 +20,7 @@ urlpatterns = [
     path('list_members/', views.list_members, name='list_members'),
     path('list_masapirivu/', views.list_masapirivu, name='list_masapirivu'),
     path('edit_member_details/', views.edit_member_details, name='edit_member_details'),
+    path('edit_masapirivu_details/', views.edit_masapirivu_details, name='edit_masapirivu_details'),
     path('admin/', views.admin, name='admin'),
 ]
 
