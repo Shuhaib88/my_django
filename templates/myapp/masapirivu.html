@@ -98,7 +98,6 @@
           </div>
       </div>
   </div>
-  
 
     <!-- function for reciept after data save -->
     {% if success %}
@@ -107,6 +106,7 @@
           <h3 class="text-black font-bold">Masapirivu Data Saved Successfully!</h3>
           <p class="text-black font-bold">ID: {{ submitted_data.id_no }}</p>
           <p class="text-black font-bold">Name: {{ submitted_data.name }}</p>
+          <p class="text-black font-bold">Father/Husband Name: {{ submitted_data.father_name }}</p>
           <p class="text-black font-bold">Receipt No.: {{ submitted_data.reciept_no }}</p>
           <p class="text-black font-bold">Date: {{ submitted_data.date }}</p>
           <p class="text-black font-bold">Palli: {{ submitted_data.palli }}</p>
@@ -160,6 +160,7 @@
           const content = [
               ['Mahallu Card No :', '{{ submitted_data.id_no }}'],
               ['Name :', '{{ submitted_data.name }}'],
+              ['Fath/Hus :', '{{ submitted_data.father_name }}'],
               ['Receipt No :', '{{ submitted_data.reciept_no }}'],
               ['Date :', '{{ submitted_data.date }}'],
               ['Palli :', '{{ submitted_data.palli }}'],
@@ -192,6 +193,7 @@
     <!-- popup confirmation after clicking the submit button -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // console.log(data.father_name)
           const form = document.getElementById("masapirivuForm");
           const popup = document.getElementById("confirmationPopup");
           const popupContent = document.getElementById("popupContent");
@@ -209,28 +211,38 @@
                 total_amount: "Total Amount",
                 radio10: "Transaction Type"
             };
+            const membersData = JSON.parse('{{ data | escapejs }}');
   
-          form.addEventListener("submit", function (e) {
-              e.preventDefault(); // Prevent default submission
-              
-              // Gather form data
-              const formData = new FormData(form);
-              const entries = Array.from(formData.entries());
-              
-              // Generate HTML preview of data
-              let contentHtml = '<ul>';
-              entries.forEach(([name, value]) => {
-                  if (name !== "csrfmiddlewaretoken") { // Skip CSRF token
-                    const displayName = fieldNames[name] || name;
-                      contentHtml += `<li><strong>${displayName}:</strong> ${value}</li>`;
-                  }
-              });
-              contentHtml += '</ul>';
-              
-              // Set the content and show the popup
-              popupContent.innerHTML = contentHtml;
-              popup.classList.remove("hidden");
-          });
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const idNo = formData.get("id_no");
+                const selectedMember = membersData.find(member => member.id_no === idNo);
+                const fatherName = selectedMember ? selectedMember.father_name : "N/A";
+
+                // Reorder the preview content
+                let contentHtml = '<ul>';
+                // Add ID first
+                contentHtml += `<li><strong>${fieldNames.id_no}:</strong> ${formData.get("id_no")}</li>`;
+                // Add Name
+                contentHtml += `<li><strong>${fieldNames.name}:</strong> ${formData.get("name")}</li>`;
+                // Add Father's Name
+                contentHtml += `<li><strong>Father's Name:</strong> ${fatherName}</li>`;
+                // Add Receipt Number
+                contentHtml += `<li><strong>${fieldNames.reciept_no}:</strong> ${formData.get("reciept_no")}</li>`;
+                
+                // Add remaining fields
+                formData.forEach((value, name) => {
+                    if (!["csrfmiddlewaretoken", "id_no", "name", "reciept_no"].includes(name)) {
+                        const displayName = fieldNames[name] || name;
+                        contentHtml += `<li><strong>${displayName}:</strong> ${value}</li>`;
+                    }
+                });
+                
+                contentHtml += '</ul>';
+                popupContent.innerHTML = contentHtml;
+                popup.classList.remove("hidden");
+            });
   
           // Handle cancel and confirm actions
           cancelPopupButton.addEventListener("click", function () {

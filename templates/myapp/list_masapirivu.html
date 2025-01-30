@@ -29,6 +29,7 @@
                 <tr class="border-primary">
                   <th class="border-r p-2">Mahallu ID</th>
                   <th class="border-r p-2">Name</th>
+                  <th class="border-r p-2">Fath/Hus</th>
                   <th class="border-r p-2">Date</th>
                   <th class="border-r p-2">Reciept No</th>
                   <th class="border-r p-2">Palli-Amount</th>
@@ -41,7 +42,7 @@
               </thead>
               <thead class="bg-slate-600 text-white">
                 <tr id="total" class="border-white hover:bg-black hover:text-action-color text-center align-middle">
-                  <th class="border p-2" colspan="4">Total</th>
+                  <th class="border p-2" colspan="5">Total</th>
                   <td class="pallitotal border p-2"></td>
                   <td class="madrassatotal border p-2"></td>
                   <td class="messtotal border p-2"></th>
@@ -56,6 +57,7 @@
                 <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle" onclick="editmasapirivu('{{ data.reciept_no }}', '{{ data.id_no }}')" style="cursor: pointer;">
                   <th class="border p-2 ">{{ data.id_no }}</th>
                   <td class="border p-2 ">{{ data.name }}</td>
+                  <td class="border p-2 ">{{ data.fathersname }}</td>
                   <td class="border p-2 ">{{ data.date }}</td>
                   <td class="border p-2 ">{{ data.reciept_no }}</td>
                   <td class="border p-2 ">{{ data.palli }}</td>
@@ -70,6 +72,7 @@
                       onclick="event.stopPropagation(); showPopup({
                         id: '{{ data.id_no }}',
                         name: '{{ data.name }}',
+                        fatherName: '{{ data.fathersname }}',
                         date: '{{ data.date }}',
                         receiptNo: '{{ data.reciept_no }}',
                         palli: '{{ data.palli }}',
@@ -98,6 +101,7 @@
         <h3 class="text-black font-bold"></h3>
         <p class="id text-black font-bold"></p>
         <p class="name text-black font-bold"></p> 
+        <p class="fatherName text-black font-bold"></p> 
         <p class="receiptNo text-black font-bold"></p>
         <p class="date text-black font-bold"></p>
         <p class="palli text-black font-bold"></p>
@@ -134,10 +138,10 @@
               // Recalculate totals based on visible rows
               rows.forEach((row) => {
                   if (row.style.display !== "none") {
-                      const palliCell = row.querySelector("td:nth-child(5)");
-                      const madrassaCell = row.querySelector("td:nth-child(6)");
-                      const messCell = row.querySelector("td:nth-child(7)");
-                      const totalAmountCell = row.querySelector("td:nth-child(9)");
+                      const palliCell = row.querySelector("td:nth-child(6)");
+                      const madrassaCell = row.querySelector("td:nth-child(7)");
+                      const messCell = row.querySelector("td:nth-child(8)");
+                      const totalAmountCell = row.querySelector("td:nth-child(10)");
   
                       // Add visible amounts to the total
                       palliTotal += parseFloat(palliCell?.textContent) || 0;
@@ -190,20 +194,20 @@
   </script>
   
         
-        
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
     <!-- Function to popup print box -->
     <script>
     function showPopup(data) {
         // console.log(data)
+        // console.log(data.fatherName)
         // Populate the popup with the data
         document.querySelector('#confirmationPopup h3').innerText = 'Print Data !';
         document.querySelector('#confirmationPopup .id').innerText = `ID: ${data.id}`;
         document.querySelector('#confirmationPopup .name').innerText = `Name: ${data.name}`;
-        document.querySelector('#confirmationPopup .receiptNo').innerText = `Receipt No.: ${data.receiptNo}`;
+        document.querySelector('#confirmationPopup .fatherName').innerText = `Father/Hus Name: ${data.fatherName}`;
         document.querySelector('#confirmationPopup .date').innerText = `Date: ${data.date}`;
+        document.querySelector('#confirmationPopup .receiptNo').innerText = `Receipt No.: ${data.receiptNo}`;
         document.querySelector('#confirmationPopup .palli').innerText = `Palli: ${data.palli}`;
         document.querySelector('#confirmationPopup .madrassa').innerText = `Madrassa: ${data.madrassa}`;
         document.querySelector('#confirmationPopup .mess').innerText = `Mess: ${data.mess}`;
@@ -249,6 +253,7 @@
           const content = [
               ['Mahallu Card No :', data.id],
               ['Name :', data.name],
+              ['Fath/Hus :', data.fatherName],
               ['Receipt No :', data.receiptNo],
               ['Date :', data.date],
               ['Palli :', data.palli],
@@ -288,8 +293,6 @@
     }
     </script>
 
-    
-    
     <!-- function to sort data based on date, recent on top -->
     <script>
         // Wait for the DOM to load
@@ -302,8 +305,8 @@
     
                 // Sort rows based on the Receipt Number (4th column)
                 rows.sort((rowA, rowB) => {
-                    const receiptNoA = rowA.querySelector("td:nth-child(4)").innerText.trim();
-                    const receiptNoB = rowB.querySelector("td:nth-child(4)").innerText.trim();
+                    const receiptNoA = rowA.querySelector("td:nth-child(5)").innerText.trim();
+                    const receiptNoB = rowB.querySelector("td:nth-child(5)").innerText.trim();
     
                     // Convert receipt numbers to integers for numeric sorting
                     const numA = parseInt(receiptNoA, 10);

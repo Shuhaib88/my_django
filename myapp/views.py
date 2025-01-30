@@ -170,7 +170,7 @@ def masapirivu_view(request):
 
     current_date = date.today().strftime('%Y-%m-%d')
 
-    data = list(addmahallumembers.objects.values('id_no', 'name'))
+    data = list(addmahallumembers.objects.values('id_no', 'name', 'father_name'))
     balances = list(balance.objects.all().values('id_no', 'balance'))
     masapirivu_data = list(masapirivu.objects.all().values('id_no', 'name', 'reciept_no'))
 
@@ -185,6 +185,9 @@ def masapirivu_view(request):
         total_amount = request.POST.get('total_amount')
         debit_credit = request.POST.get('radio10')
         balance_value = request.POST.get('balance')
+
+        member = addmahallumembers.objects.get(id_no=id_no)
+        father_name  = member.father_name 
 
         new_fund = masapirivu(
             name=name,
@@ -216,6 +219,7 @@ def masapirivu_view(request):
             'submitted_data': {
                 'id_no': id_no,
                 'name': name,
+                'father_name': father_name,
                 'reciept_no': reciept_no,
                 'date': current_date,
                 'palli': palli,
@@ -351,6 +355,14 @@ def list_masapirivu(request):
 
     data = masapirivu.objects.all()
     sorted_data = sorted(data, key=lambda x: int(x.id_no))
+
+    mahallumembers = addmahallumembers.objects.all()
+
+    fathersname_map = {member.id_no: member.father_name for member in mahallumembers}
+
+    # Add fathersname to each masapirivu entry
+    for entry in sorted_data:
+        entry.fathersname = fathersname_map.get(entry.id_no, "N/A")  # Default to "N/A" if not found
 
     return render(request, 'myapp/list_masapirivu.html', {'sorted_data': sorted_data})
 

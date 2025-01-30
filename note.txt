@@ -1,7 +1,71 @@
-    addmahallumembers_data = addmahallumembers.objects.filter(id_no=id_no)
+addmahallumembers_data = addmahallumembers.objects.filter(id_no=id_no)
 
-        'addmahallumembers_data':addmahallumembers_data,
+'addmahallumembers_data':addmahallumembers_data,
 
-    id_no = request.GET.get('id_no')
+id_no = request.GET.get('id_no')
 
 window.location.href = "{% url 'edit_masapirivu_details' %}?reciept_no=" + reciept_no + "&id_no=" + id_no;
+
+mahallumembers = addmahallumembers.objects.all()
+------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------
+i just want to map the mahallumembers.fathersname from views to the table corresponding to the id_no 
+@login_required
+def list_masapirivu(request):
+    data = masapirivu.objects.all()
+    sorted_data = sorted(data, key=lambda x: int(x.id_no))
+    mahallumembers = addmahallumembers.objects.all()
+    return render(request, 'myapp/list_masapirivu.html', {'sorted_data': sorted_data})
+
+{% for data in sorted_data %}
+                <tr class="border-white hover:bg-black hover:text-action-color text-center align-middle" onclick="editmasapirivu('{{ data.reciept_no }}', '{{ data.id_no }}')" style="cursor: pointer;">
+                  <th class="border p-2 ">{{ data.id_no }}</th>
+                  <td class="border p-2 ">{{ data.name }}</td>
+                  <td class="border p-2 ">{{ data.date }}</td>
+                  <td class="border p-2 ">{{ data.reciept_no }}</td>
+                  <td class="border p-2 ">{{ data.palli }}</td>
+                  <td class="border p-2 ">{{ data.madrassa }}</td>
+                  <td class="border p-2 ">{{ data.mess }}</td>
+                  <td class="border p-2 ">{{ data.description }}</td>
+                  <td class="border p-2 ">{{ data.total_amount }}</td>
+                  <td class="border p-2 ">
+                    <button
+                      id="printReceiptButton" 
+                      class="btn btn-error w-24 h-3" 
+                      onclick="event.stopPropagation(); showPopup({
+                        id: '{{ data.id_no }}',
+                        name: '{{ data.name }}',
+                        date: '{{ data.date }}',
+                        receiptNo: '{{ data.reciept_no }}',
+                        palli: '{{ data.palli }}',
+                        madrassa: '{{ data.madrassa }}',
+                        mess: '{{ data.mess }}',
+                        description: '{{ data.description }}',
+                        totalAmount: '{{ data.total_amount }}'
+                      })"
+                    >
+                      Print
+                    </button>
+                  </td>
+                </tr>
+                {% endfor %}
+------------------------------------------------------------------------------------------------------------------------------------------
+@login_required
+def list_masapirivu(request):
+
+    data = masapirivu.objects.all()
+    sorted_data = sorted(data, key=lambda x: int(x.id_no))
+
+    mahallumembers = addmahallumembers.objects.all()
+
+    fathersname_map = {member.id_no: member.father_name for member in mahallumembers}
+    
+    # Add fathersname to each masapirivu entry
+    for entry in sorted_data:
+        entry.fathersname = fathersname_map.get(entry.id_no, "N/A")  # Default to "N/A" if not found
+
+    return render(request, 'myapp/list_masapirivu.html', {'sorted_data': sorted_data})
+------------------------------------------------------------------------------------------------------------------------------------------
