@@ -68,21 +68,21 @@ def logout(request):
     auth_logout(request)
     return response
     
-# @login_required
+@login_required
 def index(request):
     return render(request, 'myapp/index.html')
 
-# @login_required
+@login_required
 def dashboard(request):
-    # if not request.user.is_authenticated:
-        # return redirect('login')
+    if not request.user.is_authenticated:
+        return redirect('login')
     return render(request, 'myapp/dashboard.html')
 
-# @login_required
+@login_required
 def admin(request):
     return render(request, 'admin')
 
-# @login_required
+@login_required
 def pallifund_view(request):
 
     if request.method == "POST":
@@ -165,7 +165,7 @@ def pallifund_view(request):
     return render(request, 'myapp/pallifund.html')
 
 
-# @login_required
+@login_required
 def masapirivu_view(request):
 
     current_date = date.today().strftime('%Y-%m-%d')
@@ -242,7 +242,7 @@ def masapirivu_view(request):
         'masapirivu_data': json.dumps(masapirivu_data),
     })
 
-# @login_required
+@login_required
 def add_members_view(request):
     if request.method == "POST":
         print(f"Request POST data: {request.POST}")
@@ -292,7 +292,7 @@ def add_members_view(request):
 
     return render(request, 'myapp/add_members.html')
 
-# @login_required
+@login_required
 def individual_statement(request):
     id_no = request.GET.get('id_no')  # Get id_no from the query parameter
     if id_no:
@@ -329,7 +329,7 @@ def individual_statement(request):
         'additionalfund_data': additionalfund_data,
     })
 
-# @login_required
+@login_required
 def acc_statement(request):
 
     pallifund_data = pallifund.objects.all()
@@ -346,7 +346,7 @@ def acc_statement(request):
         'additionalfund_data': additionalfund_data,
     })
 
-# @login_required
+@login_required
 def list_members(request):
 
     mahallumembers = addmahallumembers.objects.all()
@@ -354,7 +354,7 @@ def list_members(request):
 
     return render(request, 'myapp/list_members.html', {'mahallumembers': members})
 
-# @login_required
+@login_required
 def list_masapirivu(request):
 
     data = masapirivu.objects.all()
@@ -372,7 +372,7 @@ def list_masapirivu(request):
 
     return render(request, 'myapp/list_masapirivu.html', {'sorted_data': sorted_data})
 
-# @login_required
+@login_required
 def list_pallifund(request):
 
     data = pallifund.objects.all()
@@ -392,7 +392,7 @@ def list_pallifund(request):
     return render(request, 'myapp/list_pallifund.html', {'sorted_data': sorted_data})
 
 
-# @login_required
+@login_required
 def edit_member_details(request):
     id_no = request.GET.get('id_no')
     print(f"GET ID: {id_no}")
@@ -484,7 +484,7 @@ def edit_member_details(request):
         'balance': (balance_list),
     })
 
-# @login_required
+@login_required
 def edit_masapirivu_details(request):
     reciept_no = request.GET.get('reciept_no')
     print(f"GET ID: {reciept_no}")
