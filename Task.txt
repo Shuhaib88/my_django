@@ -1,6 +1,25 @@
 --------------------------------------------------------------------------------
 stable version
 
+version 1.o.4
+--------------------------------------------------------------------------------
+changes :
+--------------------------------------------------------------------------------
+masa pirivu list Date Filter (repaire)
+
+masa pirivu list - House name
+
+Bill - House name
+
+Add A Page For Palli Fund list like masa pirivu
+
+Sort date + reciept_no
+
+filter date and any data in the table
+
+--------------------------------------------------------------------------------
+stable version
+
 version 1.o.3
 --------------------------------------------------------------------------------
 changes :

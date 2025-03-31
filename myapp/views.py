@@ -68,21 +68,21 @@ def logout(request):
     auth_logout(request)
     return response
     
-@login_required
+# @login_required
 def index(request):
     return render(request, 'myapp/index.html')
 
-@login_required
+# @login_required
 def dashboard(request):
-    if not request.user.is_authenticated:  # Extra safety check
-        return redirect('login')
+    # if not request.user.is_authenticated:
+        # return redirect('login')
     return render(request, 'myapp/dashboard.html')
 
-@login_required
+# @login_required
 def admin(request):
     return render(request, 'admin')
 
-@login_required
+# @login_required
 def pallifund_view(request):
 
     if request.method == "POST":
@@ -165,14 +165,16 @@ def pallifund_view(request):
     return render(request, 'myapp/pallifund.html')
 
 
-@login_required
+# @login_required
 def masapirivu_view(request):
 
     current_date = date.today().strftime('%Y-%m-%d')
 
-    data = list(addmahallumembers.objects.values('id_no', 'name', 'father_name'))
+    data = list(addmahallumembers.objects.values('id_no', 'name', 'father_name','house_name'))
     balances = list(balance.objects.all().values('id_no', 'balance'))
     masapirivu_data = list(masapirivu.objects.all().values('id_no', 'name', 'reciept_no'))
+
+    
 
     if request.method == "POST":
         name = request.POST.get('name')
@@ -187,7 +189,8 @@ def masapirivu_view(request):
         balance_value = request.POST.get('balance')
 
         member = addmahallumembers.objects.get(id_no=id_no)
-        father_name  = member.father_name 
+        father_name  = member.father_name
+        house_name  = member.house_name
 
         new_fund = masapirivu(
             name=name,
@@ -220,6 +223,7 @@ def masapirivu_view(request):
                 'id_no': id_no,
                 'name': name,
                 'father_name': father_name,
+                'house_name': house_name,
                 'reciept_no': reciept_no,
                 'date': current_date,
                 'palli': palli,
@@ -238,7 +242,7 @@ def masapirivu_view(request):
         'masapirivu_data': json.dumps(masapirivu_data),
     })
 
-@login_required
+# @login_required
 def add_members_view(request):
     if request.method == "POST":
         print(f"Request POST data: {request.POST}")
@@ -288,7 +292,7 @@ def add_members_view(request):
 
     return render(request, 'myapp/add_members.html')
 
-@login_required
+# @login_required
 def individual_statement(request):
     id_no = request.GET.get('id_no')  # Get id_no from the query parameter
     if id_no:
@@ -325,7 +329,7 @@ def individual_statement(request):
         'additionalfund_data': additionalfund_data,
     })
 
-@login_required
+# @login_required
 def acc_statement(request):
 
     pallifund_data = pallifund.objects.all()
@@ -342,7 +346,7 @@ def acc_statement(request):
         'additionalfund_data': additionalfund_data,
     })
 
-@login_required
+# @login_required
 def list_members(request):
 
     mahallumembers = addmahallumembers.objects.all()
@@ -350,7 +354,7 @@ def list_members(request):
 
     return render(request, 'myapp/list_members.html', {'mahallumembers': members})
 
-@login_required
+# @login_required
 def list_masapirivu(request):
 
     data = masapirivu.objects.all()
@@ -359,15 +363,36 @@ def list_masapirivu(request):
     mahallumembers = addmahallumembers.objects.all()
 
     fathersname_map = {member.id_no: member.father_name for member in mahallumembers}
+    housename_map = {member.id_no: member.house_name for member in mahallumembers}
 
     # Add fathersname to each masapirivu entry
     for entry in sorted_data:
         entry.fathersname = fathersname_map.get(entry.id_no, "N/A")  # Default to "N/A" if not found
+        entry.housename = housename_map.get(entry.id_no, "N/A")
 
     return render(request, 'myapp/list_masapirivu.html', {'sorted_data': sorted_data})
 
+# @login_required
+def list_pallifund(request):
 
-@login_required
+    data = pallifund.objects.all()
+    # sorted_data = sorted(data, key=lambda x: int(x.id_no))
+    sorted_data = sorted(data, key=lambda x: x.id_no)
+
+    mahallumembers = addmahallumembers.objects.all()
+
+    fathersname_map = {member.id_no: member.father_name for member in mahallumembers}
+    housename_map = {member.id_no: member.house_name for member in mahallumembers}
+
+    # Add fathersname to each masapirivu entry
+    for entry in sorted_data:
+        entry.fathersname = fathersname_map.get(entry.id_no, "N/A")  # Default to "N/A" if not found
+        entry.housename = housename_map.get(entry.id_no, "N/A")
+
+    return render(request, 'myapp/list_pallifund.html', {'sorted_data': sorted_data})
+
+
+# @login_required
 def edit_member_details(request):
     id_no = request.GET.get('id_no')
     print(f"GET ID: {id_no}")
@@ -459,7 +484,7 @@ def edit_member_details(request):
         'balance': (balance_list),
     })
 
-@login_required
+# @login_required
 def edit_masapirivu_details(request):
     reciept_no = request.GET.get('reciept_no')
     print(f"GET ID: {reciept_no}")

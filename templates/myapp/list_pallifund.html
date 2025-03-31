@@ -6,13 +6,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masapirivu List</title>
+    <title>Palli Fund List</title>
     {% tailwind_css %}
 </head>
 <body>
     {% include 'myapp/navbar.html' %}
 
-    <h1 class="flex items-center justify-center text-xl">Masapirivu List</h1>
+    <h1 class="flex items-center justify-center text-xl">Palli Fund List</h1>
 
     <div class="mt-4 l:ml-2 sm:w-full lg:ml-60 l:w-96 lg:w-8/12">
         <input type="date" id="dateFilter" class="p-2 border mb-4" placeholder="Filter by date">
@@ -26,6 +26,8 @@
             <table id="masapirivu" class="table border border-r w-full text-left">
               <!-- head -->
 
+              
+
               <thead class="bg-slate-300 text-black text-center">
                 <tr class="border-primary">
                   <th class="border-r p-2">Mahallu ID</th>
@@ -34,9 +36,7 @@
                   <th class="border-r p-2">House</th>
                   <th class="border-r p-2">Date</th>
                   <th class="border-r p-2">Reciept No</th>
-                  <th class="border-r p-2">Palli-Amount</th>
-                  <th class="border-r p-2">Madrassa-Amount</th>
-                  <th class="border-r p-2">Mess-Amount</th>
+                  <th class="border-r p-2">Amount</th>
                   <th class="border-r p-2">Description</th>
                   <th class="border-r p-2">Total Amount</th>
                   <th class="border-r p-2">Print</th>
@@ -46,9 +46,7 @@
               <thead class="bg-slate-600 text-white">
                 <tr id="total" class="border-white hover:bg-black hover:text-action-color text-center align-middle">
                   <th class="border p-2" colspan="6">Total</th>
-                  <td class="pallitotal border p-2"></td>
-                  <td class="madrassatotal border p-2"></td>
-                  <td class="messtotal border p-2"></th>
+                  <td class="total border p-2"></td>
                   <th class="border p-2">Grand Total</td>
                   <td class="grandtotal border p-2" colspan="2"></td>
               </tr>
@@ -65,9 +63,7 @@
                   <td class="border p-2 ">{{ data.housename }}</td>
                   <td class="border p-2 ">{{ data.date }}</td>
                   <td class="border p-2 ">{{ data.reciept_no }}</td>
-                  <td class="border p-2 ">{{ data.palli }}</td>
-                  <td class="border p-2 ">{{ data.madrassa }}</td>
-                  <td class="border p-2 ">{{ data.mess }}</td>
+                  <td class="border p-2 ">{{ data.amount }}</td>
                   <td class="border p-2 ">{{ data.description }}</td>
                   <td class="border p-2 ">{{ data.total_amount }}</td>
                   <td class="border p-2 ">
@@ -81,9 +77,7 @@
                         houseName: '{{ data.housename }}',
                         date: '{{ data.date }}',
                         receiptNo: '{{ data.reciept_no }}',
-                        palli: '{{ data.palli }}',
-                        madrassa: '{{ data.madrassa }}',
-                        mess: '{{ data.mess }}',
+                        amount: '{{ data.amount }}',
                         description: '{{ data.description }}',
                         totalAmount: '{{ data.total_amount }}'
                       })"
@@ -111,9 +105,7 @@
         <p class="houseName text-black font-bold"></p>
         <p class="receiptNo text-black font-bold"></p>
         <p class="date text-black font-bold"></p>
-        <p class="palli text-black font-bold"></p>
-        <p class="madrassa text-black font-bold"></p>
-        <p class="mess text-black font-bold"></p>
+        <p class="amount text-black font-bold"></p>
         <p class="description text-black font-bold"></p>
         <p class="totalAmount text-black font-bold"></p>
     <div class="flex items-center gap-2">
@@ -137,31 +129,23 @@
           const rows = document.querySelectorAll("tbody#dataTable tr");
   
           function calculateTotals() {
-              let palliTotal = 0;
-              let madrassaTotal = 0;
-              let messTotal = 0;
+              let Total = 0;
               let grandTotal = 0;
   
               // Recalculate totals based on visible rows
               rows.forEach((row) => {
                   if (row.style.display !== "none") {
-                      const palliCell = row.querySelector("td:nth-child(6)");
-                      const madrassaCell = row.querySelector("td:nth-child(7)");
-                      const messCell = row.querySelector("td:nth-child(8)");
-                      const totalAmountCell = row.querySelector("td:nth-child(11)");
+                      const totalCell = row.querySelector("td:nth-child(7)");
+                      const grandtotalCell = row.querySelector("td:nth-child(9)");
   
                       // Add visible amounts to the total
-                      palliTotal += parseFloat(palliCell?.textContent) || 0;
-                      madrassaTotal += parseFloat(madrassaCell?.textContent) || 0;
-                      messTotal += parseFloat(messCell?.textContent) || 0;
-                      grandTotal += parseFloat(totalAmountCell?.textContent) || 0;
+                      Total += parseFloat(totalCell?.textContent) || 0;
+                      grandTotal += parseFloat(grandtotalCell?.textContent) || 0;
                   }
               });
   
               // Update totals in the UI
-              document.querySelector(".pallitotal").textContent = palliTotal.toFixed(2);
-              document.querySelector(".madrassatotal").textContent = madrassaTotal.toFixed(2);
-              document.querySelector(".messtotal").textContent = messTotal.toFixed(2);
+              document.querySelector(".total").textContent = Total.toFixed(2);
               document.querySelector(".grandtotal").textContent = grandTotal.toFixed(2);
           }
   
@@ -216,9 +200,7 @@
         document.querySelector('#confirmationPopup .houseName').innerText = `House Name: ${data.houseName}`;
         document.querySelector('#confirmationPopup .date').innerText = `Date: ${data.date}`;
         document.querySelector('#confirmationPopup .receiptNo').innerText = `Receipt No.: ${data.receiptNo}`;
-        document.querySelector('#confirmationPopup .palli').innerText = `Palli: ${data.palli}`;
-        document.querySelector('#confirmationPopup .madrassa').innerText = `Madrassa: ${data.madrassa}`;
-        document.querySelector('#confirmationPopup .mess').innerText = `Mess: ${data.mess}`;
+        document.querySelector('#confirmationPopup .amount').innerText = `Amount: ${data.amount}`;
         document.querySelector('#confirmationPopup .description').innerText = `Description: ${data.description}`;
         document.querySelector('#confirmationPopup .totalAmount').innerText = `Total Amount: ${data.totalAmount}`;
 
@@ -265,9 +247,7 @@
               ['House Name :', data.houseName],
               ['Receipt No :', data.receiptNo],
               ['Date :', data.date],
-              ['Palli :', data.palli],
-              ['Madrassa :', data.madrassa],
-              ['Mess :', data.mess],
+              ['Amount :', data.amount],
               ['Description :', data.description],
           ];
   
@@ -304,113 +284,80 @@
 
     <!-- function to sort data based on ReceiptNo, recent on top -->
     <script>
+        // Wait for the DOM to load
         document.addEventListener("DOMContentLoaded", function () {
             const tableBody = document.getElementById("dataTable");
-            
-            function sortTable() {
+
+            function sortTableByReceiptNo() {
                 // Get all rows in the table body
                 const rows = Array.from(tableBody.querySelectorAll("tr"));
-                
-                // 1. First sort by date (newest first)
+                // Sort rows based on the Receipt Number (4th column)
                 rows.sort((rowA, rowB) => {
-                    const dateA = new Date(rowA.querySelector("td:nth-child(5)").innerText.trim());
-                    const dateB = new Date(rowB.querySelector("td:nth-child(5)").innerText.trim());
-                    return dateB - dateA; // Newest dates first
+                    const receiptNoA = rowA.querySelector("td:nth-child(6)").innerText.trim();
+                    const receiptNoB = rowB.querySelector("td:nth-child(6)").innerText.trim();
+                    // Convert receipt numbers to integers for numeric sorting
+                    const numA = parseInt(receiptNoA, 10);
+                    const numB = parseInt(receiptNoB, 10);
+    
+                    return numB - numA; // Sort in ascending order
                 });
-                
-                // 2. Then sort by receipt_no (descending) within each date group
-                const dateGroups = {};
-                
-                // Group rows by date
-                rows.forEach(row => {
-                    const date = row.querySelector("td:nth-child(5)").innerText.trim();
-                    if (!dateGroups[date]) {
-                        dateGroups[date] = [];
-                    }
-                    dateGroups[date].push(row);
-                });
-                
-                // Sort each date group by receipt_no (descending)
-                for (const date in dateGroups) {
-                    dateGroups[date].sort((rowA, rowB) => {
-                        const receiptNoA = parseInt(rowA.querySelector("td:nth-child(6)").innerText.trim(), 10);
-                        const receiptNoB = parseInt(rowB.querySelector("td:nth-child(6)").innerText.trim(), 10);
-                        return receiptNoB - receiptNoA; // Higher receipt numbers first
-                    });
-                }
-                
-                // Rebuild the sorted table
+                // Clear and re-add the sorted rows to the table body
                 tableBody.innerHTML = "";
-                Object.values(dateGroups).forEach(group => {
-                    group.forEach(row => tableBody.appendChild(row));
-                });
-                
-                // Return the latest receipt number (first row's receipt_no if exists)
-                return rows.length > 0 ? 
-                    parseInt(rows[0].querySelector("td:nth-child(6)").innerText.trim(), 10) : 
-                    0;
+                rows.forEach(row => tableBody.appendChild(row));
             }
-            
-            // Sort the table on page load
-            const latestReceiptNo = sortTable();
-            
-            // Auto-generate new receipt number (if input exists)
-            const receiptNoInput = document.getElementById("receiptNoInput");
-            if (receiptNoInput) {
-                const newReceiptNo = latestReceiptNo + 1;
-                receiptNoInput.value = newReceiptNo.toString().padStart(6, '0');
-            }
+            // Sort the table rows on page load
+            sortTableByReceiptNo();
         });
     </script>
 
     <!-- function to filter on data -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const dateFilterInput = document.getElementById("dateFilter");
-            const textFilterInput = document.getElementById("textFilter");
-            const dataTable = document.querySelector("#dataTable");
-        
-            // Function to filter table rows
-            function filterTable() {
-                const dateFilter = dateFilterInput.value.trim(); // Date filter value
-                const textFilter = textFilterInput.value.trim().toLowerCase(); // Text filter value
-        
-                dataTable.querySelectorAll("tr").forEach(row => {
-                    const idCell = row.querySelector("th:nth-child(1)"); // `id_no` column is in `<th>`
-                    const dateCell = row.querySelector("td:nth-child(5)"); // Date column
-                    const allCellsText = Array.from(row.querySelectorAll("td")).map(cell => cell.innerText.toLowerCase());
-        
-                    // Parse `id_no` to integer for filtering
-                    let idMatches = true;
-                    if (textFilter && idCell) {
-                        const idValue = idCell.innerText.trim();
-                        const idParsed = parseInt(idValue, 10); // Convert `id_no` to an integer
-                        if (!isNaN(idParsed)) {
-                            // If filter text can be parsed as an integer, compare as numbers
-                            const filterParsed = parseInt(textFilter, 10);
-                            idMatches = !isNaN(filterParsed) ? idParsed === filterParsed : false;
-                        } else {
-                            // If `id_no` isn't a number, compare as strings
-                            idMatches = idValue.toLowerCase().includes(textFilter);
-                        }
-                    }
-        
-                    const dateMatches = dateFilter ? (dateCell?.innerText.trim().includes(dateFilter)) : true;
-                    const textMatches = textFilter ? allCellsText.some(cellText => cellText.includes(textFilter)) : true;
-        
-                    // Show row if all conditions match
-                    row.style.display = (dateMatches && (idMatches || textMatches)) ? "" : "none";
-                });
-            }
-        
-            // Attach input event listeners to filters
-            dateFilterInput.addEventListener("input", filterTable);
-            textFilterInput.addEventListener("input", filterTable);
-        });
-        </script>
+      document.addEventListener("DOMContentLoaded", function () {
+          const dateFilterInput = document.getElementById("dateFilter");
+          const textFilterInput = document.getElementById("textFilter");
+          const dataTable = document.querySelector("#dataTable");
+      
+          // Function to filter table rows
+          function filterTable() {
+              const dateFilter = dateFilterInput.value.trim(); // Date filter value
+              const textFilter = textFilterInput.value.trim().toLowerCase(); // Text filter value
+      
+              dataTable.querySelectorAll("tr").forEach(row => {
+                  const idCell = row.querySelector("th:nth-child(1)"); // `id_no` column is in `<th>`
+                  const dateCell = row.querySelector("td:nth-child(5)"); // Date column
+                  const allCellsText = Array.from(row.querySelectorAll("td")).map(cell => cell.innerText.toLowerCase());
+      
+                  // Parse `id_no` to integer for filtering
+                  let idMatches = true;
+                  if (textFilter && idCell) {
+                      const idValue = idCell.innerText.trim();
+                      const idParsed = parseInt(idValue, 10); // Convert `id_no` to an integer
+                      if (!isNaN(idParsed)) {
+                          // If filter text can be parsed as an integer, compare as numbers
+                          const filterParsed = parseInt(textFilter, 10);
+                          idMatches = !isNaN(filterParsed) ? idParsed === filterParsed : false;
+                      } else {
+                          // If `id_no` isn't a number, compare as strings
+                          idMatches = idValue.toLowerCase().includes(textFilter);
+                      }
+                  }
+      
+                  const dateMatches = dateFilter ? (dateCell?.innerText.trim().includes(dateFilter)) : true;
+                  const textMatches = textFilter ? allCellsText.some(cellText => cellText.includes(textFilter)) : true;
+      
+                  // Show row if all conditions match
+                  row.style.display = (dateMatches && (idMatches || textMatches)) ? "" : "none";
+              });
+          }
+      
+          // Attach input event listeners to filters
+          dateFilterInput.addEventListener("input", filterTable);
+          textFilterInput.addEventListener("input", filterTable);
+      });
+    </script>
 
     <script>
-        function exportTableToExcel(tableID, filename = 'Visible_Masapirivu_Details.xlsx') {
+        function exportTableToExcel(tableID, filename = 'Palli_Fund_List_Details.xlsx') {
             // Define table headers
             const headers = [
                 "Mahallu ID",
@@ -418,10 +365,8 @@
                 "Fathers Name",
                 "House Name",
                 "Date",
-                "Receipt No",
-                "Palli-Amount",
-                "Madrassa-Amount",
-                "Mess-Amount",
+                "Reciept No",
+                "Amount",
                 "Description",
                 "Total Amount"
             ];

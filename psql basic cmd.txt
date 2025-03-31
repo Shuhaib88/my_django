@@ -1,13 +1,34 @@
 ----------------------------------------------------------------------------------------------
+Server [localhost]:
+Database [postgres]: plkd_mahallu
+Port [5432]:
+Username [postgres]: shuhaib
+Password for user shuhaib:@88737softkind
+
 plkd_mahallu
 
-Shuhaib
+shuhaib
 
 @88737softkind
 
 \pset pager off
 
 \conninfo
+
+ssh root@68.183.91.111
+
+screen -r Django-server
+
+python3 -m venv myenv
+
+source myenv/bin/activate
+
+pip install -r requirements.txt
+
+screen -ls
+
+Ctrl + A, D
+
 
 ----------------------------------------------------------------------------------------------
 ssh root@68.183.91.111
@@ -23,6 +44,8 @@ pip install -r requirements.txt
 python3 manage.py collectstatic
 
 python manage.py runserver 0.0.0.0:8000
+
+
 
 screen -S Django-server
 
@@ -56,7 +79,8 @@ Reattach session:
 screen -r session_name
 
 Terminate sessio:
-exit
+screen -XS session_id quit
+
 ----------------------------------------------------------------------------------------------
 tables :
 ----------------------------------------------------------------------------------------------

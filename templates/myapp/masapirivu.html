@@ -107,6 +107,7 @@
           <p class="text-black font-bold">ID: {{ submitted_data.id_no }}</p>
           <p class="text-black font-bold">Name: {{ submitted_data.name }}</p>
           <p class="text-black font-bold">Father/Husband Name: {{ submitted_data.father_name }}</p>
+          <p class="text-black font-bold">House Name: {{ submitted_data.house_name }}</p>
           <p class="text-black font-bold">Receipt No.: {{ submitted_data.reciept_no }}</p>
           <p class="text-black font-bold">Date: {{ submitted_data.date }}</p>
           <p class="text-black font-bold">Palli: {{ submitted_data.palli }}</p>
@@ -161,6 +162,7 @@
               ['Mahallu Card No :', '{{ submitted_data.id_no }}'],
               ['Name :', '{{ submitted_data.name }}'],
               ['Fath/Hus :', '{{ submitted_data.father_name }}'],
+              ['House Name :', '{{ submitted_data.house_name }}'],
               ['Receipt No :', '{{ submitted_data.reciept_no }}'],
               ['Date :', '{{ submitted_data.date }}'],
               ['Palli :', '{{ submitted_data.palli }}'],
@@ -193,7 +195,6 @@
     <!-- popup confirmation after clicking the submit button -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // console.log(data.father_name)
           const form = document.getElementById("masapirivuForm");
           const popup = document.getElementById("confirmationPopup");
           const popupContent = document.getElementById("popupContent");
@@ -219,6 +220,7 @@
                 const idNo = formData.get("id_no");
                 const selectedMember = membersData.find(member => member.id_no === idNo);
                 const fatherName = selectedMember ? selectedMember.father_name : "N/A";
+                const houseName = selectedMember ? selectedMember.house_name : "N/A";
 
                 // Reorder the preview content
                 let contentHtml = '<ul>';
@@ -228,6 +230,8 @@
                 contentHtml += `<li><strong>${fieldNames.name}:</strong> ${formData.get("name")}</li>`;
                 // Add Father's Name
                 contentHtml += `<li><strong>Father's Name:</strong> ${fatherName}</li>`;
+                // Add House Name
+                contentHtml += `<li><strong>House Name:</strong> ${houseName}</li>`;
                 // Add Receipt Number
                 contentHtml += `<li><strong>${fieldNames.reciept_no}:</strong> ${formData.get("reciept_no")}</li>`;
                 
@@ -284,6 +288,8 @@
       document.addEventListener("DOMContentLoaded", function () {
         const balances = JSON.parse('{{ balances | escapejs }}');
         const masapirivuData = JSON.parse('{{ masapirivu_data | escapejs }}');
+
+        console.log(masapirivuData);
     
         const idNoInput = document.getElementById("id_no");
         const balanceInput = document.getElementById("balance");
@@ -295,15 +301,25 @@
     
         // Store the original balance
         let originalBalance = 0;
-    
+        
         if (masapirivuData.length > 0) {
-            const maxIdNo = Math.max(...masapirivuData.map(data => parseInt(data.reciept_no, 10)));
-            let newReceiptNo = maxIdNo + 1;
+            // Find the last receipt_no instead of max ID
+            const lastReceiptNo = parseInt(masapirivuData[masapirivuData.length - 1].reciept_no, 10);
+            const newReceiptNo = lastReceiptNo + 1;
             receiptNoInput.value = newReceiptNo.toString().padStart(6, '0');
             console.log(receiptNoInput.value);
         } else {
             receiptNoInput.value = "000001";
         }
+    
+        // if (masapirivuData.length > 0) {
+        //     const maxIdNo = Math.max(...masapirivuData.map(data => parseInt(data.reciept_no, 10)));
+        //     let newReceiptNo = maxIdNo + 1;
+        //     receiptNoInput.value = newReceiptNo.toString().padStart(6, '0');
+        //     console.log(receiptNoInput.value);
+        // } else {
+        //     receiptNoInput.value = "000001";
+        // }
 
         // Update balance and store the original balance on ID input
         idNoInput.addEventListener("input", () => {
