@@ -1,6 +1,18 @@
 --------------------------------------------------------------------------------
 stable version
 
+version 1.o.5
+--------------------------------------------------------------------------------
+changes :
+--------------------------------------------------------------------------------
+small corruption in date filter related to the total and grand total calculation
+
+pallifund fund type added in the palli fund list
+
+palli fund list according to the date
+--------------------------------------------------------------------------------
+stable version
+
 version 1.o.4
 --------------------------------------------------------------------------------
 changes :

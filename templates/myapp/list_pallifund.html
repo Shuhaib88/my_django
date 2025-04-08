@@ -26,8 +26,16 @@
             <table id="masapirivu" class="table border border-r w-full text-left">
               <!-- head -->
 
-              
+              <thead class="bg-slate-600 text-white">
+                <tr id="total" class="border-white hover:bg-black hover:text-action-color text-center align-middle">
+                  <th class="border p-2" colspan="6">Total</th>
+                  <td class="total border p-2"></td>
+                  <th class="border p-2" colspan="2">Grand Total</td>
+                  <td class="grandtotal border p-2" colspan="2"></td>
+              </tr>
+              </thead>
 
+              
               <thead class="bg-slate-300 text-black text-center">
                 <tr class="border-primary">
                   <th class="border-r p-2">Mahallu ID</th>
@@ -37,21 +45,12 @@
                   <th class="border-r p-2">Date</th>
                   <th class="border-r p-2">Reciept No</th>
                   <th class="border-r p-2">Amount</th>
+                  <th class="border-r p-2">Fund Type</th>
                   <th class="border-r p-2">Description</th>
                   <th class="border-r p-2">Total Amount</th>
                   <th class="border-r p-2">Print</th>
                 </tr>
               </thead>
-
-              <thead class="bg-slate-600 text-white">
-                <tr id="total" class="border-white hover:bg-black hover:text-action-color text-center align-middle">
-                  <th class="border p-2" colspan="6">Total</th>
-                  <td class="total border p-2"></td>
-                  <th class="border p-2">Grand Total</td>
-                  <td class="grandtotal border p-2" colspan="2"></td>
-              </tr>
-              </thead>
-              
 
               <tbody id="dataTable">
                 <!-- row 1 -->
@@ -64,6 +63,7 @@
                   <td class="border p-2 ">{{ data.date }}</td>
                   <td class="border p-2 ">{{ data.reciept_no }}</td>
                   <td class="border p-2 ">{{ data.amount }}</td>
+                  <td class="border p-2 ">{{ data.fund_type }}</td>
                   <td class="border p-2 ">{{ data.description }}</td>
                   <td class="border p-2 ">{{ data.total_amount }}</td>
                   <td class="border p-2 ">
@@ -136,7 +136,7 @@
               rows.forEach((row) => {
                   if (row.style.display !== "none") {
                       const totalCell = row.querySelector("td:nth-child(7)");
-                      const grandtotalCell = row.querySelector("td:nth-child(9)");
+                      const grandtotalCell = row.querySelector("td:nth-child(10)");
   
                       // Add visible amounts to the total
                       Total += parseFloat(totalCell?.textContent) || 0;
@@ -154,7 +154,7 @@
               const textFilterValue = textFilterInput.value.toLowerCase();
   
               rows.forEach((row) => {
-                  const dateCell = row.querySelector("td:nth-child(3)");
+                  const dateCell = row.querySelector("td:nth-child(5)");
                   const textCells = Array.from(row.querySelectorAll("td"));
   
                   if (!dateCell) return;
@@ -282,31 +282,64 @@
     }
     </script>
 
-    <!-- function to sort data based on ReceiptNo, recent on top -->
+    <!-- function to sort data based on Date and ReceiptNo, recent on top -->
     <script>
-        // Wait for the DOM to load
         document.addEventListener("DOMContentLoaded", function () {
             const tableBody = document.getElementById("dataTable");
-
-            function sortTableByReceiptNo() {
+            
+            function sortTable() {
                 // Get all rows in the table body
                 const rows = Array.from(tableBody.querySelectorAll("tr"));
-                // Sort rows based on the Receipt Number (4th column)
+                
+                // 1. First sort by date (newest first)
                 rows.sort((rowA, rowB) => {
-                    const receiptNoA = rowA.querySelector("td:nth-child(6)").innerText.trim();
-                    const receiptNoB = rowB.querySelector("td:nth-child(6)").innerText.trim();
-                    // Convert receipt numbers to integers for numeric sorting
-                    const numA = parseInt(receiptNoA, 10);
-                    const numB = parseInt(receiptNoB, 10);
-    
-                    return numB - numA; // Sort in ascending order
+                    const dateA = new Date(rowA.querySelector("td:nth-child(5)").innerText.trim());
+                    const dateB = new Date(rowB.querySelector("td:nth-child(5)").innerText.trim());
+                    return dateB - dateA; // Newest dates first
                 });
-                // Clear and re-add the sorted rows to the table body
+                
+                // 2. Then sort by receipt_no (descending) within each date group
+                const dateGroups = {};
+                
+                // Group rows by date
+                rows.forEach(row => {
+                    const date = row.querySelector("td:nth-child(5)").innerText.trim();
+                    if (!dateGroups[date]) {
+                        dateGroups[date] = [];
+                    }
+                    dateGroups[date].push(row);
+                });
+                
+                // Sort each date group by receipt_no (descending)
+                for (const date in dateGroups) {
+                    dateGroups[date].sort((rowA, rowB) => {
+                        const receiptNoA = parseInt(rowA.querySelector("td:nth-child(6)").innerText.trim(), 10);
+                        const receiptNoB = parseInt(rowB.querySelector("td:nth-child(6)").innerText.trim(), 10);
+                        return receiptNoB - receiptNoA; // Higher receipt numbers first
+                    });
+                }
+                
+                // Rebuild the sorted table
                 tableBody.innerHTML = "";
-                rows.forEach(row => tableBody.appendChild(row));
+                Object.values(dateGroups).forEach(group => {
+                    group.forEach(row => tableBody.appendChild(row));
+                });
+                
+                // Return the latest receipt number (first row's receipt_no if exists)
+                return rows.length > 0 ? 
+                    parseInt(rows[0].querySelector("td:nth-child(6)").innerText.trim(), 10) : 
+                    0;
             }
-            // Sort the table rows on page load
-            sortTableByReceiptNo();
+            
+            // Sort the table on page load
+            const latestReceiptNo = sortTable();
+            
+            // Auto-generate new receipt number (if input exists)
+            const receiptNoInput = document.getElementById("receiptNoInput");
+            if (receiptNoInput) {
+                const newReceiptNo = latestReceiptNo + 1;
+                receiptNoInput.value = newReceiptNo.toString().padStart(6, '0');
+            }
         });
     </script>
 
@@ -367,6 +400,7 @@
                 "Date",
                 "Reciept No",
                 "Amount",
+                "Fund Type",
                 "Description",
                 "Total Amount"
             ];

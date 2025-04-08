@@ -145,9 +145,9 @@
               // Recalculate totals based on visible rows
               rows.forEach((row) => {
                   if (row.style.display !== "none") {
-                      const palliCell = row.querySelector("td:nth-child(6)");
-                      const madrassaCell = row.querySelector("td:nth-child(7)");
-                      const messCell = row.querySelector("td:nth-child(8)");
+                      const palliCell = row.querySelector("td:nth-child(7)");
+                      const madrassaCell = row.querySelector("td:nth-child(8)");
+                      const messCell = row.querySelector("td:nth-child(9)");
                       const totalAmountCell = row.querySelector("td:nth-child(11)");
   
                       // Add visible amounts to the total
@@ -170,7 +170,7 @@
               const textFilterValue = textFilterInput.value.toLowerCase();
   
               rows.forEach((row) => {
-                  const dateCell = row.querySelector("td:nth-child(3)");
+                  const dateCell = row.querySelector("td:nth-child(5)");
                   const textCells = Array.from(row.querySelectorAll("td"));
   
                   if (!dateCell) return;
@@ -302,7 +302,7 @@
     }
     </script>
 
-    <!-- function to sort data based on ReceiptNo, recent on top -->
+    <!-- function to sort data based on Date and ReceiptNo, recent on top -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const tableBody = document.getElementById("dataTable");
