@@ -25,6 +25,8 @@ shuhaib
 
 @88737softkind
 
+psql -U shuhaib -d plkd_mahallu
+
 \pset pager off
 
 \conninfo
@@ -57,8 +59,7 @@ pip install -r requirements.txt
 python3 manage.py collectstatic
 
 python manage.py runserver 0.0.0.0:8000
-
-
+----------------------------------------------------------------------------------------------
 screen -S Django-server
 
 Ctrl + A, D
@@ -143,7 +144,19 @@ WHERE id_no='0001';
 ----------------------------------------------------------------------------------------------
 delete data from table :
 
+select * from table_name where id="";
+
+select * from myapp_masapirivu where reciept_no='000204';
+
+delete from myapp_masapirivu where reciept_no='000204';
+
+select * from myapp_addfamilymembers where id_no='';
+
 delete from myapp_addfamilymembers where id_no='';   
+
+select * from myapp_addmahallumembers where id_no='';
+
+delete from myapp_addmahallumembers where id_no='';   
 ----------------------------------------------------------------------------------------------
 Reorder the id in the table :
 
